@@ -1,5 +1,5 @@
 .\objects\\gpio.o: ..\Src\gpio.c
-.\objects\\gpio.o: ..\Inc\gpio.h
+.\objects\\gpio.o: ..\Src\gpio.h
 .\objects\\gpio.o: ..\Drivers\FM33LC0xx_FL_Driver\Inc\fm33lc0xx_fl.h
 .\objects\\gpio.o: ..\Drivers\FM33LC0xx_FL_Driver\Inc\fm33lc0xx_fl_conf.h
 .\objects\\gpio.o: ..\Drivers\FM33LC0xx_FL_Driver\Inc\fm33lc0xx_fl_adc.h
@@ -42,4 +42,4 @@
 .\objects\\gpio.o: ..\Drivers\FM33LC0xx_FL_Driver\Inc\fm33lc0xx_fl_uart.h
 .\objects\\gpio.o: ..\Drivers\FM33LC0xx_FL_Driver\Inc\fm33lc0xx_fl_vref.h
 .\objects\\gpio.o: ..\Drivers\FM33LC0xx_FL_Driver\Inc\fm33lc0xx_fl_wwdt.h
-.\objects\\gpio.o: ..\Inc\taskgpio.h
+.\objects\\gpio.o: ..\Src\taskgpio.h

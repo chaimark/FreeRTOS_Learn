@@ -1,5 +1,5 @@
 .\objects\\taskgpio.o: ..\Src\taskgpio.c
-.\objects\\taskgpio.o: ..\Inc\taskgpio.h
+.\objects\\taskgpio.o: ..\Src\taskgpio.h
 .\objects\\taskgpio.o: ..\Drivers\FM33LC0xx_FL_Driver\Inc\fm33lc0xx_fl.h
 .\objects\\taskgpio.o: ..\Drivers\FM33LC0xx_FL_Driver\Inc\fm33lc0xx_fl_conf.h
 .\objects\\taskgpio.o: ..\Drivers\FM33LC0xx_FL_Driver\Inc\fm33lc0xx_fl_adc.h

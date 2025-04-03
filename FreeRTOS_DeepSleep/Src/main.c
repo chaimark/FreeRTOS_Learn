@@ -1,12 +1,15 @@
 #include "main.h"
-
 #include "FreeRTOS.h"
 #include "task.h"
 #include "Tickless_Hook.h" 
-#include "lptim32_timing.h"
 #include "semphr.h"
 #include "gpio.h"
 #include "taskgpio.h"
+#include "../Interflow/Define.h"
+#include "../Interflow/PublicLib_No_One.h"
+#include "../Interflow/AT24CXXDataLoader.h"
+#include "../Interflow/NumberBaseLib.h"
+#include "../Interflow/RTC_SetTime.h"
 /**
   ****************************************************************************************************
   * @file    main.c
@@ -28,40 +31,33 @@
   ****************************************************************************************************
   */
 
-SemaphoreHandle_t   gpioSemaphore = NULL; 
+SemaphoreHandle_t   gpioSemaphore = NULL;
 #define TASK_GPIO_PRIORITY          (tskIDLE_PRIORITY + 2)
+void AAA_ADD(void * pvParameters) {
+    return;
+}
 
-
-
-int main(void)
-{
+int main(void) {
     /* Reset of all peripherals, Initializes the Flash interface and the Systick. */
-    
     /* SHOULD BE KEPT!!! */
     MF_Clock_Init();
-    
-    /* Configure the system clock */
-    /* SHOULD BE KEPT!!! */
-    MF_SystemClock_Config();
-    
     /* Initialize FL Driver Library */
     /* SHOULD BE KEPT!!! */
     FL_Init();
-
-
     /* Initialize all configured peripherals */
     /* SHOULD BE KEPT!!! */
-
+    AT24CXXLoader_Init();	// 初始化参数
     MF_Config_Init();
-
-    GPIO_interrupt_init();  
-    LPTIM32_Init();
-    
-    gpioSemaphore = xSemaphoreCreateBinary();       
-    xTaskCreate(GPIOTask, "GPIO", configMINIMAL_STACK_SIZE, NULL, TASK_GPIO_PRIORITY, NULL);      
-    vTaskStartScheduler(); 
-    while(1)
-    {     
+    Device_Init();            // 初始化设备
+    EEprom_AT24CXX_Parameter_Init(false);
+    // LPTIM32_Init();
+    StartOPenDevMode();
+    CheckMeterNum();
+    TaskHandle_t AAA = NULL;
+    gpioSemaphore = xSemaphoreCreateBinary();
+    xTaskCreate(AAA_ADD, "AAA", configMINIMAL_STACK_SIZE, NULL, tskIDLE_PRIORITY, AAA);
+    vTaskStartScheduler();
+    while (1) {
 
     }
 

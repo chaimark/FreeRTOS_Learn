@@ -346,10 +346,10 @@ ARM Macro Assembler    Page 6
               00000000 
 Command Line: --debug --xref --diag_suppress=9931 --cpu=Cortex-M0 --apcs=interw
 ork --depend=.\objects\\startup_fm33lc0xx.d -o.\objects\\startup_fm33lc0xx.o -I
-.\RTE\_FreeRTOS_DeepSleep -IC:\Keil_v5\ARM\PACK\FMSH\FM33LC0XX_DFP\3.0.4\Device
-\Include -IC:\Keil_v5\ARM\CMSIS\Include --predefine="__UVISION_VERSION SETA 523
-" --predefine="FM33LC0xx SETA 1" --list=.\listings\\startup_fm33lc0xx.lst ../Dr
-ivers/CMSIS/Device/FM/FM33xx/Source/Templates/arm/startup_fm33lc0xx.s
+C:\Keil_v5\Arm\Packs\FMSH\FM33LC0XX_DFP\3.0.4\Device\Include --predefine="__UVI
+SION_VERSION SETA 535" --predefine="FM33LC0xx SETA 1" --list=.\listings\\startu
+p_fm33lc0xx.lst ../Drivers/CMSIS/Device/FM/FM33xx/Source/Templates/arm/startup_
+fm33lc0xx.s
 
 
 

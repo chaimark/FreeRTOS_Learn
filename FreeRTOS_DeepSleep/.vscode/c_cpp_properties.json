@@ -16,7 +16,8 @@
                 "Inc",
                 "FreeRTOS\\include",
                 "FreeRTOS\\portable\\RVDS\\ARM_CM0",
-                "Tickless"
+                "Tickless",
+                "Src"
             ],
             "defines": [
                 "FM33LC0XX",
