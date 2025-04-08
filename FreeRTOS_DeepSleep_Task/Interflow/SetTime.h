@@ -10,8 +10,8 @@
 #ifdef BSTIM_OPEN_AND_TASK_NUM
 /********************BSTIM********************/
 typedef enum _TimeTaskName {	// 发送AT指令时调用什么函数发送, 对应的函数名
-    RecTimeUART1,       // 用于判断 uart1   串口是否接收结束
     RecTimeLPUART0,     // 用于判断 LPuart0 串口是否接收结束
+    RecTimeLPUART1,     // 用于判断 LPuart1 串口是否接收结束
 } TimeTaskName;
 
 #define SecTo10Ms(sec) (uint64_t)((sec * 100 == 0) ? 1 : (sec * 100))
@@ -35,8 +35,7 @@ extern void CountSetTimeTask(void);
 /********************LPTIM********************/
 typedef enum _LPTimeTaskName {
     IWDTClS,
-    CloseUart0TTLTask,  // 用于判断什么时候关闭 uart0_ttl
-    ShowSetPage,        // 用于刷新显示设置页面
+    CloseLPUart1TTLTask,  // 用于判断什么时候关闭 uart0_ttl
 }LPTimeTaskName;
 
 #define SecTo250Ms(sec) (uint64_t)((sec * 4 == 0) ? 1 : (sec * 4))

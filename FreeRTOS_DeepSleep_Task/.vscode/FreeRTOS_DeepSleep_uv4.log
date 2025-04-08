@@ -1,30 +1,3 @@
-<html>
-<body>
-<pre>
-<h1>µVision Build Log</h1>
-<h2>Tool Versions:</h2>
-IDE-Version: ¦ÌVision V5.23.0.0
-Copyright (C) 2017 ARM Ltd and ARM Germany GmbH. All rights reserved.
-License Information: 1 admin, 1, LIC=14HV2-97ADH-CXEU6-D1FQE-HPE1A-WYZDQ
- 
-Tool Versions:
-Toolchain:       MDK-ARM Plus  Version: 5.23
-Toolchain Path:  C:\Keil_v5\ARM\ARMCC\Bin
-C Compiler:      Armcc.exe V5.06 update 4 (build 422)
-Assembler:       Armasm.exe V5.06 update 4 (build 422)
-Linker/Locator:  ArmLink.exe V5.06 update 4 (build 422)
-Library Manager: ArmAr.exe V5.06 update 4 (build 422)
-Hex Converter:   FromElf.exe V5.06 update 4 (build 422)
-CPU DLL:         SARMCM3.DLL V5.23
-Dialog DLL:      DARMCM1.DLL V1.17.0.0
-Target DLL:      Segger\JL2CM3.dll V2.99.23.0
-Dialog DLL:      TARMCM1.DLL V1.12.0.0
- 
-<h2>Project:</h2>
-e:\work\git_room\QiuLei_WorkSpace\ReadDevOfTemperatureOrPressure\FreeRTOS_DeepSleep_Task\MDK-ARM\FreeRTOS_SLEEP.uvprojx
-Project File Date:  04/08/2025
-
-<h2>Output:</h2>
 *** Using Compiler 'V5.06 update 4 (build 422)', folder: 'C:\Keil_v5\ARM\ARMCC\Bin'
 Rebuild target 'FreeRTOS_DeepSleep'
 compiling Tickless_Hook.c...
@@ -103,13 +76,4 @@ linking...
 Program Size: Code=15412 RO-data=1180 RW-data=700 ZI-data=22836  
 FromELF: creating hex file...
 ".\Objects\\ADC_Poll.axf" - 0 Error(s), 6 Warning(s).
-
-<h2>Collection of Component include folders:</h2>
-  .\RTE\_FreeRTOS_DeepSleep
-  C:\Keil_v5\ARM\PACK\FMSH\FM33LC0XX_DFP\3.0.4\Device\Include
-
-<h2>Collection of Component Files used:</h2>
 Build Time Elapsed:  00:00:02
-</pre>
-</body>
-</html>
