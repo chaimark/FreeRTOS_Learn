@@ -5,7 +5,8 @@
 #include "task.h"
 #include "semphr.h"
 
-extern void SendData_ForLoar(void *pvParameters);
+#define SendData_PRIORITY_02    (tskIDLE_PRIORITY + 2)
+extern void SendDataForLoar(void *pvParameters);
 
 #endif
 

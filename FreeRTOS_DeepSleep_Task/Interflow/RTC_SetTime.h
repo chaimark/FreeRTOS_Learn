@@ -19,8 +19,7 @@ typedef enum _RTCTaskName {
 }RTCTaskName;
 #else
 typedef enum _RTCTaskName {
-    BatVoltge,              // 用于判断什么时候检测电池电压
-    TestTemperOrPressure,   // 用于判断当前温度或压力
+    TestArgument,           // 用于判断当前温度或压力
     Read_EEprom,            // 用于判断什么时候读取 eeprom
     SendLoarTask,           // 用于判断什么时候发送数据
     CheckPWMOfClock,

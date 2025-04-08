@@ -1,0 +1,13 @@
+.\objects\\tickless_hook.o: ..\Tickless\Tickless_Hook.c
+.\objects\\tickless_hook.o: ..\Tickless\Tickless_Hook.h
+.\objects\\tickless_hook.o: ..\FreeRTOS\include\FreeRTOS.h
+.\objects\\tickless_hook.o: C:\Keil_v5\ARM\ARMCC\Bin\..\include\stddef.h
+.\objects\\tickless_hook.o: C:\Keil_v5\ARM\ARMCC\Bin\..\include\stdint.h
+.\objects\\tickless_hook.o: ..\Include\FreeRTOSConfig.h
+.\objects\\tickless_hook.o: ..\FreeRTOS\include\projdefs.h
+.\objects\\tickless_hook.o: ..\FreeRTOS\include\portable.h
+.\objects\\tickless_hook.o: ..\FreeRTOS\include\deprecated_definitions.h
+.\objects\\tickless_hook.o: ..\FreeRTOS\portable\RVDS\ARM_CM0\portmacro.h
+.\objects\\tickless_hook.o: ..\FreeRTOS\include\mpu_wrappers.h
+.\objects\\tickless_hook.o: ..\FreeRTOS\include\task.h
+.\objects\\tickless_hook.o: ..\FreeRTOS\include\list.h

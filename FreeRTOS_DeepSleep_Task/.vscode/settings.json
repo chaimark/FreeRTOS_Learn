@@ -13,6 +13,7 @@
         "publiclib_no_one.h": "c",
         "fm33lc0xx_fl.h": "c",
         "rtc_settime.h": "c",
-        "senddata_task.h": "c"
+        "senddata_task.h": "c",
+        "adc.h": "c"
     }
 }

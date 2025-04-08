@@ -3,8 +3,8 @@
 const char SOFT_VERSION = 11; // 版本号
 unsigned int UART_BAND = 115200;
 
-// ShortUART LPUART0Ddata;
-ShortUART LPUART1Ddata;
+// LongUART UART1Ddata;
+ShortUART LPUART0Ddata, LPUART1Ddata;
 
 unsigned int Now_DEV_Volt = 3600;
 float Now_TemperOrPress = 0.0;

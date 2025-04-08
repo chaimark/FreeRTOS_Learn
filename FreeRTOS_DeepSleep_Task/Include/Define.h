@@ -31,7 +31,7 @@ typedef struct {
 }ShortUART;
 
 // extern LongUART UART1Ddata;
-extern ShortUART LPUART0Ddata;
+extern ShortUART LPUART0Ddata, LPUART1Ddata;
 
 extern unsigned int Now_DEV_Volt;
 extern float Now_TemperOrPress;

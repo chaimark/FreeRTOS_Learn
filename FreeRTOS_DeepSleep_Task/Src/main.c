@@ -8,7 +8,9 @@
 #include "NumberBaseLib.h"
 #include "RTC_SetTime.h"
 #include "PublicLib_No_One.h"
-#include "SendData_Task.h"
+#include "SendDataTask.h"
+#include "MeasureTask.h"
+#include "ReadEEpromTask.h"
 
 /**
   ****************************************************************************************************
@@ -48,9 +50,13 @@ int main(void) {
     StartOPenDevMode();
     CheckMeterNum();
     setNetArgumentInit(NULL);
+    TaskHandle_t ReadEEpromHand = NULL;
     TaskHandle_t LoarSendHand = NULL;
+    TaskHandle_t MeasureHand = NULL;
     gpioSemaphore = xSemaphoreCreateBinary();
-    xTaskCreate(SendData_ForLoar, "LoarSend", configMINIMAL_STACK_SIZE, NULL, SendData_PRIORITY_02, &LoarSendHand);
+    xTaskCreate(ReadEEprom, "ReadEEprom", configMINIMAL_STACK_SIZE, NULL, ReadEEprom_PRIORITY_01, &ReadEEpromHand);
+    xTaskCreate(SendDataForLoar, "LoarSend", configMINIMAL_STACK_SIZE, NULL, SendData_PRIORITY_02, &LoarSendHand);
+    xTaskCreate(MeasureForworld, "TestAll", configMINIMAL_STACK_SIZE, NULL, Measure_PRIORITY_02, &MeasureHand);
     vTaskStartScheduler();
     while (1) {
 

@@ -36,9 +36,6 @@ void setNetArgumentInit(void (*UserShowdownNowDev)(void)) {
     // SetLPTime.LPInitSetTimeTask(HomePage, SecTo250Ms(0.9), ShowHomePage);    //1s 执行一次
     // 初始化 RTC_TASK 任务  
     #warning need check;
-    RTC_TASK.InitSetTimeTask(BatVoltge, MinToSec(1), NULL); // 1 分钟检测一次电池电压
-    RTC_TASK.InitSetTimeTask(TestTemperOrPressure, MinToSec(1), NULL); // 1 分钟检测一次内部温度
-    RTC_TASK.InitSetTimeTask(Read_EEprom, MinToSec(HourToMin(1)), NULL);
     return;
 }
 

@@ -34,7 +34,5 @@ extern void WGID_String_To_BCD(strnew bcd, strnew str);
 // 开启测温，否则关闭测温开启测压
 #define IsTemperature
 
-#define SendData_PRIORITY_02    (tskIDLE_PRIORITY + 1)
-
 #endif
 

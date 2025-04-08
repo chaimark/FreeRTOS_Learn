@@ -117,7 +117,6 @@ unsigned int GetBatVoltage(void) {
     return testVOL;
 }
 void Test_BatVoltge(void) {
-    RTC_TASK.InitSetTimeTask(BatVoltge, MinToSec(1), NULL); // 1 分钟检测一次电池电压
     unsigned int testVOL = 0;
     #warning need check;
     // Battary_SET_OUTMODE();
@@ -166,7 +165,6 @@ unsigned int Get_Temper_value(void) {
 }
 #ifdef IsTemperature
 void Test_InsideT(void) {
-    RTC_TASK.InitSetTimeTask(TestTemperOrPressure, MinToSec(1), NULL); // 1 分钟检测一次内部温度
     float Temp_di = 0.0;        // 单位摄氏度的等份数
     float Temp_Temper = 0.0;    // 当前温度
     unsigned int AD_Vaule = Get_Temper_value();
