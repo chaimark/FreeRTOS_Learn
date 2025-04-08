@@ -1,0 +1,18 @@
+{
+    "files.associations": {
+        "main.h": "c",
+        "mf_config.h": "c",
+        "tickless_hook.h": "c",
+        "freertos.h": "c",
+        "freertosconfig.h": "c",
+        "check_xthf_or_xtlf.h": "c",
+        "display.h": "c",
+        "task.h": "c",
+        "define.h": "c",
+        "strlib.h": "c",
+        "publiclib_no_one.h": "c",
+        "fm33lc0xx_fl.h": "c",
+        "rtc_settime.h": "c",
+        "senddata_task.h": "c"
+    }
+}
