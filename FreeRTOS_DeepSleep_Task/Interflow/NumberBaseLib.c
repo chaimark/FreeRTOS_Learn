@@ -1,7 +1,28 @@
 #include "NumberBaseLib.h"
 #include <stdlib.h>
 #include <stdio.h>
-
+double BuffToFloatOrDouble(strnew OutBuff, bool IsDouble) {
+    union {
+        double TempDouble;
+        float TempFloat;
+        uint8_t Buff[8];
+    } converter;
+    if ((OutBuff.MaxLen > 4) && (!IsDouble)) {
+        return 0;
+    }
+    if ((OutBuff.MaxLen > 8) && (IsDouble)) {
+        return 0;
+    }
+    swapStr(OutBuff.Name._char, OutBuff.MaxLen);
+    for (int i = 0; i < OutBuff.MaxLen; i++) {
+        converter.Buff[i] = OutBuff.Name._char[i];
+    }
+    if (IsDouble) {
+        return converter.TempDouble;
+    } else {
+        return (double)converter.TempFloat;
+    }
+}
 void DoubleOrFloatToBuff(strnew OutBuff, double Number, bool IsDouble) {
     uint8_t BuffLen = 0;
     union {

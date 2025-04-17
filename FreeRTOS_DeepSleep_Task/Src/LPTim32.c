@@ -1,5 +1,5 @@
 #include "fm33lc0xx_fl.h"
-#include "../Include/Define.h"
+#include "Define.h"
 #include "Main.h"
 #include "LPTim32.h"
 
@@ -20,7 +20,7 @@ void MF_LPTIM250mS_Init(void) {
     FL_LPTIM32_ClearFlag_Update(LPTIM32);
     FL_LPTIM32_EnableIT_Update(LPTIM32);
 
-    InterruptConfigStruct.preemptPriority = 0x0002;
+    InterruptConfigStruct.preemptPriority = 0x0001;
     FL_NVIC_Init(&InterruptConfigStruct, LPTIM_IRQn);
     FL_LPTIM32_Enable(LPTIM32);
 }

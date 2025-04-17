@@ -4,8 +4,8 @@
 #include "StrLib.h"
 #include <stdbool.h>
 #include <stdint.h>
-#define BSTIM_OPEN_AND_TASK_NUM 3
-#define LPTIM_OPEN_AND_TASK_NUM 6
+#define BSTIM_OPEN_AND_TASK_NUM 2
+#define LPTIM_OPEN_AND_TASK_NUM 2
 
 #ifdef BSTIM_OPEN_AND_TASK_NUM
 /********************BSTIM********************/
@@ -35,7 +35,6 @@ extern void CountSetTimeTask(void);
 /********************LPTIM********************/
 typedef enum _LPTimeTaskName {
     IWDTClS,
-    CloseLPUart1TTLTask,  // 用于判断什么时候关闭 uart0_ttl
 }LPTimeTaskName;
 
 #define SecTo250Ms(sec) (uint64_t)((sec * 4 == 0) ? 1 : (sec * 4))

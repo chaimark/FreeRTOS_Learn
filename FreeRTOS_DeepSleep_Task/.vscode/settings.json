@@ -14,6 +14,21 @@
         "fm33lc0xx_fl.h": "c",
         "rtc_settime.h": "c",
         "senddata_task.h": "c",
-        "adc.h": "c"
+        "adc.h": "c",
+        "at24cxxdataloader.h": "c",
+        "at24c02.h": "c",
+        "LPUart_0_And_1_Lib.h": "c",
+        "taskmeasure.h": "c",
+        "fm33lc0xx_fl_rcc.h": "c",
+        "sx1276.h": "c",
+        "rtc.h": "c",
+        "semphr.h": "c",
+        "stdbool.h": "c",
+        "stdint.h": "c",
+        "numberbaselib.h": "c",
+        "tasklpuart1.h": "c",
+        "taskabouttimer.h": "c",
+        "tasklpuart0.h": "c",
+        "tasklpuart_0_and_1.h": "c"
     }
 }

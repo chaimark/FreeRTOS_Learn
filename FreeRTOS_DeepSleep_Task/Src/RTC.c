@@ -1,8 +1,8 @@
 #include "fm33lc0xx_fl.h"
 #include <string.h>
 #include <stdio.h>
-#include "../Include/RTC.h"
-#include "../Include/Define.h"
+#include "RTC.h"
+#include "Define.h"
 #include "Main.h"
 #include "AT24C02.h"
 #include "PublicLib_No_One.h"
@@ -169,15 +169,12 @@ void RTC_IRQ_Second(void) {
     FL_NVIC_ConfigTypeDef    InterruptConfigStruct;
     FL_RCC_EnableGroup1BusClock(FL_RCC_GROUP1_BUSCLK_RTC);
     FL_RTC_EnableIT_Second(RTC);
-    InterruptConfigStruct.preemptPriority = 0x0002;
+    InterruptConfigStruct.preemptPriority = 0x0001;
     FL_NVIC_Init(&InterruptConfigStruct, RTC_IRQn);
 }
 void MF_RTC_1S_Init(void) {
     _RTC_Date = &AT24CXX_Manager.Time_Data;
-    FL_NVIC_ConfigTypeDef    InterruptConfigStruct;
     FL_RTC_Init(RTC, &RTC_Date);
-    InterruptConfigStruct.preemptPriority = 0x0002;
-    FL_NVIC_Init(&InterruptConfigStruct, RTC_IRQn);
 
     IncludeDelayMs(1000);
     RTC_IRQ_Second();
@@ -234,7 +231,7 @@ void setRtcDate(strnew SteStrRTCData, char isWriteEEPROM) {
 
     if (isWriteEEPROM) {
         // 写 eeprom
-        EEprom_AT24C0XXData_Write((unsigned char *)&AT24CXX_Manager.Time_Data, sizeof(FL_RTC_InitTypeDef));
+        EEprom_AT24C0XXData_Write(&AT24CXX_Manager.Time_Data, sizeof(FL_RTC_InitTypeDef));
     }
 }
 void getStrUserTime(FL_RTC_InitTypeDef UserDate, char NowStrRTCData[]) {
@@ -278,7 +275,7 @@ void RTC_IRQHandler(void) {
         Reboot.RTC_ReBoot_Check(&Reboot);   // 异步重启
         if (NowSecond == 0x00) {
             if (NowMinute == 0x00) {
-                // SaveDevData();
+
                 if (NowHour == 0x00) {
                     NowWeek = getDayOfWeek(NowYear, NowMonth, NowDay); // 计算周 周不需要转换
                 }

@@ -1,6 +1,6 @@
 #include "fm33lc0xx_fl.h"
 #include "AT24C02.h"
-#include "../Include/Define.h"
+#include "Define.h"
 #include "NumberBaseLib.h"
 #include "RTC_SetTime.h"
 #include "PublicLib_No_One.h"
@@ -9,14 +9,20 @@ int HY_FLAG = true;
 // public
 AT24CXX_MANAGER_T AT24CXX_Manager = {
     .Sing = 0xB2,
-    .MeterID = {0x34, 0x56, 0x78, 0x01},
-    .FrequencyPoint = 0x00,
-    .SendInterval = 120,
+    .MeterID = {0x00, 0x00, 0x56, 0x78}, // 0x12 0x34 0x56 0x78
+    .FrequencyPoint = 0x01, // 分频点
+    .SendInterval = 60,
+    .Meter_Type = 1,  // 1：PT1000, 2:压力
+    .Test_TemperOrPress_Interval = 20,
+    .MeterTemperature_Adjust = 0,   // 修正值 单位0.1
+    .MeterPress_Adjust = 0,         // 修正值 单位0.1
     .Time_Data = {0},
 };
 NetDevParameter Now_NetDevParameter = {
+    .NowRunTag = true,
     .SendCount = 0,
     .ReceiveCount = 0,
+    .RSSI = 17,
 };
 // void SaveDevData(void) {
 //     unsigned int HourInt = 0;
@@ -33,21 +39,21 @@ unsigned char  EEprom_Err_Flage;   //0:正常   1：错误
 
 static void EEprom_SDA_SET_IN(void) {
     FL_GPIO_InitTypeDef    GPIO_InitStruct = {0};
-    GPIO_InitStruct.pin = FL_GPIO_PIN_12;
+    GPIO_InitStruct.pin = FL_GPIO_PIN_0;
     GPIO_InitStruct.mode = FL_GPIO_MODE_INPUT;
     GPIO_InitStruct.outputType = FL_GPIO_OUTPUT_OPENDRAIN;
     GPIO_InitStruct.pull = FL_DISABLE;
-    FL_GPIO_Init(GPIOA, &GPIO_InitStruct);
+    FL_GPIO_Init(GPIOC, &GPIO_InitStruct);
 }
 
 static void EEprom_SDA_SET_OUT(void) {
     FL_GPIO_InitTypeDef    GPIO_InitStruct = {0};
-    GPIO_InitStruct.pin = FL_GPIO_PIN_12;
+    GPIO_InitStruct.pin = FL_GPIO_PIN_0;
     GPIO_InitStruct.mode = FL_GPIO_MODE_OUTPUT;
     GPIO_InitStruct.outputType = FL_GPIO_OUTPUT_OPENDRAIN;
     GPIO_InitStruct.pull = FL_DISABLE;
-    FL_GPIO_Init(GPIOA, &GPIO_InitStruct);
-    FL_GPIO_SetOutputPin(GPIOA, FL_GPIO_PIN_12);
+    FL_GPIO_Init(GPIOC, &GPIO_InitStruct);
+    FL_GPIO_SetOutputPin(GPIOC, FL_GPIO_PIN_0);
 }
 
 void IIC_Start(void) {
@@ -307,9 +313,9 @@ unsigned char EEprom_Write_Start(unsigned char * data, unsigned char addr, unsig
     return 0;
 }
 // 写参数
-unsigned char EEprom_AT24C0XXData_Write(unsigned char * data, unsigned char len) {
+unsigned char EEprom_AT24C0XXData_Write(void * data, unsigned char len) {
     char addr = (int)data - (int)(&AT24CXX_Manager); // 数据地址
-    return EEprom_Write_Start(data, EEPROM_AT24CXXDATA_ADDRESS + addr, len);
+    return EEprom_Write_Start((unsigned char *)data, EEPROM_AT24CXXDATA_ADDRESS + addr, len);
 }
 // 读参数 位置
 unsigned char EEprom_Read_Start(unsigned char * Buff, unsigned short int addr, unsigned char len) {

@@ -1,7 +1,7 @@
 #ifndef RTC_H
 #define RTC_H
 
-#include "../Include/Define.h"
+#include "Define.h"
 #include <stdint.h>
 #include "StrLib.h"
 #include "RTC_SetTime.h"

@@ -3,11 +3,11 @@
 
 #include "PublicLib_No_One.h"
 
+extern void MF_ADC_Common_Init(void);
+extern void MF_ADC_Sampling_Init(void);
+
 extern void Test_BatVoltge(void);
-#ifdef IsTemperature
-extern void Test_InsideT(void);
-#else
-extern void Get_Press_Value(void)
-#endif
+extern void TEST_Temperature(void);
+extern void TEST_Press(void);
 
 #endif

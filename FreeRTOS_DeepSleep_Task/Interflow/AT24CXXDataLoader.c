@@ -34,7 +34,6 @@ void setNetArgumentInit(void (*UserShowdownNowDev)(void)) {
     // 初始化 SetLPTime 任务
     // SetLPTime.LPInitSetTimeTask(HomePage, SecTo250Ms(0.9), ShowHomePage);    //1s 执行一次
     // 初始化 RTC_TASK 任务  
-    #warning need check;
     return;
 }
 

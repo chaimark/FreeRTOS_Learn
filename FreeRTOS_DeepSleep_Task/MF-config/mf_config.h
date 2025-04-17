@@ -36,11 +36,14 @@ extern "C" {
     void MF_SystemClock_Config(void);
     void MF_Config_Init(void);
     void Error_Handler(void);
-    void MF_ADC_Common_Init(void);
-    void MF_ADC_Init(void);
+
 #ifdef __cplusplus
 }
 #endif
+
+extern void MF_IWDT_Init(void);
+extern void MF_EXTI_Line_Init(void);
+extern void MF_GPIO_Init(void);
 
 #endif /* __MF_CONFIG_H */
 

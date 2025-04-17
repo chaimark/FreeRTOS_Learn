@@ -3,7 +3,7 @@
 
 #include <stdbool.h>
 #include "NumberBaseLib.h"
-#include "../Include/AT24C02.h"
+#include "AT24C02.h"
 
 #ifndef __AT24C0XXX_H
 typedef struct {
@@ -24,7 +24,7 @@ typedef struct {
 
 } FL_RTC_InitTypeDef;
 #else
-#include "../Include/RTC.h"
+#include "RTC.h"
 #endif
 
 /*

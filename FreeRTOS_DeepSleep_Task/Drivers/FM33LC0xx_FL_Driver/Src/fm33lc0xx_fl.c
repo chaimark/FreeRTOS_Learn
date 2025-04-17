@@ -34,8 +34,7 @@
   * @param  None
   * @retval None
   */
-__WEAK void FL_DelayInit(void)
-{
+__WEAK void FL_DelayInit(void) {
     SysTick->CTRL |= SysTick_CTRL_CLKSOURCE_Msk;
     SysTick->CTRL |= SysTick_CTRL_ENABLE_Msk;
 }
@@ -63,10 +62,8 @@ __WEAK void FL_DelayUs(uint32_t count)
   * @param  count   specifies the delay count in milliseconds.
   * @retval None
   */
-__WEAK void FL_DelayMs(uint32_t count)
-{
-    while(count--)
-    {
+__WEAK void FL_DelayMs(uint32_t count) {
+    while (count--) {
         FL_DelayUs(1000);
     }
 }
@@ -79,8 +76,7 @@ __WEAK void FL_DelayMs(uint32_t count)
   * @param  count   specifies the delay count in microseconds.
   * @retval None
   */
-__WEAK void FL_DelayUsStart(uint32_t count)
-{
+__WEAK void FL_DelayUsStart(uint32_t count) {
     count = FL_DELAY_US * count;
     count = count > 16777216 ? 16777216 : count;
     SysTick->LOAD = count - 1;
@@ -95,8 +91,7 @@ __WEAK void FL_DelayUsStart(uint32_t count)
   * @param  count   specifies the delay count in milliseconds.
   * @retval None
   */
-__WEAK void FL_DelayMsStart(uint32_t count)
-{
+__WEAK void FL_DelayMsStart(uint32_t count) {
     FL_DelayUsStart(1000 * count);
 }
 
@@ -109,8 +104,7 @@ __WEAK void FL_DelayMsStart(uint32_t count)
   * @retval true  - delay has ended
   *         false - delay is in progress
   */
-__WEAK bool FL_DelayEnd(void)
-{
+__WEAK bool FL_DelayEnd(void) {
     return (((SysTick->CTRL >> 16) & 0x1) == 0x1);
 }
 
@@ -122,8 +116,7 @@ __WEAK bool FL_DelayEnd(void)
   * @{
   */
 
-void FL_Init(void)
-{
+void FL_Init(void) {
     /* Init delay support function */
     FL_DelayInit();
 }
@@ -142,11 +135,9 @@ void FL_Init(void)
   * @param  irq             Interrupt number.
   * @retval None
   */
-void FL_NVIC_Init(FL_NVIC_ConfigTypeDef *configStruct, IRQn_Type irq)
-{
+void FL_NVIC_Init(FL_NVIC_ConfigTypeDef * configStruct, IRQn_Type irq) {
     /* Check parameter */
-    if(configStruct->preemptPriority > 3)
-    {
+    if (configStruct->preemptPriority > 3) {
         configStruct->preemptPriority = 3;
     }
     NVIC_DisableIRQ(irq);

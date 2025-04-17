@@ -14,8 +14,13 @@
 #include <stdint.h>
 #include "fm33lc0xx_fl.h"
 #include "StrLib.h"
-#include "../Include/Define.h"
+#include "Define.h"
+#include "FreeRTOS.h"
+#include "task.h"
+#include "Tickless_Hook.h" 
+#include "semphr.h"
 
+extern void FL_DelayUs(uint32_t nus);
 #define IncludeDelayMs FL_DelayMs
 
 #define ATCMD_MAXNUMBER 1
@@ -31,8 +36,9 @@ extern void TimeSpeed(void);
 extern void BCD_To_String(strnew str, strnew bcd);
 extern void WGID_String_To_BCD(strnew bcd, strnew str);
 
-// 开启测温，否则关闭测温开启测压
-#define IsTemperature
+//////////////////////////////////////////////////////
+
+
 
 #endif
 

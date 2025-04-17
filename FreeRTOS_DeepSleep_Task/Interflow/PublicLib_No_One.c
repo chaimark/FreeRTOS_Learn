@@ -1,7 +1,38 @@
 #include "PublicLib_No_One.h"
 #include "NumberBaseLib.h"
-#include "../Include/BSTim.h"
+#include "BSTim.h"
+#include "fm33lc0xx_fl.h"
+#include "FreeRTOS.h"      // FreeRTOS 基本定义
+#include "task.h"          // FreeRTOS 任务管理函数
+#include <stdint.h>        // 标准整数类型定义
 
+void FL_DelayUs(uint32_t nus) {
+    uint32_t ticks;
+    uint32_t told, tnow, reload, tcnt = 0;
+
+    reload = SysTick->LOAD;                     //获取重装载寄存器值
+    ticks = nus * (SystemCoreClock / 1000000);  //计数时间值
+
+    vTaskSuspendAll();      //阻止OS调度，防止打断us延时
+    told = SysTick->VAL;    //获取当前数值寄存器值（开始时数值）
+    while (1) {
+        tnow = SysTick->VAL; 
+        //当前值不等于开始值说明已在计数
+        if (tnow != told) {
+            if (tnow < told) {                  //当前值小于开始数值，说明未计到0
+                tcnt += told - tnow;            //计数值=开始值-当前值
+            } else {                            //当前值大于开始数值，说明已计到0并重新计数
+                tcnt += reload - tnow + told;   //计数值=重装载值-当前值+开始值
+            }            
+            told = tnow;        //更新开始值
+            if (tcnt >= ticks)  //时间超过/等于要延迟的时间,则退出.
+                break;  
+        }
+    }
+    xTaskResumeAll();	//恢复OS调度		   
+}
+//SystemCoreClock为系统时钟(system_stmf4xx.c中)，通常选择该时钟作为
+//systick定时器时钟，根据具体情况更改
 #ifdef TimeSpeedNum
 void TimeSpeed(void) {
     int TempNowHour = anyBaseToAnyBase((uint64_t)NowHour, 10, 16) * 60 * 60;

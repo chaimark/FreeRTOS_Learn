@@ -11,6 +11,8 @@ xxxxx_xxxx <==> typedef(数据类型)
 
 #include <stdint.h>
 #include "StrLib.h"
+// 将 uint8_t 数组 转换成 Double Or Float 
+extern double BuffToFloatOrDouble(strnew OutBuff, bool IsDouble);
 
 // 将 Double Or Float 存到 char 数组 中
 extern void DoubleOrFloatToBuff(strnew OutBuff, double Number, bool IsDouble);

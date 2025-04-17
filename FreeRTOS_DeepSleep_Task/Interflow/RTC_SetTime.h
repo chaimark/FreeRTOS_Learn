@@ -12,22 +12,20 @@
 #ifdef OPEN_AT_CMD_DEBUG
 typedef enum _RTCTaskName {
     ATDebug,
-    BatVoltge,          // 用于判断什么时候检测电池电压
-    TestTemperOrPressure,            // 用于判断什么时候检测内部温度
-    Read_EEprom,        // 用于判断什么时候读取 eeprom
+    TestArgument,           // 用于判断当前温度或压力
+    SendLoarTask,           // 用于判断什么时候发送数据
     CheckPWMOfClock,
 }RTCTaskName;
 #else
 typedef enum _RTCTaskName {
     TestArgument,           // 用于判断当前温度或压力
-    Read_EEprom,            // 用于判断什么时候读取 eeprom
     SendLoarTask,           // 用于判断什么时候发送数据
     CheckPWMOfClock,
 }RTCTaskName;
 #endif
 
 // 任务数量
-#define _RTCTimeTaskMAX 5
+#define _RTCTimeTaskMAX 3
 
 #ifdef OPEN_AT_CMD_DEBUG
 #define RTCTimeTaskMAX (_RTCTimeTaskMAX + 1)
