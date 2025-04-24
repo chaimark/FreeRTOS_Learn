@@ -151,8 +151,7 @@ unsigned int GetPressVoltage(void) {
     FL_VREF_Disable(VREF);               //关闭VREF1p2
     FL_SVD_DisableADCMonitor(SVD);       //关闭ADC电源检测
     FL_ADC_Disable(ADC);                 //关闭ADC使能
-    PressVotage = testVOL * 2;
-    return PressVotage;
+    return testVOL * 2;
 }
 
 #include "SX1276.h"

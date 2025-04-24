@@ -4,6 +4,7 @@
 #include "StrLib.h"
 #include "ADC.h"
 #include "timers.h"
+#include "SX1276.h"
 
 /* FlagBit_Task == 0000 0000
     最后三位代表对应定时任务
@@ -44,7 +45,6 @@ void VoltgeTestTimer(TimerHandle_t xTimer) {
     }
 }
 void TimeTask(void * pvParameters) {
-    bool IsOpenSemaphore = true; // 是否使用信号量
     TimerHandle_t TestBatVoltgeTimer = xTimerCreate(
         "Measure_Time",          // 定时器名称
         pdMS_TO_TICKS(60000),    // 定时周期 1min
@@ -77,10 +77,13 @@ void TimeTask(void * pvParameters) {
                     continue;   // 低于 25 ° 不需要该机制
                 }
                 if (!(Front_TemperOrPress - 1 < Now_TemperOrPress && Now_TemperOrPress < Front_TemperOrPress + 1)) {
+                    Alarm_Falge = true;
                     vTaskDelay(5000);
                     if (!(Front_TemperOrPress - 1 < Now_TemperOrPress && Now_TemperOrPress < Front_TemperOrPress + 1)) {
                         FlagBit_Task |= 0x04; // 设置标志位, 发送数据
                     }
+                } else {
+                    Alarm_Falge = false;
                 }
             } else if (AT24CXX_Manager_NET.Meter_Type == 2) {  // 2:压力
                 TEST_Press();
@@ -88,10 +91,13 @@ void TimeTask(void * pvParameters) {
                     continue;   // 低于 0.1 MPa 不需要该机制
                 }
                 if (!(Front_TemperOrPress - 0.05 < Now_TemperOrPress && Now_TemperOrPress < Front_TemperOrPress + 0.05)) {
+                    Alarm_Falge = true;
                     vTaskDelay(5000);
                     if (!(Front_TemperOrPress - 0.05 < Now_TemperOrPress && Now_TemperOrPress < Front_TemperOrPress + 0.05)) {
                         FlagBit_Task |= 0x04; // 设置标志位, 发送数据
                     }
+                } else {
+                    Alarm_Falge = false;
                 }
             }
         }
@@ -101,10 +107,9 @@ void TimeTask(void * pvParameters) {
             // 低字节第三位是1的情况
             if (Now_NetDevParameter.NowRunTag != 0) {
                 SendDataByRF();
-                #warning "Send test";
             }
         }
         FlagBit_Task &= 0x0F;
-    } while ((IsOpenSemaphore) && (xSemaphoreTake(TimeTaskSemaphore, portMAX_DELAY) == pdTRUE));   // 等待信号量阻塞任务, 转为运行其他任务
+    } while (xSemaphoreTake(TimeTaskSemaphore, portMAX_DELAY) == pdTRUE);   // 等待信号量阻塞任务, 转为运行其他任务
 }
 

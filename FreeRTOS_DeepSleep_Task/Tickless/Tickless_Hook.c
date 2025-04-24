@@ -1,7 +1,7 @@
 #include "Tickless_Hook.h" 
 #include "FreeRTOS.h"
 #include "task.h"
-
+#include "Define.h"
 
 #define   ulGetExternalTime()    FL_LPTIM32_ReadCounter(LPTIM32)
 

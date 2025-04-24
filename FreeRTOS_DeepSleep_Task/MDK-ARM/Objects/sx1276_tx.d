@@ -73,3 +73,4 @@
 .\objects\\sx1276_tx.o: ..\Interflow\SetTime.h
 .\objects\\sx1276_tx.o: ..\Include\RTC.h
 .\objects\\sx1276_tx.o: ..\Interflow\RTC_SetTime.h
+.\objects\\sx1276_tx.o: ..\Include\PT1000.h

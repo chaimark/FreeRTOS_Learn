@@ -1,29 +1,21 @@
 #include "SX1276.h"
 #include "Define.h"
 
-unsigned int TEMP_R_VALUE_PT1;
-unsigned int TEMP_R_VALUE_PT2;
-unsigned char Current_meter_status;
-unsigned int PressVotage;   // 压力表的电压 Now_DEV_Volt
-unsigned char RF_ReceiveFig = 0x01;
-unsigned char SingalStatus = 0;
-
+unsigned char Alarm_Falge = false;
 const unsigned char SpreadingFactor = 11;    //7-12
 const unsigned char CodingRate = 2;          //1-4
 const unsigned char Bw_Frequency = 7;        //6-9
 const unsigned char powerValue = 7;
 const unsigned char power_data[8] = {0X80,0X80,0X80,0X83,0X86,0x89,0x8c,0x8f};
-unsigned char SX1276_RF_RXBuffer[32];
+unsigned char SX1276LoRaRXBuffer[32];
 unsigned char Frequency[3] = {0x6C,0x80,0x00}; //433
-unsigned char RF_RXBuffer[50];
-unsigned char RF_TXBuffer[30];
-unsigned char RF_EX0_STATUS;
-unsigned char CRC_Value;
-unsigned char SX1278_RLEN;
-
-extern unsigned char Alarm_Falge;
-extern void RECEIVE_DATA(void);
 lpCtrlTypefunc_t lpTypefunc = {0,0,0,0,0};
+
+unsigned char SX1276_RF_RXBuffer[50];
+unsigned char SX1276_RF_TXBuffer[30];
+
+extern void SX1276_RF_ReceiveData(void);
+
 void register_rf_func(lpCtrlTypefunc_t * func) {
     if (func->lpByteWritefunc != 0) {
         lpTypefunc.lpByteWritefunc = func->lpByteWritefunc;
@@ -42,7 +34,7 @@ void register_rf_func(lpCtrlTypefunc_t * func) {
     }
 }
 
-void FSK_SEND_PACKET(void) {
+void SX1276LoRaFSKSendPacket(void) {
     SX1276LoRaSetOpMode(Stdby_mode);
     SX1276WriteBuffer(REG_LR_DIOMAPPING1, 0x01);
     SX1276WriteBuffer(REG_LR_DIOMAPPING2, 0x20);
@@ -83,24 +75,7 @@ void SX1276LoRaFsk(Debugging_fsk_ook opMode) {
 void SX1276LoRaSetRFFrequency(void) {
     unsigned int RFFrequencyTemp = 0;
     RFFrequencyTemp = AT24CXX_Manager_NET.FrequencyPoint;
-    // unsigned char RFFrequency = 0x00;
-    // if (RF_Is_Beginning_Flage == 1) {
-    //     if ((RFFrequency > 0x00) && (RFFrequency <= 0x25)) {
-    //         RFFrequencyTemp = ((METERID[0] & 0xF0) >> 4) * 10 + (METERID[0] & 0x0F);
-    //     }
-    //     if ((RFFrequency > 0x25) && (RFFrequency <= 0x50)) {
-    //         RFFrequencyTemp = ((METERID[0] & 0xF0) >> 4) * 10 + (METERID[0] & 0x0F) - 25;
-    //     }
-    //     if ((RFFrequency > 0x50) && (RFFrequency <= 0x75)) {
-    //         RFFrequencyTemp = ((METERID[0] & 0xF0) >> 4) * 10 + (METERID[0] & 0x0F) - 50;
-    //     }
-    //     if ((RFFrequency > 0x75) && (RFFrequency <= 0x99)) {
-    //         RFFrequencyTemp = ((METERID[0] & 0xF0) >> 4) * 10 + (METERID[0] & 0x0F) - 75;
-    //     }
-    // } else {
-    //     RFFrequencyTemp = 0;
-    // }
-    if (Alarm_Falge != 0)
+    if (Alarm_Falge != false)
         RFFrequencyTemp = RFFrequencyTemp + 3;
     else
         RFFrequencyTemp = RFFrequencyTemp;
@@ -325,7 +300,7 @@ void SX1276LoRaSetMobileNode(BOOL enable) {
     SX1276WriteBuffer(REG_LR_MODEMCONFIG3, RECVER_DAT);
 }
 
-void SX1276Init(void) {
+void SX1276LoRaInit(void) {
     SX1276LoRaSetOpMode(Sleep_mode);
     SX1276LoRaFsk(LORA_mode);
     SX1276LoRaSetOpMode(Stdby_mode);
@@ -341,12 +316,12 @@ void SX1276Init(void) {
     SX1276LoRaSetPayloadLength(0xff);
     SX1276LoRaSetSymbTimeout(0x3FF);
     SX1276LoRaSetMobileNode(TRUE);
-    SX1276_RF_RECEIVE();
-    //RF_SEELP();
+    SX1276LoRaGetReceive();
+    //SX1276LoRaSleep();
 }
 
-void SX1276_RF_SENDPACKET(unsigned char * RF_TRAN_P, unsigned char LEN) {
-    unsigned char ASM_i;
+void SX1276_RF_SendPacket(unsigned char * RF_TRAN_P, unsigned char LEN) {
+    unsigned char i;
     lpTypefunc.paSwitchCmdfunc(txOpen);
     SX1276LoRaSetOpMode(Stdby_mode);
     SX1276WriteBuffer(REG_LR_HOPPERIOD, 0);
@@ -356,7 +331,7 @@ void SX1276_RF_SENDPACKET(unsigned char * RF_TRAN_P, unsigned char LEN) {
     SX1276WriteBuffer(REG_LR_FIFOADDRPTR, 0);
     lpTypefunc.lpSwitchEnStatus(enOpen);
     lpTypefunc.lpByteWritefunc(0x80);
-    for (ASM_i = 0; ASM_i < LEN; ASM_i++) {
+    for (i = 0; i < LEN; i++) {
         lpTypefunc.lpByteWritefunc(*RF_TRAN_P);
         RF_TRAN_P++;
     }
@@ -366,7 +341,7 @@ void SX1276_RF_SENDPACKET(unsigned char * RF_TRAN_P, unsigned char LEN) {
     SX1276LoRaSetOpMode(Transmitter_mode);
 }
 
-void SX1276_RF_RECEIVE(void) {
+void SX1276LoRaGetReceive(void) {
     SX1276LoRaSetOpMode(Stdby_mode);
     SX1276WriteBuffer(REG_LR_IRQFLAGSMASK, IRQN_RXD_Value);
     SX1276WriteBuffer(REG_LR_HOPPERIOD, PACKET_MIAX_Value);
@@ -376,7 +351,7 @@ void SX1276_RF_RECEIVE(void) {
     lpTypefunc.paSwitchCmdfunc(rxOpen);
 }
 
-void SX1276_RF_CAD_RECEIVE(void) {
+void SX1276LoRaCardReceive(void) {
     SX1276LoRaSetOpMode(Stdby_mode);
     SX1276WriteBuffer(REG_LR_IRQFLAGSMASK, IRQN_CAD_Value);
     SX1276WriteBuffer(REG_LR_DIOMAPPING1, 0X80);
@@ -385,7 +360,7 @@ void SX1276_RF_CAD_RECEIVE(void) {
     lpTypefunc.paSwitchCmdfunc(rxOpen);
 }
 
-void SX1276_RF_SEELP(void) {
+void SX1276LoRaSleep(void) {
     SX1276LoRaSetOpMode(Stdby_mode);
     SX1276WriteBuffer(REG_LR_IRQFLAGSMASK, IRQN_SEELP_Value);
     SX1276WriteBuffer(REG_LR_DIOMAPPING1, 0X00);
@@ -393,35 +368,37 @@ void SX1276_RF_SEELP(void) {
     SX1276LoRaSetOpMode(Sleep_mode);
 }
 
-void SX1276_Interupt(void) {
-    unsigned int	i;
-    unsigned char RF_REC_RLEN_i;
-    RF_EX0_STATUS = SX1276ReadBuffer(REG_LR_IRQFLAGS);
-    if ((RF_EX0_STATUS & 0x08) == 0x08) {
-        SX1276_RF_RECEIVE();
+unsigned char SX1276LoRa_EX0_STATUS;
+void SX1276_RF_Interupt(void) {
+    unsigned char	i = 0;
+    unsigned char SX1276LoRa_Len = 0;
+    unsigned char CRC_Value;
+    SX1276LoRa_EX0_STATUS = SX1276ReadBuffer(REG_LR_IRQFLAGS);
+    if ((SX1276LoRa_EX0_STATUS & 0x08) == 0x08) {
+        SX1276LoRaGetReceive();
     }
-    if ((RF_EX0_STATUS & 0x40) == 0x40) {
+    if ((SX1276LoRa_EX0_STATUS & 0x40) == 0x40) {
         CRC_Value = SX1276ReadBuffer(REG_LR_MODEMCONFIG2);
         if ((CRC_Value & 0x04) == 0x04) {
             SX1276WriteBuffer(REG_LR_FIFOADDRPTR, 0x00);
-            SX1278_RLEN = SX1276ReadBuffer(REG_LR_NBRXBYTES);
+            SX1276LoRa_Len = SX1276ReadBuffer(REG_LR_NBRXBYTES);
             lpTypefunc.lpSwitchEnStatus(enOpen);
             lpTypefunc.lpByteWritefunc(0x00);
-            for (RF_REC_RLEN_i = 0; RF_REC_RLEN_i < SX1278_RLEN; RF_REC_RLEN_i++) {
-                if (RF_REC_RLEN_i < 32) SX1276_RF_RXBuffer[RF_REC_RLEN_i] = lpTypefunc.lpByteReadfunc();
+            for (i = 0; i < SX1276LoRa_Len; i++) {
+                if (i < 32) SX1276LoRaRXBuffer[i] = lpTypefunc.lpByteReadfunc();
+            }
+            for (i = 0; i < SX1276LoRa_Len; i++) {
+                if (i < 32) SX1276_RF_RXBuffer[i] = SX1276LoRaRXBuffer[i];
             }
             lpTypefunc.lpSwitchEnStatus(enClose);
         }
-        for (i = 0; i < SX1278_RLEN; i++) {
-            if (i < 32) RF_RXBuffer[i] = SX1276_RF_RXBuffer[i];
-        }
         SX1276LoRaSetOpMode(Stdby_mode);
-        RECEIVE_DATA();
+        SX1276_RF_ReceiveData();
     }
     SX1276WriteBuffer(REG_LR_IRQFLAGS, 0xff);
 }
 
-void SX1276_GPIO_Init(void) {
+void SX1276LoRa_GPIO_Init(void) {
     FL_GPIO_InitTypeDef GPIO_InitStruct = {0};
     // PA0_MISO
     GPIO_InitStruct.pin = FL_GPIO_PIN_0;
@@ -429,14 +406,14 @@ void SX1276_GPIO_Init(void) {
     GPIO_InitStruct.outputType = FL_GPIO_OUTPUT_PUSHPULL;
     GPIO_InitStruct.pull = FL_DISABLE;
     FL_GPIO_Init(GPIOA, &GPIO_InitStruct);
-    FL_GPIO_ResetOutputPin(GPIOA, FL_GPIO_PIN_0);
     // PA1_MOSI  PA2_NSS   PA3_SCLK   PA4_RF_Control    PA7_RST_433          
     GPIO_InitStruct.pin = FL_GPIO_PIN_1 | FL_GPIO_PIN_2 | FL_GPIO_PIN_3 | FL_GPIO_PIN_4 | FL_GPIO_PIN_7;
     GPIO_InitStruct.mode = FL_GPIO_MODE_OUTPUT;
     GPIO_InitStruct.outputType = FL_GPIO_OUTPUT_PUSHPULL;
     GPIO_InitStruct.pull = FL_DISABLE;
     FL_GPIO_Init(GPIOA, &GPIO_InitStruct);
-    FL_GPIO_ResetOutputPin(GPIOA, FL_GPIO_PIN_1 | FL_GPIO_PIN_2 | FL_GPIO_PIN_3 | FL_GPIO_PIN_4 | FL_GPIO_PIN_7);
+    FL_GPIO_ResetOutputPin(GPIOA, FL_GPIO_PIN_1 | FL_GPIO_PIN_2 | FL_GPIO_PIN_3 | FL_GPIO_PIN_4);
+    FL_GPIO_SetOutputPin(GPIOA, FL_GPIO_PIN_7);
     // PB2_GD0_433    
     GPIO_InitStruct.pin = FL_GPIO_PIN_2;
     GPIO_InitStruct.mode = FL_GPIO_MODE_INPUT;

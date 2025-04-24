@@ -1,7 +1,7 @@
 #include "Define.h"
 #include "LPUart_0_And_1_Lib.h"
 #include "AT24CXXDataLoader.h"
-#include "SX1276.h"
+#include "PT1000.h"
 
 char TagToType[][2] = {
     {positiveHeat_TAG,Type_float},
@@ -60,7 +60,6 @@ unsigned int UART_BAND = 115200;
 // LongUART UART1Ddata;
 ShortUART LPUART0Ddata, LPUART1Ddata;
 
-unsigned char RF_Is_Beginning_Flage;    // 关机
 unsigned int Now_DEV_Volt = 3600;
 float Now_TemperOrPress = 0.0;
 
@@ -200,8 +199,6 @@ int Add_HY_DataClass(strnew OutPutBuff, int startAddr, unsigned char DataTAG, un
             OutPutBuff.Name._char[startAddr++] = DoubleBuff[3];
             break;
         case CurrentRSSI:
-            OutPutBuff.Name._char[startAddr++] = (Now_NetDevParameter.RSSI >> 8) & 0x00FF;
-            OutPutBuff.Name._char[startAddr++] = (Now_NetDevParameter.RSSI >> 0) & 0x00FF;
             break;
         case FrequencyPoint:
             OutPutBuff.Name._char[startAddr++] = AT24CXX_Manager_NET.FrequencyPoint;
@@ -219,12 +216,17 @@ int Add_HY_DataClass(strnew OutPutBuff, int startAddr, unsigned char DataTAG, un
             OutPutBuff.Name._char[startAddr++] = AT24CXX_Manager_NET.Meter_Type;
             break;
         case ErrorCode:
-            OutPutBuff.Name._char[startAddr++] = 0x00;
+            OutPutBuff.Name._char[startAddr++] = Now_NetDevParameter.ReceiveFlag;
             OutPutBuff.Name._char[startAddr++] = Current_meter_status;
             break;
         case PD1000_R:
-            OutPutBuff.Name._char[startAddr++] = TEMP_R_VALUE_PT1 >> 8;
-            OutPutBuff.Name._char[startAddr++] = TEMP_R_VALUE_PT1 & 0XFF;
+            if (VIF == 0x01) {
+                OutPutBuff.Name._char[startAddr++] = TEMP_R_VALUE_PT1 >> 8;
+                OutPutBuff.Name._char[startAddr++] = TEMP_R_VALUE_PT1 & 0XFF;
+            } else {
+                OutPutBuff.Name._char[startAddr++] = TEMP_R_VALUE_PT2 >> 8;
+                OutPutBuff.Name._char[startAddr++] = TEMP_R_VALUE_PT2 & 0XFF;
+            }
             break;
     }
     OutPutBuff.Name._char[HeadStartAddr + 0] = ((startAddr - HeadStartAddr) >> 8) & 0x00FF;
@@ -239,7 +241,7 @@ bool WeiteCmdSubData(strnew CmdSub) {
         _Module_EEpromTime 需要写 时间
     */
     uint8_t ResFlag;
-    // int RXDataMaxLen = (CmdSub.Name._char[0] << 8 | CmdSub.Name._char[1]);
+    // int RXDataMaxLen = U8_Connect_U8(CmdSub.Name._char[0], CmdSub.Name._char[1]);
     if (CmdSub.Name._char[3] == nowTime_TAG) {
         if (TagToType[nowTime_TAG - 1][1] != CmdSub.Name._char[2]) {
             ResFlag = false;
@@ -265,6 +267,14 @@ bool WeiteCmdSubData(strnew CmdSub) {
         FloatBuf.MaxLen = 4;
         Now_TemperOrPress = (float)BuffToFloatOrDouble(FloatBuf, false);
         ResFlag = false;
+    } else if ((CmdSub.Name._char[3] == SendCount_TAG) || (CmdSub.Name._char[3] == receiveConut_TAG)) {
+        if ((TagToType[SendCount_TAG - 1][1] != CmdSub.Name._char[2]) && (TagToType[receiveConut_TAG - 1][1] != CmdSub.Name._char[2])) {
+            ResFlag = false;
+            goto SubEndAndWriteData;
+        }
+        Now_NetDevParameter.ReceiveCount = 0;
+        Now_NetDevParameter.SendCount = 0;
+        ResFlag = false;
     } else if (CmdSub.Name._char[3] == MeterAndTargeID_TAG) {
         if (TagToType[MeterAndTargeID_TAG - 1][1] != CmdSub.Name._char[2]) {
             ResFlag = false;
@@ -272,8 +282,8 @@ bool WeiteCmdSubData(strnew CmdSub) {
         }
         AT24CXX_Manager_NET.MeterID[0] = 0x00;
         AT24CXX_Manager_NET.MeterID[1] = 0x00;
-        AT24CXX_Manager_NET.MeterID[2] = (CmdSub.Name._char[7] != 0xFF ? CmdSub.Name._char[7] : AT24CXX_Manager_NET.MeterID[2]);
-        AT24CXX_Manager_NET.MeterID[3] = (CmdSub.Name._char[8] != 0xFF ? CmdSub.Name._char[8] : AT24CXX_Manager_NET.MeterID[3]);
+        AT24CXX_Manager_NET.MeterID[2] = (((unsigned char)CmdSub.Name._char[7] != 0xFF) ? CmdSub.Name._char[7] : AT24CXX_Manager_NET.MeterID[2]);
+        AT24CXX_Manager_NET.MeterID[3] = (((unsigned char)CmdSub.Name._char[8] != 0xFF) ? CmdSub.Name._char[8] : AT24CXX_Manager_NET.MeterID[3]);
         ResFlag = true;
     } else if (CmdSub.Name._char[3] == NowRunMode_TAG) {
         if (TagToType[NowRunMode_TAG - 1][1] != CmdSub.Name._char[2]) {
@@ -393,17 +403,18 @@ bool HY_USB_TTL_CheckBuff(char * RxBuf, int RxLen, uint8_t Now_LPUartx) {
     memset(SendBuf.Name._char, 0, SendBuf.MaxLen);
     SendBuf.Name._char[SendDataLen++] = 0x68;
     SendBuf.Name._char[SendDataLen++] = 0x44;
-    SendBuf.Name._char[SendDataLen++] = EEprom_METERID[0];
-    SendBuf.Name._char[SendDataLen++] = EEprom_METERID[1];
-    SendBuf.Name._char[SendDataLen++] = EEprom_METERID[2];
-    SendBuf.Name._char[SendDataLen++] = EEprom_METERID[3];
+    SendBuf.Name._char[SendDataLen++] = 0xFF;
+    SendBuf.Name._char[SendDataLen++] = 0xFF;
+    SendBuf.Name._char[SendDataLen++] = 0xFF;
+    SendBuf.Name._char[SendDataLen++] = 0xFF;
     SendBuf.Name._char[SendDataLen++] = 0x00;
     SendBuf.Name._char[SendDataLen++] = 0x11;
     SendBuf.Name._char[SendDataLen++] = 0x11;
     SendDataLen++;      // SendDataLen == 09 H 
     SendDataLen++;      // SendDataLen == 10 L 
-    int CmdTempFlag = (RXDatabuff.Name._char[11] << 16 | RXDatabuff.Name._char[12] << 8 | RXDatabuff.Name._char[13]);
 
+    uint32_t CmdTempFlag = U8_Connect_U8(0x00, RXDatabuff.Name._char[11]);
+    CmdTempFlag = (CmdTempFlag << 16 & 0xFFFF0000) | (U8_Connect_U8(RXDatabuff.Name._char[12], RXDatabuff.Name._char[13]) & 0x0000FFFF);
     if ((CmdTempFlag == CMD_CODE_CTRL || CmdTempFlag == CMD_CODE_WRITE)) {
         SendBuf.Name._char[SendDataLen++] = ((CMD_CODE_RES >> 0x10) & 0x00FF); // CMDID
         SendBuf.Name._char[SendDataLen++] = ((CMD_CODE_RES >> 0x08) & 0x00FF); // DI0
@@ -416,22 +427,22 @@ bool HY_USB_TTL_CheckBuff(char * RxBuf, int RxLen, uint8_t Now_LPUartx) {
 
     int SubLen = 0;
     char TempRXSubBuff[128] = {0};
-    int RXDataMaxLen = (RXDatabuff.Name._char[0x09] << 8 | RXDatabuff.Name._char[0x0A]);
+    int RXDataMaxLen = U8_Connect_U8(RXDatabuff.Name._char[0x09], RXDatabuff.Name._char[0x0A]);
     int SteepAddr = 0;
 
     if (CmdTempFlag == CMD_CODE_RES) {
-        DoingCmdSub(NEW_NAME(TempRXSubBuff), (RXDatabuff.Name._char[11] << 16 | RXDatabuff.Name._char[12] << 8 | RXDatabuff.Name._char[13]));
+        DoingCmdSub(NEW_NAME(TempRXSubBuff), CmdTempFlag);
         return false;
     }
     for (int NowSubLenAddr = 14; NowSubLenAddr < RXDataMaxLen; NowSubLenAddr = 14 + SteepAddr) {
         memset(TempRXSubBuff, 0, ARR_SIZE(TempRXSubBuff));
-        SubLen = RXDatabuff.Name._char[NowSubLenAddr] << 8 | RXDatabuff.Name._char[NowSubLenAddr + 1];
+        SubLen = U8_Connect_U8(RXDatabuff.Name._char[NowSubLenAddr],RXDatabuff.Name._char[NowSubLenAddr + 1]);
         if (SubLen > 128 || SubLen > RXDatabuff.MaxLen) {
             return false;
         }
         memcpy(TempRXSubBuff, &RXDatabuff.Name._char[NowSubLenAddr], (SubLen + 5));
         // 执行
-        isWirteEEprom |= DoingCmdSub(NEW_NAME(TempRXSubBuff), (RXDatabuff.Name._char[11] << 16 | RXDatabuff.Name._char[12] << 8 | RXDatabuff.Name._char[13]));
+        isWirteEEprom |= DoingCmdSub(NEW_NAME(TempRXSubBuff), CmdTempFlag);
         // 回复
         if ((CmdTempFlag == CMD_CODE_CTRL || CmdTempFlag == CMD_CODE_WRITE) && (NowSubLenAddr + (SubLen + 5) > RXDataMaxLen)) {
             SendDataLen = Add_HY_DataClass(NEW_NAME(SendBuf.Name._char), SendDataLen, MessageResFlag, 0x01);
@@ -445,7 +456,7 @@ bool HY_USB_TTL_CheckBuff(char * RxBuf, int RxLen, uint8_t Now_LPUartx) {
             SendBuf.Name._char[SendDataLen++] = MessageResFlag;                   // VIF
             SendBuf.Name._char[SendDataLen++] = 0x00;                             // 回复指令错误
         }
-        SteepAddr += (RXDatabuff.Name._char[14 + SteepAddr] << 8 | RXDatabuff.Name._char[15 + SteepAddr]);
+        SteepAddr += U8_Connect_U8(RXDatabuff.Name._char[14 + SteepAddr],RXDatabuff.Name._char[15 + SteepAddr]);
     }
     SendBuf.Name._char[0x09] = ((SendDataLen >> 8) & 0x00FF);
     SendBuf.Name._char[0x0A] = ((SendDataLen >> 0) & 0x00FF);

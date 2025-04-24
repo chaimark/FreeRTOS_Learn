@@ -12,6 +12,7 @@
 #include "TaskLPUart_0_And_1.h"
 #include "TaskAboutTimer.h"
 #include "TaskReadEEprom.h"
+#include "SX1276.h"
 
 /**
   ****************************************************************************************************
@@ -50,12 +51,12 @@ int main(void) {
     StartOPenDevMode();
     CheckMeterNum();
     setNetArgumentInit(NULL);
+    Send_RF_DATA_AT_The_Beginning();
     xTaskCreate(LPUart_0_And_1_Receive, "AllCmd", configMINIMAL_STACK_SIZE, NULL, LPUart_0_And_1_PRIORITY, &LPUart_0_And_1_Hand); // 1 -- x
     xTaskCreate(ReadEEprom, "ReadEEprom", configMINIMAL_STACK_SIZE, NULL, ReadEEprom_PRIORITY, &ReadEEpromHand); // 4
     xTaskCreate(TimeTask, "TestAll", configMINIMAL_STACK_SIZE, NULL, TimeTask_PRIORITY, &TimeTaskHand); // 2
     vTaskStartScheduler();
     while (1) { // 无任务运行，RTOS 自动进入睡眠
-#warning "Now_NetDevParameter.RSSI 怎么获取";
     }
 }
 

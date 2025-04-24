@@ -2,40 +2,37 @@
 #include "SX1276.h"
 #include "PublicLib_No_One.h"
 
-extern void SX1276Init(void);  //from SX1276.c
-extern void SX1276_RF_SEELP(void);  //from SX1276.c
-
-void SX1276_RF_SpiInit(void) {
+void SX1276LoRa_SPI_Init(void) {
     SX1276_SCLK_L;
     SX1276_NSS_H;
-    SX1276_MOSI_L;
+    SX1276_SIMO_L;
 }
 
-void SX1276Reset(void) {
+void SX1276LoRa_Reset(void) {
     SX1276_RST_L;
     IncludeDelayMs(200);
     SX1276_RST_H;
     IncludeDelayMs(300);
 }
 
-void SX1276_RF_SPI_MasterIO(unsigned char out) {
+void SX1276LoRa_SPI_MasterIO(unsigned char out) {
     unsigned char i;
     for (i = 0; i < 8; i++) {
-        if (out & 0x80) { SX1276_MOSI_H; } else { SX1276_MOSI_L; }
+        if (out & 0x80) { SX1276_SIMO_H; } else { SX1276_SIMO_L; }
         SX1276_SCLK_H;
         out = (out << 1);
         SX1276_SCLK_L;
     }
 }
 
-unsigned char SX1276_RF_SPI_READ_BYTE() {
+unsigned char SX1276LoRa_SPI_ReadByte() {
     unsigned char j;
     unsigned char i;
     j = 0;
     for (i = 0; i < 8; i++) {
         SX1276_SCLK_H;
         j = (j << 1);
-        if (SX1276_MISO_VALUE) j = j | 0x01;
+        if (SX1276_SOMI_VALUE) j = j | 0x01;
         SX1276_SCLK_L;
     }
     return j;
@@ -70,8 +67,8 @@ void fqcRecvData(unsigned char * lpbuf, unsigned short len) {
 }
 
 lpCtrlTypefunc_t  ctrlTypefunc = {
-   SX1276_RF_SPI_MasterIO,
-   SX1276_RF_SPI_READ_BYTE,
+   SX1276LoRa_SPI_MasterIO,
+   SX1276LoRa_SPI_ReadByte,
    cmdSwitchEn,
    cmdSwitchPA,
    fqcRecvData
@@ -88,20 +85,20 @@ void SX1276_PWR_OFF(void) {
     IncludeDelayMs(200);
 }
 
-void SX1276_RF_OPEN(void) {
+void SX1276_RF_Open(void) {
     SX1276_PWR_ON();
     IncludeDelayMs(50);
-    SX1276_RF_SpiInit();
+    SX1276LoRa_SPI_Init();
     register_rf_func(&ctrlTypefunc);
-    SX1276Reset();
-    SX1276Init();
+    SX1276LoRa_Reset();
+    SX1276LoRaInit();
 }
 
-void SX1276_RF_CLOSE() {
+void SX1276_RF_Close() {
     SX1276_PWR_OFF();
     IncludeDelayMs(50);
     SX1276_SCLK_L;
     SX1276_NSS_L;
-    SX1276_MOSI_L;
+    SX1276_SIMO_L;
     SX1276_RST_L;
 }

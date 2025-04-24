@@ -68,7 +68,7 @@
 .\objects\\pt1000.o: ..\Interflow\SetTime.h
 .\objects\\pt1000.o: ..\Include\RTC.h
 .\objects\\pt1000.o: ..\Interflow\RTC_SetTime.h
-.\objects\\pt1000.o: ..\Include\SX1276.h
+.\objects\\pt1000.o: ..\Include\PT1000.h
 .\objects\\pt1000.o: ..\Interflow\AT24CXXDataLoader.h
 .\objects\\pt1000.o: ..\Interflow\NumberBaseLib.h
 .\objects\\pt1000.o: ..\Include\AT24C02.h

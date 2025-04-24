@@ -13,7 +13,6 @@
                 "FreeRTOS\\include",
                 "Drivers\\CMSIS\\Device\\FM\\FM33xx\\Include",
                 "Drivers\\FM33LC0xx_FL_Driver\\Inc",
-                "Drivers\\CMSIS\\Inculde",
                 "MF-config",
                 "Tickless",
                 "Interflow\\",

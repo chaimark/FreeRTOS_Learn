@@ -60,6 +60,8 @@ extern uint64_t setDataBit(uint64_t InputNumber, int8_t BitNumber, bool Value);
 extern int HEX2ToASCII(char * hex, int hex_len, char * asc, int asc_len);
 extern int ASCIIToHEX2(char * asc, int asc_len, char * hex, int hex_len);
 
+extern uint16_t U8_Connect_U8(uint8_t H_Part, uint8_t L_Part);
+
 // 该宏可以恢复原数组, 如果不需要可直接调用原函数： ASCIIToHEX2
 #define AsciiToHex(asc, asc_len, hex, hex_len) ASCIIToHEX2(asc, asc_len, hex, hex_len);\
     numberArrayToStrArray(asc, asc, asc_len)

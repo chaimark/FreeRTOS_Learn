@@ -10,7 +10,7 @@ int HY_FLAG = true;
 AT24CXX_MANAGER_T AT24CXX_Manager = {
     .Sing = 0xB2,
     .MeterID = {0x00, 0x00, 0x56, 0x78}, // 0x12 0x34 0x56 0x78
-    .FrequencyPoint = 0x01, // 分频点
+    .FrequencyPoint = 0x12, // 分频点
     .SendInterval = 60,
     .Meter_Type = 1,  // 1：PT1000, 2:压力
     .Test_TemperOrPress_Interval = 20,
@@ -22,7 +22,7 @@ NetDevParameter Now_NetDevParameter = {
     .NowRunTag = true,
     .SendCount = 0,
     .ReceiveCount = 0,
-    .RSSI = 17,
+    .ReceiveFlag = false,
 };
 // void SaveDevData(void) {
 //     unsigned int HourInt = 0;

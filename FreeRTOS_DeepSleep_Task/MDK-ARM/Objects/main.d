@@ -79,3 +79,4 @@
 .\objects\\main.o: ..\Include\TaskLPUart_0_And_1.h
 .\objects\\main.o: ..\Include\TaskAboutTimer.h
 .\objects\\main.o: ..\Include\TaskReadEEprom.h
+.\objects\\main.o: ..\Include\SX1276.h

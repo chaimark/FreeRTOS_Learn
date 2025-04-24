@@ -76,3 +76,4 @@
 .\objects\\taskabouttimer.o: ..\Include\AT24C02.h
 .\objects\\taskabouttimer.o: ..\Include\ADC.h
 .\objects\\taskabouttimer.o: ..\FreeRTOS\include\timers.h
+.\objects\\taskabouttimer.o: ..\Include\SX1276.h

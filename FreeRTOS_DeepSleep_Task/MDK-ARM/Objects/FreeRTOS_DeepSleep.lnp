@@ -64,6 +64,6 @@
 ".\objects\\taskabouttimer.o"
 ".\objects\\tasklpuart_0_and_1.o"
 --strict --scatter ".\Objects\\FreeRTOS_DeepSleep.sct"
---summary_stderr --info summarysizes --map --xref --callgraph --symbols
+--summary_stderr --info summarysizes --map --load_addr_map_info --xref --callgraph --symbols
 --info sizes --info totals --info unused --info veneers
 --list ".\Listings\\FreeRTOS_DeepSleep.map" -o .\Objects\\FreeRTOS_DeepSleep.axf

@@ -40,7 +40,7 @@ typedef struct {
     bool NowRunTag;
     uint16_t SendCount;     // 发送次数
     uint16_t ReceiveCount;  // 接收次数
-    uint16_t RSSI;          // RSSI值
+    bool ReceiveFlag;   // 上次通信是否接收到标记
 } NetDevParameter;
 
 extern NetDevParameter Now_NetDevParameter;    // 网络状态标记与下行指令表

@@ -13,39 +13,39 @@ ARM Macro Assembler    Page 1
     6 00000000         ;   <o> Stack Size (in Bytes) <0x0-0xFFFFFFFF:8>
     7 00000000         ; </h>
     8 00000000         
-    9 00000000 00001400 
+    9 00000000 00001800 
                        Stack_Size
-                               EQU              0x00001400
+                               EQU              0x00001800
    10 00000000         
    11 00000000                 AREA             STACK, NOINIT, READWRITE, ALIGN
 =3
    12 00000000         Stack_Mem
                                SPACE            Stack_Size
-   13 00001400         __initial_sp
-   14 00001400         
-   15 00001400         
-   16 00001400         ; <h> Heap Configuration
-   17 00001400         ;   <o>  Heap Size (in Bytes) <0x0-0xFFFFFFFF:8>
-   18 00001400         ; </h>
-   19 00001400         
-   20 00001400 00001000 
+   13 00001800         __initial_sp
+   14 00001800         
+   15 00001800         
+   16 00001800         ; <h> Heap Configuration
+   17 00001800         ;   <o>  Heap Size (in Bytes) <0x0-0xFFFFFFFF:8>
+   18 00001800         ; </h>
+   19 00001800         
+   20 00001800 00000100 
                        Heap_Size
-                               EQU              0x00001000
-   21 00001400         
-   22 00001400                 AREA             HEAP, NOINIT, READWRITE, ALIGN=
+                               EQU              0x00000100
+   21 00001800         
+   22 00001800                 AREA             HEAP, NOINIT, READWRITE, ALIGN=
 3
    23 00000000         __heap_base
    24 00000000         Heap_Mem
                                SPACE            Heap_Size
-   25 00001000         __heap_limit
-   26 00001000         
-   27 00001000                 PRESERVE8
-   28 00001000                 THUMB
-   29 00001000         
-   30 00001000         
-   31 00001000         ; Vector Table Mapped to Address 0 at Reset
-   32 00001000         
-   33 00001000                 AREA             RESET, DATA, READONLY
+   25 00000100         __heap_limit
+   26 00000100         
+   27 00000100                 PRESERVE8
+   28 00000100                 THUMB
+   29 00000100         
+   30 00000100         
+   31 00000100         ; Vector Table Mapped to Address 0 at Reset
+   32 00000100         
+   33 00000100                 AREA             RESET, DATA, READONLY
    34 00000000                 EXPORT           __Vectors
    35 00000000                 EXPORT           __Vectors_End
    36 00000000                 EXPORT           __Vectors_Size
@@ -341,15 +341,15 @@ ARM Macro Assembler    Page 6
               00000000 
               00000000 
               00000000 
-              00001400 
-              00001000 
+              00001800 
+              00000100 
               00000000 
 Command Line: --debug --xref --diag_suppress=9931 --cpu=Cortex-M0 --apcs=interw
 ork --depend=.\objects\\startup_fm33lc0xx.d -o.\objects\\startup_fm33lc0xx.o -I
-.\RTE\_FreeRTOS_DeepSleep -IC:\Keil_v5\ARM\PACK\FMSH\FM33LC0XX_DFP\3.0.4\Device
-\Include -IC:\Keil_v5\ARM\CMSIS\Include --predefine="__UVISION_VERSION SETA 523
-" --predefine="FM33LC0xx SETA 1" --list=.\listings\\startup_fm33lc0xx.lst ../Dr
-ivers/CMSIS/Device/FM/FM33xx/Source/Templates/arm/startup_fm33lc0xx.s
+C:\Keil_v5\Arm\Packs\FMSH\FM33LC0XX_DFP\3.0.4\Device\Include --predefine="__UVI
+SION_VERSION SETA 535" --predefine="FM33LC0xx SETA 1" --list=.\listings\\startu
+p_fm33lc0xx.lst ../Drivers/CMSIS/Device/FM/FM33xx/Source/Templates/arm/startup_
+fm33lc0xx.s
 
 
 
@@ -377,7 +377,7 @@ m/startup_fm33lc0xx.s
       At line 223 in file ../Drivers/CMSIS/Device/FM/FM33xx/Source/Templates/ar
 m/startup_fm33lc0xx.s
 
-__initial_sp 00001400
+__initial_sp 00001800
 
 Symbol: __initial_sp
    Definitions
@@ -424,7 +424,7 @@ Symbol: __heap_base
    Uses
       None
 Comment: __heap_base unused
-__heap_limit 00001000
+__heap_limit 00000100
 
 Symbol: __heap_limit
    Definitions
@@ -1019,7 +1019,7 @@ Comment: __user_initial_stackheap used once
 ARM Macro Assembler    Page 1 Alphabetic symbol ordering
 Absolute symbols
 
-Heap_Size 00001000
+Heap_Size 00000100
 
 Symbol: Heap_Size
    Definitions
@@ -1031,7 +1031,7 @@ Symbol: Heap_Size
       At line 222 in file ../Drivers/CMSIS/Device/FM/FM33xx/Source/Templates/ar
 m/startup_fm33lc0xx.s
 
-Stack_Size 00001400
+Stack_Size 00001800
 
 Symbol: Stack_Size
    Definitions

@@ -22,7 +22,6 @@
 
 /* Includes ------------------------------------------------------------------*/
 #include "mf_config.h"
-#include "fm33lc0xx_fl.h"
 #include "ADC.h"
 #include "PublicLib_No_One.h"
 /* Private function prototypes -----------------------------------------------*/
@@ -44,23 +43,23 @@ void MF_EXTI_Line_Init(void) {
     FL_GPIO_InitTypeDef     GPIO_InitStruct;
     FL_EXTI_InitTypeDef     EXTI_InitStruct;
     FL_NVIC_ConfigTypeDef   InterruptConfigStruct;
-    MF_EXTI_Init();
-
     // INT1 PB2 EXET4
     GPIO_InitStruct.pin = FL_GPIO_PIN_2;
     GPIO_InitStruct.mode = FL_GPIO_MODE_INPUT;
     GPIO_InitStruct.outputType = FL_GPIO_OUTPUT_OPENDRAIN;
-    GPIO_InitStruct.pull = FL_ENABLE;
+    GPIO_InitStruct.pull = FL_DISABLE;
     GPIO_InitStruct.remapPin = FL_DISABLE;
     FL_GPIO_Init(GPIOB, &GPIO_InitStruct);
     EXTI_InitStruct.input = FL_GPIO_EXTI_INPUT_GROUP2;
-    EXTI_InitStruct.triggerEdge = FL_GPIO_EXTI_TRIGGER_EDGE_FALLING;
+    EXTI_InitStruct.triggerEdge = FL_GPIO_EXTI_TRIGGER_EDGE_RISING;
     EXTI_InitStruct.filter = FL_ENABLE;
     FL_EXTI_Init(FL_GPIO_EXTI_LINE_4, &EXTI_InitStruct);
     FL_GPIO_ClearFlag_EXTI(GPIO, FL_GPIO_EXTI_LINE_4);
-    /////////////////////////////////// 
+
     InterruptConfigStruct.preemptPriority = 0x0001;
     FL_NVIC_Init(&InterruptConfigStruct, GPIO_IRQn);
+	
+	  MF_EXTI_Init();
 }
 void MF_PMU_Init(void) {
     FL_PMU_SleepInitTypeDef    PMU_InitStruct;
@@ -232,7 +231,7 @@ void MF_Config_Init(void) {
     /* initial GP2 */
     GP21_GPIO_Init();
     /* initial SX1276 */
-    SX1276_GPIO_Init();
+    SX1276LoRa_GPIO_Init();
     /* Initial ADC */
     MF_ADC_Common_Init();
     MF_ADC_Sampling_Init();

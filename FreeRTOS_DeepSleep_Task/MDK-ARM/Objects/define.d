@@ -72,4 +72,4 @@
 .\objects\\define.o: ..\Interflow\AT24CXXDataLoader.h
 .\objects\\define.o: ..\Interflow\NumberBaseLib.h
 .\objects\\define.o: ..\Include\AT24C02.h
-.\objects\\define.o: ..\Include\SX1276.h
+.\objects\\define.o: ..\Include\PT1000.h

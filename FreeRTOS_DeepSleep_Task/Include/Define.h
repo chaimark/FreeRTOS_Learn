@@ -140,53 +140,54 @@ typedef struct {
 // extern ShortUART LPUART0Ddata;
 extern ShortUART LPUART0Ddata, LPUART1Ddata;
 
-extern unsigned char RF_Is_Beginning_Flage;
 extern unsigned int Now_DEV_Volt;
 extern float Now_TemperOrPress;
 
 #define GPIO_SET_H(GPIOX,PINX)        FL_GPIO_SetOutputPin(GPIOX,PINX)      // 设置高电平
 #define GPIO_SET_L(GPIOX,PINX)        FL_GPIO_ResetOutputPin(GPIOX,PINX)    // 设置低电平
 
-#define EEprom_SDA_HIGH         GPIO_SET_H(GPIOC, FL_GPIO_PIN_0)
-#define EEprom_SDA_LOW          GPIO_SET_L(GPIOC, FL_GPIO_PIN_0)  
-#define EEprom_SDA_VALUE        (FL_GPIO_ReadInputPort(GPIOC)&FL_GPIO_PIN_0)
+#define EEProm_SDA_GPIO_X       GPIOC
+#define EEProm_SDA_GPIO_PIN     FL_GPIO_PIN_0
+#define EEprom_SDA_HIGH         GPIO_SET_H(EEProm_SDA_GPIO_X, EEProm_SDA_GPIO_PIN)
+#define EEprom_SDA_LOW          GPIO_SET_L(EEProm_SDA_GPIO_X, EEProm_SDA_GPIO_PIN)  
+#define EEprom_SDA_VALUE        (FL_GPIO_ReadInputPort(EEProm_SDA_GPIO_X)&EEProm_SDA_GPIO_PIN)
 #define EEprom_SCL_LOW          GPIO_SET_L(GPIOC, FL_GPIO_PIN_1) 
 #define EEprom_SCL_HIGH         GPIO_SET_H(GPIOC, FL_GPIO_PIN_1) 
 
-#define  GP21_POWER_ON            FL_GPIO_SetOutputPin(GPIOB, FL_GPIO_PIN_10)
-#define  GP21_POWER_OFF           FL_GPIO_ResetOutputPin(GPIOB, FL_GPIO_PIN_10) 
+#define  GP21_POWER_ON          GPIO_SET_H(GPIOB, FL_GPIO_PIN_10)
+#define  GP21_POWER_OFF         GPIO_SET_L(GPIOB, FL_GPIO_PIN_10) 
 
-#define  GP21_SCLK_H          FL_GPIO_SetOutputPin(GPIOB, FL_GPIO_PIN_3)
-#define  GP21_SCLK_L           FL_GPIO_ResetOutputPin(GPIOB, FL_GPIO_PIN_3)
-#define  GP21_SIMO_H          FL_GPIO_SetOutputPin(GPIOA, FL_GPIO_PIN_10)
-#define  GP21_SIMO_L           FL_GPIO_ResetOutputPin(GPIOA, FL_GPIO_PIN_10)
-#define  GP21_RST_H            FL_GPIO_SetOutputPin(GPIOA, FL_GPIO_PIN_9)
-#define  GP21_RST_L             FL_GPIO_ResetOutputPin(GPIOA, FL_GPIO_PIN_9) 
-#define  GP21_NSS_H            FL_GPIO_SetOutputPin(GPIOB, FL_GPIO_PIN_4)
-#define  GP21_NSS_L             FL_GPIO_ResetOutputPin(GPIOB, FL_GPIO_PIN_4) 
-#define  GP21_ACLK_H          FL_GPIO_SetOutputPin(GPIOB, FL_GPIO_PIN_12)
-#define  GP21_ACLK_L           FL_GPIO_ResetOutputPin(GPIOB, FL_GPIO_PIN_12) 
+#define  GP21_SCLK_H            GPIO_SET_H(GPIOB, FL_GPIO_PIN_3)
+#define  GP21_SCLK_L            GPIO_SET_L(GPIOB, FL_GPIO_PIN_3)
+#define  GP21_SIMO_H            GPIO_SET_H(GPIOA, FL_GPIO_PIN_10)
+#define  GP21_SIMO_L            GPIO_SET_L(GPIOA, FL_GPIO_PIN_10)
+#define  GP21_RST_H             GPIO_SET_H(GPIOA, FL_GPIO_PIN_9)
+#define  GP21_RST_L             GPIO_SET_L(GPIOA, FL_GPIO_PIN_9) 
+#define  GP21_NSS_H             GPIO_SET_H(GPIOB, FL_GPIO_PIN_4)
+#define  GP21_NSS_L             GPIO_SET_L(GPIOB, FL_GPIO_PIN_4) 
+#define  GP21_ACLK_H            GPIO_SET_H(GPIOB, FL_GPIO_PIN_12)
+#define  GP21_ACLK_L            GPIO_SET_L(GPIOB, FL_GPIO_PIN_12) 
 
-#define  EN761_HIGH              FL_GPIO_SetOutputPin(GPIOB, FL_GPIO_PIN_9)
-#define  EN761_LOW              FL_GPIO_ResetOutputPin(GPIOB, FL_GPIO_PIN_9) 
-#define  GP21_SOMI_VALUE  (FL_GPIO_ReadInputPort(GPIOA)&FL_GPIO_PIN_8)
-#define  GP21_INT_VALUE      (FL_GPIO_ReadInputPort(GPIOB)&FL_GPIO_PIN_5)
+#define  EN761_HIGH             GPIO_SET_H(GPIOB, FL_GPIO_PIN_9)
+#define  EN761_LOW              GPIO_SET_L(GPIOB, FL_GPIO_PIN_9) 
+#define  GP21_SOMI_VALUE        (FL_GPIO_ReadInputPort(GPIOA)&FL_GPIO_PIN_8)
+#define  GP21_INT_VALUE         (FL_GPIO_ReadInputPort(GPIOB)&FL_GPIO_PIN_5)
 
-#define SX1276_PWR_H       FL_GPIO_SetOutputPin(GPIOA, FL_GPIO_PIN_4)
-#define SX1276_PWR_L     FL_GPIO_ResetOutputPin(GPIOA, FL_GPIO_PIN_4)
+#define SX1276_PWR_H            GPIO_SET_H(GPIOA, FL_GPIO_PIN_4)
+#define SX1276_PWR_L            GPIO_SET_L(GPIOA, FL_GPIO_PIN_4)
 
-#define SX1276_SCLK_H         FL_GPIO_SetOutputPin(GPIOA, FL_GPIO_PIN_3)
-#define SX1276_SCLK_L          FL_GPIO_ResetOutputPin(GPIOA, FL_GPIO_PIN_3)
-#define SX1276_NSS_H           FL_GPIO_SetOutputPin(GPIOA, FL_GPIO_PIN_2)
-#define SX1276_NSS_L            FL_GPIO_ResetOutputPin(GPIOA, FL_GPIO_PIN_2)
-#define SX1276_MOSI_H          FL_GPIO_SetOutputPin(GPIOA, FL_GPIO_PIN_1)
-#define SX1276_MOSI_L           FL_GPIO_ResetOutputPin(GPIOA, FL_GPIO_PIN_1)
-#define SX1276_RST_H            FL_GPIO_SetOutputPin(GPIOA, FL_GPIO_PIN_7)
-#define SX1276_RST_L             FL_GPIO_ResetOutputPin(GPIOA, FL_GPIO_PIN_7)
-#define SX1276_MISO_VALUE  (FL_GPIO_ReadInputPort(GPIOA)&FL_GPIO_PIN_0) 
+#define SX1276_SCLK_H           GPIO_SET_H(GPIOA, FL_GPIO_PIN_3)
+#define SX1276_SCLK_L           GPIO_SET_L(GPIOA, FL_GPIO_PIN_3)
+#define SX1276_NSS_H            GPIO_SET_H(GPIOA, FL_GPIO_PIN_2)
+#define SX1276_NSS_L            GPIO_SET_L(GPIOA, FL_GPIO_PIN_2)
+#define SX1276_SIMO_H           GPIO_SET_H(GPIOA, FL_GPIO_PIN_1)
+#define SX1276_SIMO_L           GPIO_SET_L(GPIOA, FL_GPIO_PIN_1)
+#define SX1276_RST_H            GPIO_SET_H(GPIOA, FL_GPIO_PIN_7)
+#define SX1276_RST_L            GPIO_SET_L(GPIOA, FL_GPIO_PIN_7)
+#define SX1276_SOMI_VALUE       (FL_GPIO_ReadInputPort(GPIOA)&FL_GPIO_PIN_0) 
 
-#define  Press_POWER_ON    FL_GPIO_SetOutputPin(GPIOB, FL_GPIO_PIN_14)
-#define  Press_POWER_OFF  FL_GPIO_ResetOutputPin(GPIOB, FL_GPIO_PIN_14) 
+#define Press_POWER_ON    GPIO_SET_H(GPIOB, FL_GPIO_PIN_14)
+#define Press_POWER_OFF  GPIO_SET_L(GPIOB, FL_GPIO_PIN_14) 
 
 #define EEPROM_AT24CXXDATA_ADDRESS 0    // AT24CxxData
 #define EEPROM_OTHER_ADDRESS 184       // EEPROM_Other

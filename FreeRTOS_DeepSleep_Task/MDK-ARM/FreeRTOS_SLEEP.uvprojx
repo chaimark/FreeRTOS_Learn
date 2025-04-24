@@ -339,7 +339,7 @@
               <MiscControls></MiscControls>
               <Define>FM33LC0XX,USE_FULL_ASSERT</Define>
               <Undefine></Undefine>
-              <IncludePath>..\FreeRTOS\portable\RVDS\ARM_CM0;..\FreeRTOS\include;..\Drivers\CMSIS\Device\FM\FM33xx\Include;..\Drivers\FM33LC0xx_FL_Driver\Inc;..\Drivers\CMSIS\Inculde;..\MF-config;..\Tickless;..\Interflow\;..\Include</IncludePath>
+              <IncludePath>..\FreeRTOS\portable\RVDS\ARM_CM0;..\FreeRTOS\include;..\Drivers\CMSIS\Device\FM\FM33xx\Include;..\Drivers\FM33LC0xx_FL_Driver\Inc;..\MF-config;..\Tickless;..\Interflow\;..\Include</IncludePath>
             </VariousControls>
           </Cads>
           <Aads>
@@ -763,6 +763,11 @@
               <FileType>5</FileType>
               <FilePath>..\Include\TaskLPUart_0_And_1.h</FilePath>
             </File>
+            <File>
+              <FileName>PT1000.h</FileName>
+              <FileType>5</FileType>
+              <FilePath>..\Include\PT1000.h</FilePath>
+            </File>
           </Files>
         </Group>
         <Group>
@@ -869,14 +874,5 @@
     <components/>
     <files/>
   </RTE>
-
-  <LayerInfo>
-    <Layers>
-      <Layer>
-        <LayName>FreeRTOS_SLEEP</LayName>
-        <LayPrjMark>1</LayPrjMark>
-      </Layer>
-    </Layers>
-  </LayerInfo>
 
 </Project>

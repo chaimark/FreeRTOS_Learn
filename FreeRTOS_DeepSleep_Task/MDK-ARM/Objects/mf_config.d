@@ -72,3 +72,7 @@
 .\objects\\mf_config.o: ..\Interflow\Check_XTHF_Or_XTLF.h
 .\objects\\mf_config.o: ..\Include\ADC.h
 .\objects\\mf_config.o: ..\Include\GP21.h
+.\objects\\mf_config.o: ..\Include\SX1276.h
+.\objects\\mf_config.o: ..\Interflow\AT24CXXDataLoader.h
+.\objects\\mf_config.o: ..\Interflow\NumberBaseLib.h
+.\objects\\mf_config.o: ..\Include\AT24C02.h

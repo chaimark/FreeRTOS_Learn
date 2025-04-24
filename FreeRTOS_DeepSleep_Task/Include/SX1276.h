@@ -1,16 +1,10 @@
 #ifndef __SX1276__H__
 #define __SX1276__H__
 
-extern unsigned int TEMP_R_VALUE_PT1;
-extern unsigned int TEMP_R_VALUE_PT2;
-extern unsigned char Current_meter_status;
-extern unsigned int PressVotage; // 压力表的电压 Now_DEV_Volt
-extern unsigned char RF_ReceiveFig;
-extern unsigned char SingalStatus;
-
 #include "AT24CXXDataLoader.h"
 #define METERID (&AT24CXX_Manager_NET.MeterID[2])
 
+extern unsigned char Alarm_Falge;
 #define REG_LR_FIFO                                  0x00 
  // Common settings
 #define REG_LR_OPMODE                                0x01 
@@ -122,10 +116,10 @@ typedef struct {
     unsigned char (*lpByteReadfunc)();
     void (*lpSwitchEnStatus)(cmdEntype_t cmd);
     void (*paSwitchCmdfunc)(cmdpaType_t cmd);
-    void (*lpRecvDataTousr)(unsigned char * lpbuf, unsigned short length);
+    void (*lpRecvDataTousr)(unsigned char *lpbuf, unsigned short length);
 }lpCtrlTypefunc_t;
 
-void register_rf_func(lpCtrlTypefunc_t * func);
+void register_rf_func(lpCtrlTypefunc_t *func);
 void SX1276WriteBuffer(unsigned char addr, unsigned char buffer);
 unsigned char SX1276ReadBuffer(unsigned char addr);
 void SX1276LoRaSetOpMode(RFMode_SET opMode);
@@ -142,10 +136,13 @@ void SX1276LoRaSetSymbTimeout(unsigned int value);
 void SX1276LoRaSetPayloadLength(unsigned char value);
 void SX1276LoRaSetPreamLength(unsigned int value);
 void SX1276LoRaSetMobileNode(BOOL enable);
-void FSK_SEND_PACKET(void);
-void SX1276_RF_RECEIVE(void);
-void SX1276_RF_CAD_RECEIVE(void);
-void SX1276_RF_SEELP(void);
-void SX1276Init(void);
-extern void SX1276_GPIO_Init(void);
+void SX1276LoRaGetReceive(void);
+void SX1276LoRaCardReceive(void);
+void SX1276LoRaSleep(void);
+void SX1276LoRaInit(void);
+void SX1276LoRaFSKSendPacket(void);
+extern void SX1276LoRa_GPIO_Init(void);
+extern void Send_RF_DATA_AT_The_Beginning(void);
+extern unsigned char SX1276_RF_TXBuffer[30];             
+extern unsigned char SX1276_RF_RXBuffer[50];  
 #endif
