@@ -332,6 +332,8 @@ int ASCIIToHEX2(char * asc, int asc_len, char * hex, int hex_len) {
     // STR TO HEX-------------------
 }
 
-uint16_t U8_Connect_U8(uint8_t H_Part, uint8_t L_Part) {
-    return ((((uint16_t)H_Part & 0x00FF) << 8) | ((uint16_t)L_Part & 0x00FF));
+uint16_t U8_Connect_U8(uint8_t H_Part_Input, uint8_t L_Part_Input) {
+    uint16_t H_Part = H_Part_Input;
+    uint16_t L_Part = L_Part_Input;
+    return (((H_Part & 0x00FF) << 8) | (L_Part & 0x00FF));
 }

@@ -49,8 +49,6 @@ void Send_RF_DATA_AT_The_Beginning(void) {
     SX1276_RF_TXBuffer[j++] = AT24CXX_Manager_NET.Test_TemperOrPress_Interval & 0XFF;
     SX1276_RF_TXBuffer[j++] = 3600 >> 8;
     SX1276_RF_TXBuffer[j++] = 3600 & 0XFF;
-
-    SX1276_RF_TXBuffer[j++] = Now_NetDevParameter.ReceiveFlag;
     SX1276_RF_TXBuffer[j++] = Current_meter_status;
     for (unsigned char i = 0; i < j; i++) {
         Sum = Sum + SX1276_RF_TXBuffer[i];
@@ -73,8 +71,6 @@ void Send_RF_DATA(unsigned char FA_ACTIVE) {
     SX1276_RF_TXBuffer[j++] = AT24CXX_Manager_NET.Test_TemperOrPress_Interval & 0XFF;
     SX1276_RF_TXBuffer[j++] = Now_DEV_Volt >> 8;
     SX1276_RF_TXBuffer[j++] = Now_DEV_Volt & 0XFF;
-
-    SX1276_RF_TXBuffer[j++] = Now_NetDevParameter.ReceiveFlag;
     SX1276_RF_TXBuffer[j++] = Current_meter_status;
     for (unsigned char i = 0; i < j; i++) {
         Sum = Sum + SX1276_RF_TXBuffer[i];

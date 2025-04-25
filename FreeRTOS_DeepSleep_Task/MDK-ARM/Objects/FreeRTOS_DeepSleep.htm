@@ -3,7 +3,7 @@
 <title>Static Call Graph - [.\Objects\\FreeRTOS_DeepSleep.axf]</title></head>
 <body><HR>
 <H1>Static Call Graph for image .\Objects\\FreeRTOS_DeepSleep.axf</H1><HR>
-<BR><P>#&#060CALLGRAPH&#062# ARM Linker, 5060960: Last Updated: Thu Apr 24 11:48:39 2025
+<BR><P>#&#060CALLGRAPH&#062# ARM Linker, 5060960: Last Updated: Fri Apr 25 11:14:45 2025
 <BR><P>
 <H3>Maximum Stack Usage =        448 bytes + Unknown(Functions without stacksize, Cycles, Untraceable Function Pointers)</H3><H3>
 Call chain for Maximum Stack Depth:</H3>
@@ -2223,7 +2223,7 @@ Global Symbols
 <LI><a href="#[172]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;Send_RF_DATA
 </UL>
 
-<P><STRONG><a name="[172]"></a>Send_RF_DATA</STRONG> (Thumb, 260 bytes, Stack size 16 bytes, sx1276_tx.o(i.Send_RF_DATA))
+<P><STRONG><a name="[172]"></a>Send_RF_DATA</STRONG> (Thumb, 246 bytes, Stack size 16 bytes, sx1276_tx.o(i.Send_RF_DATA))
 <BR><BR>[Stack]<UL><LI>Max Depth = 128<LI>Call Chain = Send_RF_DATA &rArr; Send_RF &rArr; SX1276_RF_Open &rArr; SX1276_PWR_ON &rArr; FL_DelayMs &rArr; FL_DelayUs &rArr; xTaskResumeAll &rArr; xTaskIncrementTick
 </UL>
 <BR>[Calls]<UL><LI><a href="#[174]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;__aeabi_f2uiz
@@ -2232,7 +2232,7 @@ Global Symbols
 <BR>[Called By]<UL><LI><a href="#[171]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;SendDataByRF
 </UL>
 
-<P><STRONG><a name="[175]"></a>Send_RF_DATA_AT_The_Beginning</STRONG> (Thumb, 228 bytes, Stack size 16 bytes, sx1276_tx.o(i.Send_RF_DATA_AT_The_Beginning))
+<P><STRONG><a name="[175]"></a>Send_RF_DATA_AT_The_Beginning</STRONG> (Thumb, 214 bytes, Stack size 16 bytes, sx1276_tx.o(i.Send_RF_DATA_AT_The_Beginning))
 <BR><BR>[Stack]<UL><LI>Max Depth = 128<LI>Call Chain = Send_RF_DATA_AT_The_Beginning &rArr; Send_RF &rArr; SX1276_RF_Open &rArr; SX1276_PWR_ON &rArr; FL_DelayMs &rArr; FL_DelayUs &rArr; xTaskResumeAll &rArr; xTaskIncrementTick
 </UL>
 <BR>[Calls]<UL><LI><a href="#[173]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;Send_RF
@@ -2383,8 +2383,10 @@ Global Symbols
 </UL>
 <BR>[Address Reference Count : 1]<UL><LI> main.o(i.main)
 </UL>
-<P><STRONG><a name="[11c]"></a>U8_Connect_U8</STRONG> (Thumb, 12 bytes, Stack size 0 bytes, numberbaselib.o(i.U8_Connect_U8))
-<BR><BR>[Called By]<UL><LI><a href="#[119]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;HY_USB_TTL_CheckBuff
+<P><STRONG><a name="[11c]"></a>U8_Connect_U8</STRONG> (Thumb, 18 bytes, Stack size 12 bytes, numberbaselib.o(i.U8_Connect_U8))
+<BR><BR>[Stack]<UL><LI>Max Depth = 12<LI>Call Chain = U8_Connect_U8
+</UL>
+<BR>[Called By]<UL><LI><a href="#[119]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;HY_USB_TTL_CheckBuff
 </UL>
 
 <P><STRONG><a name="[47]"></a>VoltgeTestTimer</STRONG> (Thumb, 40 bytes, Stack size 8 bytes, taskabouttimer.o(i.VoltgeTestTimer))
