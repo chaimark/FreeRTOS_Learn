@@ -42,6 +42,7 @@
 ".\objects\\check_xthf_or_xtlf.o"
 ".\objects\\numberbaselib.o"
 ".\objects\\publiclib_no_one.o"
+".\objects\\min_settime.o"
 ".\objects\\rtc_settime.o"
 ".\objects\\settime.o"
 ".\objects\\strlib.o"

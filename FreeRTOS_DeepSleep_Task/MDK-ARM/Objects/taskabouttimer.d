@@ -17,6 +17,7 @@
 .\objects\\taskabouttimer.o: ..\Interflow\StrLib.h
 .\objects\\taskabouttimer.o: C:\Keil_v5\ARM\ARMCC\Bin\..\include\string.h
 .\objects\\taskabouttimer.o: C:\Keil_v5\ARM\ARMCC\Bin\..\include\stdbool.h
+.\objects\\taskabouttimer.o: ..\Interflow\MIN_SetTime.h
 .\objects\\taskabouttimer.o: ..\Interflow\PublicLib_No_One.h
 .\objects\\taskabouttimer.o: C:\Keil_v5\ARM\ARMCC\Bin\..\include\stdio.h
 .\objects\\taskabouttimer.o: C:\Keil_v5\ARM\ARMCC\Bin\..\include\stdlib.h
@@ -66,7 +67,7 @@
 .\objects\\taskabouttimer.o: ..\Interflow\Check_XTHF_Or_XTLF.h
 .\objects\\taskabouttimer.o: ..\Include\BSTim.h
 .\objects\\taskabouttimer.o: ..\Include\LPTim32.h
-.\objects\\taskabouttimer.o: ..\Interflow\SetTime.h
+.\objects\\taskabouttimer.o: ..\Include\../Interflow/SetTime.h
 .\objects\\taskabouttimer.o: ..\Include\RTC.h
 .\objects\\taskabouttimer.o: ..\Include\Define.h
 .\objects\\taskabouttimer.o: ..\Interflow\RTC_SetTime.h

@@ -69,7 +69,7 @@ void vSetWakeTimeInterrupt(TickType_t xExpectedIdleTime) {
 void vApplicationSleep(TickType_t xExpectedIdleTime) {
     unsigned long ulLowPowerTimeBeforeSleep, ulLowPowerTimeAfterSleep;
     eSleepModeStatus eSleepStatus;
-    FL_LPTIM32_Enable(LPTIM32);
+    LPTIM_Setup();
     /* Read the current time from a time source that will remain operational
     while the microcontroller is in a low power state. */
     ulLowPowerTimeBeforeSleep = ulGetExternalTime();
@@ -116,7 +116,7 @@ void vApplicationSleep(TickType_t xExpectedIdleTime) {
             portSUPPRESS_TICKS_AND_SLEEP() returns.  Therefore no other tasks will
             execute until this function completes. */
             ulLowPowerTimeAfterSleep = ulGetExternalTime();
-            FL_LPTIM32_Disable(LPTIM32);
+            LPTIM_Stop();
             /* Correct the kernels tick count to account for the time the
             microcontroller spent in its low power state. */
             vTaskStepTick((ulLowPowerTimeAfterSleep - ulLowPowerTimeBeforeSleep));

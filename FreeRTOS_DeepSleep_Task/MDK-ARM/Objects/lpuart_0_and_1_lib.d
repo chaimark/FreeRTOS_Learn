@@ -65,8 +65,9 @@
 .\objects\\lpuart_0_and_1_lib.o: ..\Interflow\Check_XTHF_Or_XTLF.h
 .\objects\\lpuart_0_and_1_lib.o: ..\Include\BSTim.h
 .\objects\\lpuart_0_and_1_lib.o: ..\Include\LPTim32.h
-.\objects\\lpuart_0_and_1_lib.o: ..\Interflow\SetTime.h
+.\objects\\lpuart_0_and_1_lib.o: ..\Include\../Interflow/SetTime.h
 .\objects\\lpuart_0_and_1_lib.o: ..\Include\RTC.h
 .\objects\\lpuart_0_and_1_lib.o: ..\Interflow\RTC_SetTime.h
+.\objects\\lpuart_0_and_1_lib.o: ..\Interflow\MIN_SetTime.h
 .\objects\\lpuart_0_and_1_lib.o: ..\Include\LPUart_0_And_1_Lib.h
 .\objects\\lpuart_0_and_1_lib.o: ..\Include\TaskLPUart_0_And_1.h

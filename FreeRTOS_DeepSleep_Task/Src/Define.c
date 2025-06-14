@@ -316,7 +316,7 @@ bool WeiteCmdSubData(strnew CmdSub) {
             goto SubEndAndWriteData;
         }
         if (CmdSub.Name._char[5] == 0x01) {
-            RTC_TASK.Task[SendLoarTask].MaxSecNum = 1;
+            RTC_TASK.Task[SendLoarTask].CountMaxNum = 1;
         }
         ResFlag = false;
     } else if (CmdSub.Name._char[3] == MeterType_TAG) {
@@ -382,12 +382,12 @@ bool HY_USB_TTL_CheckBuff(char * RxBuf, int RxLen, uint8_t Now_LPUartx) {
     if ((RXDatabuff.Name._char[0] != 0x68) || ((RXDatabuff.Name._char[1] != 0x44))) {
         return false;
     }
-    if (Cault_CS(RXDatabuff.Name._char, 0, CsAddr) != RXDatabuff.Name._char[CsAddr]) {
-        return false;
-    }
     if (!(((uint8_t)RXDatabuff.Name._char[2] == 0xFF && (uint8_t)RXDatabuff.Name._char[3] == 0xFF && (uint8_t)RXDatabuff.Name._char[4] == 0xFF && (uint8_t)RXDatabuff.Name._char[5] == 0xFF)
         || (AT24CXX_Manager_NET.MeterID[2] == RXDatabuff.Name._char[4] && AT24CXX_Manager_NET.MeterID[3] == RXDatabuff.Name._char[5])
         )) {
+        return false;
+    }
+    if (Cault_CS(RXDatabuff.Name._char, 0, CsAddr) != RXDatabuff.Name._char[CsAddr]) {
         return false;
     }
     bool isWirteEEprom = false;
@@ -436,7 +436,7 @@ bool HY_USB_TTL_CheckBuff(char * RxBuf, int RxLen, uint8_t Now_LPUartx) {
     }
     for (int NowSubLenAddr = 14; NowSubLenAddr < RXDataMaxLen; NowSubLenAddr = 14 + SteepAddr) {
         memset(TempRXSubBuff, 0, ARR_SIZE(TempRXSubBuff));
-        SubLen = U8_Connect_U8(RXDatabuff.Name._char[NowSubLenAddr],RXDatabuff.Name._char[NowSubLenAddr + 1]);
+        SubLen = U8_Connect_U8(RXDatabuff.Name._char[NowSubLenAddr], RXDatabuff.Name._char[NowSubLenAddr + 1]);
         if (SubLen > 128 || SubLen > RXDatabuff.MaxLen) {
             return false;
         }
@@ -456,7 +456,7 @@ bool HY_USB_TTL_CheckBuff(char * RxBuf, int RxLen, uint8_t Now_LPUartx) {
             SendBuf.Name._char[SendDataLen++] = MessageResFlag;                   // VIF
             SendBuf.Name._char[SendDataLen++] = 0x00;                             // 回复指令错误
         }
-        SteepAddr += U8_Connect_U8(RXDatabuff.Name._char[14 + SteepAddr],RXDatabuff.Name._char[15 + SteepAddr]);
+        SteepAddr += U8_Connect_U8(RXDatabuff.Name._char[14 + SteepAddr], RXDatabuff.Name._char[15 + SteepAddr]);
     }
     SendBuf.Name._char[0x09] = ((SendDataLen >> 8) & 0x00FF);
     SendBuf.Name._char[0x0A] = ((SendDataLen >> 0) & 0x00FF);
@@ -472,40 +472,32 @@ bool HY_USB_TTL_CheckBuff(char * RxBuf, int RxLen, uint8_t Now_LPUartx) {
     }
     return true;
 }
-
+#include "SX1276.h"
 void Device_Init(void) {
     LPUART_Init(LPUART0);   // 初始化 LPUart0
     LPUART_Init(LPUART1);   // 初始化 LPUart1
-    // Display_Wait(0);
     // RTC 开启定时器中断
     MF_RTC_1S_Init();
     // LPTIM 开启定时器中断
-    MF_LPTIM250mS_Init();
+    // LPTIM_Setup();
+    // LPTIM_Stop();
     // BSTIM 开启定时器中断
-    BSTIM32_Setup();    //开启定时器中断
-    BSTIM32_Stop();     //关闭定时器中断
-    SetLPTime.LPInitSetTimeTask(IWDTClS, SecTo250Ms(MinToSec(8)), NULL); // 8min 内定时器喂狗
+    // BSTIM32_Setup();    //开启定时器中断
+    // BSTIM32_Stop();     //关闭定时器中断
+    RTC_TASK.InitSetTimeTask(IWDTClS, SecTo250Ms(MinToSec(8)), NULL); // 8min 内定时器喂狗
 }
 void StartOPenDevMode(void) {
     Device_Init();
     /* Initial IWDT */
     MF_IWDT_Init();
-
-    MF_EXTI_Line_Init(); // 配置外部中断对应的端口
     FL_RTC_InitTypeDef TempTime;
-#ifdef OPEN8025T
-    TempTime = Read_RX8025T_Time();
-    RTC_SetRTC(&TempTime);    // 设置时间结构体
-    TempTime = RTC_Date;
-    Write_RX8025T_Time(TempTime);
-    RTC_TASK.InitSetTimeTask(__RX8025T_H, MinToSec(HourToMin(1)), NULL); // 每小时校准 RTC
-#else
     ReadTime_EEprom(&TempTime);
     RTC_SetRTC(&TempTime);    // 设置时间结构体
-#endif
     IncludeDelayMs(1000);
+    Config_Init_XTHF_And_XTLF();
     MF_LPUART0_Interrupt_Init();    // 开启 LPUart0
     MF_LPUART1_Interrupt_Init();    // 开启 LPUart1
+    SX1276LoRa_GPIO_Init();
 }
 void CheckMeterNum(void) {
     if (AT24CXX_Manager_NET.MeterTemperature_Adjust == 0xFFFF) {
@@ -517,4 +509,3 @@ void CheckMeterNum(void) {
         EEprom_AT24C0XXData_Write(&AT24CXX_Manager_NET.MeterPress_Adjust, sizeof(AT24CXX_Manager_NET.MeterPress_Adjust));
     }
 }
-

@@ -5,6 +5,7 @@
 .\objects\\rtc_settime.o: C:\Keil_v5\ARM\ARMCC\Bin\..\include\string.h
 .\objects\\rtc_settime.o: C:\Keil_v5\ARM\ARMCC\Bin\..\include\stdbool.h
 .\objects\\rtc_settime.o: C:\Keil_v5\ARM\ARMCC\Bin\..\include\stdint.h
+.\objects\\rtc_settime.o: ..\Interflow\MIN_SetTime.h
 .\objects\\rtc_settime.o: ..\Interflow\PublicLib_No_One.h
 .\objects\\rtc_settime.o: C:\Keil_v5\ARM\ARMCC\Bin\..\include\stdio.h
 .\objects\\rtc_settime.o: C:\Keil_v5\ARM\ARMCC\Bin\..\include\stdlib.h
@@ -54,7 +55,7 @@
 .\objects\\rtc_settime.o: ..\Interflow\Check_XTHF_Or_XTLF.h
 .\objects\\rtc_settime.o: ..\Include\BSTim.h
 .\objects\\rtc_settime.o: ..\Include\LPTim32.h
-.\objects\\rtc_settime.o: ..\Interflow\SetTime.h
+.\objects\\rtc_settime.o: ..\Include\../Interflow/SetTime.h
 .\objects\\rtc_settime.o: ..\Include\RTC.h
 .\objects\\rtc_settime.o: ..\Include\Define.h
 .\objects\\rtc_settime.o: ..\Interflow\RTC_SetTime.h

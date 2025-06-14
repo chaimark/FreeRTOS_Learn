@@ -21,8 +21,8 @@ uint8_t FlagBit_Task = 3;
 TaskHandle_t TimeTaskHand;
 SemaphoreHandle_t TimeTaskSemaphore = NULL;
 void startTimeTask(void) {
-    if (RTC_TASK.Task[TestArgument].TimeTask_Falge == true) {
-        RTC_TASK.InitSetTimeTask(TestArgument, AT24CXX_Manager_NET.Test_TemperOrPress_Interval, startTimeTask); //复位硬件定时器, 测温度或压力
+    if (MIN_TASK.Task[TestArgument].TimeTask_Falge == true) {
+        MIN_TASK.InitSetTimeTask(TestArgument, AT24CXX_Manager_NET.Test_TemperOrPress_Interval, startTimeTask); //复位硬件定时器, 测温度或压力
         FlagBit_Task |= 0x02; // 设置标志位, 测温度或压力
     }
     if (RTC_TASK.Task[SendLoarTask].TimeTask_Falge == true) {
@@ -57,7 +57,7 @@ void TimeTask(void * pvParameters) {
         xTimerStart(TestBatVoltgeTimer, 0);  // 启动定时器 测电压
     }
     // 创建硬件定时器
-    RTC_TASK.InitSetTimeTask(TestArgument, AT24CXX_Manager_NET.Test_TemperOrPress_Interval, startTimeTask); // 测温度或压力
+    MIN_TASK.InitSetTimeTask(TestArgument, AT24CXX_Manager_NET.Test_TemperOrPress_Interval, startTimeTask); // 测温度或压力
     // 创建硬件定时器
     RTC_TASK.InitSetTimeTask(SendLoarTask, AT24CXX_Manager_NET.SendInterval, startTimeTask); // 发送数据
     TimeTaskSemaphore = xSemaphoreCreateBinary(); // 初始化信号量

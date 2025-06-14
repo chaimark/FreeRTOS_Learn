@@ -65,9 +65,10 @@
 .\objects\\pt1000.o: ..\Interflow\Check_XTHF_Or_XTLF.h
 .\objects\\pt1000.o: ..\Include\BSTim.h
 .\objects\\pt1000.o: ..\Include\LPTim32.h
-.\objects\\pt1000.o: ..\Interflow\SetTime.h
+.\objects\\pt1000.o: ..\Include\../Interflow/SetTime.h
 .\objects\\pt1000.o: ..\Include\RTC.h
 .\objects\\pt1000.o: ..\Interflow\RTC_SetTime.h
+.\objects\\pt1000.o: ..\Interflow\MIN_SetTime.h
 .\objects\\pt1000.o: ..\Include\PT1000.h
 .\objects\\pt1000.o: ..\Interflow\AT24CXXDataLoader.h
 .\objects\\pt1000.o: ..\Interflow\NumberBaseLib.h

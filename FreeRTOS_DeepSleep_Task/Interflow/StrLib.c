@@ -8,8 +8,8 @@ Type_T _InitType(void * var, const char * type) {
 }
 #endif
 /*-----------------------------------函数说明----------------------------------*/
-int catString(char * OutStr, char * IntStr, int MaxSize, int IntSize);
-bool copyString(char * OutStr, char * IntStr, int MaxSize, int IntSize);
+int catString(char * OutStr, const char * IntStr, int MaxSize, int IntSize);
+bool copyString(char * OutStr, const char * IntStr, int MaxSize, int IntSize);
 char * myStrstr(char * MotherStr, char * SonStr, int MotherMaxSize);
 char * myStrstrCont(char * MotherStr, char * SonStr, int MotherMaxSize, int ContNum);
 void swapChr(char * a, char * b);
@@ -43,7 +43,7 @@ strnew New_Str_Obj(void * Master, int SizeNum, int SizeType) {
 
 /*-----------------------------------函数定义----------------------------------*/
 // 追加字符
-int catString(char * OutStr, char * IntStr, int MaxSize, int IntSize) {
+int catString(char * OutStr, const char * IntStr, int MaxSize, int IntSize) {
     int AddrNow = 0;
     // 找出"\0"
     while ((OutStr[AddrNow] != '\0') && (AddrNow < MaxSize)) {
@@ -75,7 +75,7 @@ int catString(char * OutStr, char * IntStr, int MaxSize, int IntSize) {
     }
 }
 // 复制字符串
-bool copyString(char * OutStr, char * IntStr, int MaxSize, int IntSize) {
+bool copyString(char * OutStr, const char * IntStr, int MaxSize, int IntSize) {
     int run = 0;
     if (MaxSize >= IntSize) {
         for (run = 0; run < IntSize; run++) { // last reserved for'\0'

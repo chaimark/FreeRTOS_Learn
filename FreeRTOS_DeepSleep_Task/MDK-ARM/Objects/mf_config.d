@@ -52,10 +52,11 @@
 .\objects\\mf_config.o: ..\MF-config\mf_config.h
 .\objects\\mf_config.o: ..\Include\BSTim.h
 .\objects\\mf_config.o: ..\Include\LPTim32.h
-.\objects\\mf_config.o: ..\Interflow\SetTime.h
+.\objects\\mf_config.o: ..\Include\../Interflow/SetTime.h
 .\objects\\mf_config.o: ..\Include\RTC.h
 .\objects\\mf_config.o: ..\Include\Define.h
 .\objects\\mf_config.o: ..\Interflow\RTC_SetTime.h
+.\objects\\mf_config.o: ..\Interflow\MIN_SetTime.h
 .\objects\\mf_config.o: ..\Interflow\PublicLib_No_One.h
 .\objects\\mf_config.o: ..\FreeRTOS\include\FreeRTOS.h
 .\objects\\mf_config.o: ..\Include\FreeRTOSConfig.h

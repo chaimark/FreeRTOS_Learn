@@ -65,6 +65,7 @@
 .\objects\\check_xthf_or_xtlf.o: ..\FreeRTOS\include\queue.h
 .\objects\\check_xthf_or_xtlf.o: ..\Include\BSTim.h
 .\objects\\check_xthf_or_xtlf.o: ..\Include\LPTim32.h
-.\objects\\check_xthf_or_xtlf.o: ..\Interflow\SetTime.h
+.\objects\\check_xthf_or_xtlf.o: ..\Include\../Interflow/SetTime.h
 .\objects\\check_xthf_or_xtlf.o: ..\Include\RTC.h
 .\objects\\check_xthf_or_xtlf.o: ..\Interflow\RTC_SetTime.h
+.\objects\\check_xthf_or_xtlf.o: ..\Interflow\MIN_SetTime.h

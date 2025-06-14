@@ -116,10 +116,10 @@ typedef struct {
     unsigned char (*lpByteReadfunc)();
     void (*lpSwitchEnStatus)(cmdEntype_t cmd);
     void (*paSwitchCmdfunc)(cmdpaType_t cmd);
-    void (*lpRecvDataTousr)(unsigned char *lpbuf, unsigned short length);
+    void (*lpRecvDataTousr)(unsigned char * lpbuf, unsigned short length);
 }lpCtrlTypefunc_t;
 
-void register_rf_func(lpCtrlTypefunc_t *func);
+void register_rf_func(lpCtrlTypefunc_t * func);
 void SX1276WriteBuffer(unsigned char addr, unsigned char buffer);
 unsigned char SX1276ReadBuffer(unsigned char addr);
 void SX1276LoRaSetOpMode(RFMode_SET opMode);
@@ -143,6 +143,7 @@ void SX1276LoRaInit(void);
 void SX1276LoRaFSKSendPacket(void);
 extern void SX1276LoRa_GPIO_Init(void);
 extern void Send_RF_DATA_AT_The_Beginning(void);
-extern unsigned char SX1276_RF_TXBuffer[30];             
-extern unsigned char SX1276_RF_RXBuffer[50];  
+extern unsigned char SX1276_RF_TXBuffer[30];
+extern unsigned char SX1276_RF_RXBuffer[50];
+extern void SX1276_RF_Close(void);
 #endif

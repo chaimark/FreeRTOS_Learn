@@ -67,9 +67,10 @@
 .\objects\\tasklpuart_0_and_1.o: ..\Interflow\Check_XTHF_Or_XTLF.h
 .\objects\\tasklpuart_0_and_1.o: ..\Include\BSTim.h
 .\objects\\tasklpuart_0_and_1.o: ..\Include\LPTim32.h
-.\objects\\tasklpuart_0_and_1.o: ..\Interflow\SetTime.h
+.\objects\\tasklpuart_0_and_1.o: ..\Include\../Interflow/SetTime.h
 .\objects\\tasklpuart_0_and_1.o: ..\Include\RTC.h
 .\objects\\tasklpuart_0_and_1.o: ..\Interflow\RTC_SetTime.h
+.\objects\\tasklpuart_0_and_1.o: ..\Interflow\MIN_SetTime.h
 .\objects\\tasklpuart_0_and_1.o: ..\Interflow\AT24CXXDataLoader.h
 .\objects\\tasklpuart_0_and_1.o: ..\Interflow\NumberBaseLib.h
 .\objects\\tasklpuart_0_and_1.o: ..\Include\AT24C02.h

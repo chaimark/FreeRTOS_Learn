@@ -36,28 +36,43 @@ NetDevParameter Now_NetDevParameter = {
 #define AckError    0x55
 
 unsigned char  EEprom_Err_Flage;   //0:正常   1：错误
-
-static void EEprom_SDA_SET_IN(void) {
-    FL_GPIO_InitTypeDef    GPIO_InitStruct = {0};
-    GPIO_InitStruct.pin = FL_GPIO_PIN_0;
-    GPIO_InitStruct.mode = FL_GPIO_MODE_INPUT;
-    GPIO_InitStruct.outputType = FL_GPIO_OUTPUT_OPENDRAIN;
-    GPIO_InitStruct.pull = FL_DISABLE;
-    FL_GPIO_Init(GPIOC, &GPIO_InitStruct);
-}
-
-static void EEprom_SDA_SET_OUT(void) {
-    FL_GPIO_InitTypeDef    GPIO_InitStruct = {0};
-    GPIO_InitStruct.pin = FL_GPIO_PIN_0;
+/**
+  * @brief  I2C_MASTER Initialization function
+  * @param  void
+  * @retval None
+  */
+void MF_I2C_MASTER_Init(void) {
+    FL_GPIO_InitTypeDef    GPIO_InitStruct;
+    //PC1_SCLK   PC0_SDATA   高阻
+    GPIO_InitStruct.pin = FL_GPIO_PIN_1 | EEProm_SDA_GPIO_PIN;
     GPIO_InitStruct.mode = FL_GPIO_MODE_OUTPUT;
     GPIO_InitStruct.outputType = FL_GPIO_OUTPUT_OPENDRAIN;
     GPIO_InitStruct.pull = FL_DISABLE;
+    GPIO_InitStruct.remapPin = FL_DISABLE;
     FL_GPIO_Init(GPIOC, &GPIO_InitStruct);
-    FL_GPIO_SetOutputPin(GPIOC, FL_GPIO_PIN_0);
+    GPIO_SET_H(GPIOC, FL_GPIO_PIN_1 | EEProm_SDA_GPIO_PIN);
+}
+static void EEprom_SDA_IN(void) {
+    FL_GPIO_InitTypeDef    GPIO_InitStruct = {0};
+    GPIO_InitStruct.pin = EEProm_SDA_GPIO_PIN;
+    GPIO_InitStruct.mode = FL_GPIO_MODE_INPUT;
+    GPIO_InitStruct.outputType = FL_GPIO_OUTPUT_OPENDRAIN;
+    GPIO_InitStruct.pull = FL_DISABLE;
+    FL_GPIO_Init(EEProm_SDA_GPIO_X, &GPIO_InitStruct);
+}
+
+static void EEprom_SDA_OUT(void) {
+    FL_GPIO_InitTypeDef    GPIO_InitStruct = {0};
+    GPIO_InitStruct.pin = EEProm_SDA_GPIO_PIN;
+    GPIO_InitStruct.mode = FL_GPIO_MODE_OUTPUT;
+    GPIO_InitStruct.outputType = FL_GPIO_OUTPUT_OPENDRAIN;
+    GPIO_InitStruct.pull = FL_DISABLE;
+    FL_GPIO_Init(EEProm_SDA_GPIO_X, &GPIO_InitStruct);
+    GPIO_SET_H(EEProm_SDA_GPIO_X, EEProm_SDA_GPIO_PIN);
 }
 
 void IIC_Start(void) {
-    EEprom_SDA_SET_OUT();
+    EEprom_SDA_OUT();
     FL_DelayUs(4);
     EEprom_SDA_HIGH;
     FL_DelayUs(4);
@@ -70,7 +85,7 @@ void IIC_Start(void) {
 }
 
 void IIC_Stop(void) {
-    EEprom_SDA_SET_OUT();
+    EEprom_SDA_OUT();
     EEprom_SDA_LOW;
     FL_DelayUs(4);
     EEprom_SCL_HIGH;
@@ -81,7 +96,7 @@ void IIC_Stop(void) {
 }
 
 void IIC_SendAck(void) {
-    EEprom_SDA_SET_OUT();
+    EEprom_SDA_OUT();
     EEprom_SDA_LOW;
     FL_DelayUs(4);
     EEprom_SCL_LOW;
@@ -94,7 +109,7 @@ void IIC_SendAck(void) {
 }
 
 void IIC_SendNoAck(void) {
-    EEprom_SDA_SET_OUT();
+    EEprom_SDA_OUT();
     EEprom_SDA_HIGH;
     FL_DelayUs(4);
     EEprom_SCL_LOW;
@@ -106,7 +121,7 @@ void IIC_SendNoAck(void) {
 
 unsigned char IIC_Check_Ack(void) {
     unsigned char AckStatus;
-    EEprom_SDA_SET_IN();
+    EEprom_SDA_IN();
     EEprom_SCL_HIGH;
     FL_DelayUs(4);
     if (EEprom_SDA_VALUE != 0) {
@@ -116,13 +131,13 @@ unsigned char IIC_Check_Ack(void) {
     }
     EEprom_SCL_LOW;
     FL_DelayUs(4);
-    EEprom_SDA_SET_OUT();
+    EEprom_SDA_OUT();
     return AckStatus;
 }
 
 void IIC_SendByte(unsigned char data) {
     unsigned char tmp;
-    EEprom_SDA_SET_OUT();
+    EEprom_SDA_OUT();
     for (tmp = 0; tmp < 8; tmp++) {
         if (data & 0x80) {
             EEprom_SDA_HIGH;
@@ -142,7 +157,7 @@ void IIC_SendByte(unsigned char data) {
 unsigned char IIC_RevByte(void) {
     unsigned char tmp;
     unsigned char DATA = 0;
-    EEprom_SDA_SET_IN();
+    EEprom_SDA_IN();
     EEprom_SCL_LOW;
     FL_DelayUs(4);
     for (tmp = 0; tmp < 8; tmp++) {
@@ -156,8 +171,35 @@ unsigned char IIC_RevByte(void) {
         }
         EEprom_SCL_LOW;
     }
-    EEprom_SDA_SET_OUT();
+    EEprom_SDA_OUT();
     return DATA;
+}
+
+unsigned char EEprom_Byte1Write_No_Check(unsigned char addr, unsigned char data) {
+    unsigned char Dev_addr;
+    Dev_addr = 0xa0;
+    IIC_Start();
+    IIC_SendByte(Dev_addr);
+    if (IIC_Check_Ack() == FALSE) {
+        IIC_Stop();
+        IncludeDelayMs(1);
+        return AckError;
+    }
+    IIC_SendByte(addr);
+    if (IIC_Check_Ack() == FALSE) {
+        IIC_Stop();
+        IncludeDelayMs(1);
+        return AckError;
+    }
+    IIC_SendByte(data);
+    if (IIC_Check_Ack() == FALSE) {
+        IIC_Stop();
+        IncludeDelayMs(1);
+        return AckError;
+    }
+    IIC_Stop();
+    IncludeDelayMs(1);
+    return 0;
 }
 
 unsigned char EEprom_Byte1Read_No_Check(unsigned char addr) {
@@ -167,11 +209,15 @@ unsigned char EEprom_Byte1Read_No_Check(unsigned char addr) {
     IIC_Start();
     IIC_SendByte(Dev_addr);
     if (IIC_Check_Ack() == FALSE) {
+        IIC_Stop();
+        IncludeDelayMs(1);
         return AckError;
     }
     FL_DelayUs(1);
     IIC_SendByte(addr);
     if (IIC_Check_Ack() == FALSE) {
+        IIC_Stop();
+        IncludeDelayMs(1);
         return AckError;
     }
     FL_DelayUs(1);
@@ -179,13 +225,15 @@ unsigned char EEprom_Byte1Read_No_Check(unsigned char addr) {
     Dev_addr = 0xa1;
     IIC_SendByte(Dev_addr);
     if (IIC_Check_Ack() == FALSE) {
+        IIC_Stop();
+        IncludeDelayMs(1);
         return AckError;
     }
     FL_DelayUs(1);
     data = IIC_RevByte();
     IIC_SendNoAck();
     IIC_Stop();
-    IncludeDelayMs(2);
+    IncludeDelayMs(1);
     return data;
 }
 
@@ -208,26 +256,6 @@ unsigned char EEprom_Byte1Read(unsigned char addr) {
             return AckError;
         }
     }
-}
-unsigned char EEprom_Byte1Write_No_Check(unsigned char addr, unsigned char data) {
-    unsigned char Dev_addr;
-    Dev_addr = 0xa0;
-    IIC_Start();
-    IIC_SendByte(Dev_addr);
-    if (IIC_Check_Ack() == FALSE) {
-        return AckError;
-    }
-    IIC_SendByte(addr);
-    if (IIC_Check_Ack() == FALSE) {
-        return AckError;
-    }
-    IIC_SendByte(data);
-    if (IIC_Check_Ack() == FALSE) {
-        return AckError;
-    }
-    IIC_Stop();
-    IncludeDelayMs(5);
-    return 0;
 }
 
 unsigned char EEprom_Byte1Write(unsigned char addr, unsigned char data) {

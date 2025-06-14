@@ -65,9 +65,10 @@
 .\objects\\sx1276_receive.o: ..\Interflow\Check_XTHF_Or_XTLF.h
 .\objects\\sx1276_receive.o: ..\Include\BSTim.h
 .\objects\\sx1276_receive.o: ..\Include\LPTim32.h
-.\objects\\sx1276_receive.o: ..\Interflow\SetTime.h
+.\objects\\sx1276_receive.o: ..\Include\../Interflow/SetTime.h
 .\objects\\sx1276_receive.o: ..\Include\RTC.h
 .\objects\\sx1276_receive.o: ..\Interflow\RTC_SetTime.h
+.\objects\\sx1276_receive.o: ..\Interflow\MIN_SetTime.h
 .\objects\\sx1276_receive.o: ..\Include\SX1276.h
 .\objects\\sx1276_receive.o: ..\Interflow\AT24CXXDataLoader.h
 .\objects\\sx1276_receive.o: ..\Interflow\NumberBaseLib.h

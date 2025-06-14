@@ -65,11 +65,13 @@
 .\objects\\define.o: ..\Interflow\Check_XTHF_Or_XTLF.h
 .\objects\\define.o: ..\Include\BSTim.h
 .\objects\\define.o: ..\Include\LPTim32.h
-.\objects\\define.o: ..\Interflow\SetTime.h
+.\objects\\define.o: ..\Include\../Interflow/SetTime.h
 .\objects\\define.o: ..\Include\RTC.h
 .\objects\\define.o: ..\Interflow\RTC_SetTime.h
+.\objects\\define.o: ..\Interflow\MIN_SetTime.h
 .\objects\\define.o: ..\Include\LPUart_0_And_1_Lib.h
 .\objects\\define.o: ..\Interflow\AT24CXXDataLoader.h
 .\objects\\define.o: ..\Interflow\NumberBaseLib.h
 .\objects\\define.o: ..\Include\AT24C02.h
 .\objects\\define.o: ..\Include\PT1000.h
+.\objects\\define.o: ..\Include\SX1276.h

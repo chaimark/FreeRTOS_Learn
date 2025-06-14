@@ -39,28 +39,7 @@ void MF_EXTI_Init(void) {
     EXTI_InitStruct.clockSource = FL_RCC_EXTI_CLK_SOURCE_LSCLK;
     FL_EXTI_CommonInit(&EXTI_InitStruct);
 }
-void MF_EXTI_Line_Init(void) {
-    FL_GPIO_InitTypeDef     GPIO_InitStruct;
-    FL_EXTI_InitTypeDef     EXTI_InitStruct;
-    FL_NVIC_ConfigTypeDef   InterruptConfigStruct;
-    // INT1 PB2 EXET4
-    GPIO_InitStruct.pin = FL_GPIO_PIN_2;
-    GPIO_InitStruct.mode = FL_GPIO_MODE_INPUT;
-    GPIO_InitStruct.outputType = FL_GPIO_OUTPUT_OPENDRAIN;
-    GPIO_InitStruct.pull = FL_DISABLE;
-    GPIO_InitStruct.remapPin = FL_DISABLE;
-    FL_GPIO_Init(GPIOB, &GPIO_InitStruct);
-    EXTI_InitStruct.input = FL_GPIO_EXTI_INPUT_GROUP2;
-    EXTI_InitStruct.triggerEdge = FL_GPIO_EXTI_TRIGGER_EDGE_RISING;
-    EXTI_InitStruct.filter = FL_ENABLE;
-    FL_EXTI_Init(FL_GPIO_EXTI_LINE_4, &EXTI_InitStruct);
-    FL_GPIO_ClearFlag_EXTI(GPIO, FL_GPIO_EXTI_LINE_4);
 
-    InterruptConfigStruct.preemptPriority = 0x0001;
-    FL_NVIC_Init(&InterruptConfigStruct, GPIO_IRQn);
-	
-	  MF_EXTI_Init();
-}
 void MF_PMU_Init(void) {
     FL_PMU_SleepInitTypeDef    PMU_InitStruct;
 
@@ -91,80 +70,6 @@ void MF_RCC_XTLF_IO_Init(void) {
     FL_GPIO_Init(GPIOD, &GPIO_InitStruct);
 }
 
-/* Private function prototypes -----------------------------------------------*/
-void GPIO_FM33LC02X_Init(void) {
-    FL_GPIO_InitTypeDef GPIO_InitStruct = {0};
-    // PA1_MOSI  PA2_NSS   PA3_SCLK   PA4_RF_Control    PA6_BT_CON   PA7_RST_433    PA9_GP2_RST   PA10_GP2_SI   
-    GPIO_InitStruct.pin = FL_GPIO_PIN_1 | FL_GPIO_PIN_2 | FL_GPIO_PIN_3 | FL_GPIO_PIN_4 | FL_GPIO_PIN_6 | FL_GPIO_PIN_7 | FL_GPIO_PIN_9 | FL_GPIO_PIN_10;
-    GPIO_InitStruct.mode = FL_GPIO_MODE_OUTPUT;
-    GPIO_InitStruct.outputType = FL_GPIO_OUTPUT_PUSHPULL;
-    GPIO_InitStruct.pull = FL_DISABLE;
-    FL_GPIO_Init(GPIOA, &GPIO_InitStruct);
-    FL_GPIO_ResetOutputPin(GPIOA, FL_GPIO_PIN_1 | FL_GPIO_PIN_2 | FL_GPIO_PIN_3 | FL_GPIO_PIN_4 | FL_GPIO_PIN_6 | FL_GPIO_PIN_7 | FL_GPIO_PIN_9 | FL_GPIO_PIN_10);
-    //FL_GPIO_SetOutputPin(GPIOA, FL_GPIO_PIN_9);
-
-    //PA0_MISO  PA8_GP2_SO   PA15_BT_CHECK
-    GPIO_InitStruct.pin = FL_GPIO_PIN_0 | FL_GPIO_PIN_8 | FL_GPIO_PIN_15;
-    GPIO_InitStruct.mode = FL_GPIO_MODE_INPUT;
-    GPIO_InitStruct.outputType = FL_GPIO_OUTPUT_PUSHPULL;
-    GPIO_InitStruct.pull = FL_DISABLE;
-    FL_GPIO_Init(GPIOA, &GPIO_InitStruct);
-
-
-    //PB3_GP2_SCK   PB4_GP2_SSN   PB10_GP2_PW_CTR    PB14_PRESS_CTR
-    GPIO_InitStruct.pin = FL_GPIO_PIN_3 | FL_GPIO_PIN_4 | FL_GPIO_PIN_10 | FL_GPIO_PIN_14;
-    GPIO_InitStruct.mode = FL_GPIO_MODE_OUTPUT;
-    GPIO_InitStruct.outputType = FL_GPIO_OUTPUT_PUSHPULL;
-    GPIO_InitStruct.pull = FL_DISABLE;
-    FL_GPIO_Init(GPIOB, &GPIO_InitStruct);
-    FL_GPIO_ResetOutputPin(GPIOB, FL_GPIO_PIN_3 | FL_GPIO_PIN_4 | FL_GPIO_PIN_10 | FL_GPIO_PIN_14);
-
-    // PB2_GD0_433   PB5_GP2_INT    //PB12_ACLK 
-    GPIO_InitStruct.pin = FL_GPIO_PIN_2 | FL_GPIO_PIN_5;
-    GPIO_InitStruct.mode = FL_GPIO_MODE_INPUT;
-    GPIO_InitStruct.outputType = FL_GPIO_OUTPUT_PUSHPULL;
-    GPIO_InitStruct.pull = FL_DISABLE;
-    FL_GPIO_Init(GPIOB, &GPIO_InitStruct);
-
-    //PB8   PB9   PB10  PB11  PB12  PB13
-    GPIO_InitStruct.pin = FL_GPIO_PIN_8 | FL_GPIO_PIN_9 | FL_GPIO_PIN_10 | FL_GPIO_PIN_11 | FL_GPIO_PIN_12 | FL_GPIO_PIN_13;
-    GPIO_InitStruct.mode = FL_GPIO_MODE_OUTPUT;
-    GPIO_InitStruct.outputType = FL_GPIO_OUTPUT_OPENDRAIN;
-    GPIO_InitStruct.pull = FL_DISABLE;
-    FL_GPIO_Init(GPIOB, &GPIO_InitStruct);
-    FL_GPIO_SetOutputPin(GPIOB, FL_GPIO_PIN_8 | FL_GPIO_PIN_9 | FL_GPIO_PIN_10 | FL_GPIO_PIN_11 | FL_GPIO_PIN_12 | FL_GPIO_PIN_13);
-
-    //PC7_PRESS_IN     PC9_VCC2
-    GPIO_InitStruct.pin = FL_GPIO_PIN_7 | FL_GPIO_PIN_9;
-    GPIO_InitStruct.mode = FL_GPIO_MODE_INPUT;
-    GPIO_InitStruct.outputType = FL_GPIO_OUTPUT_OPENDRAIN;
-    GPIO_InitStruct.pull = FL_DISABLE;
-    FL_GPIO_Init(GPIOC, &GPIO_InitStruct);
-
-    // PC0_SDATA  PC1_SCLK
-    GPIO_InitStruct.pin = FL_GPIO_PIN_0 | FL_GPIO_PIN_1;
-    GPIO_InitStruct.mode = FL_GPIO_MODE_OUTPUT;
-    GPIO_InitStruct.outputType = FL_GPIO_OUTPUT_OPENDRAIN;
-    GPIO_InitStruct.pull = FL_DISABLE;
-    FL_GPIO_Init(GPIOC, &GPIO_InitStruct);
-    FL_GPIO_SetOutputPin(GPIOC, FL_GPIO_PIN_0 | FL_GPIO_PIN_1);
-
-    //PC4 PC5 PC6  PC8  PC10
-    GPIO_InitStruct.pin = FL_GPIO_PIN_4 | FL_GPIO_PIN_5 | FL_GPIO_PIN_6 | FL_GPIO_PIN_8 | FL_GPIO_PIN_10;
-    GPIO_InitStruct.mode = FL_GPIO_MODE_OUTPUT;
-    GPIO_InitStruct.outputType = FL_GPIO_OUTPUT_OPENDRAIN;
-    GPIO_InitStruct.pull = FL_DISABLE;
-    FL_GPIO_Init(GPIOC, &GPIO_InitStruct);
-    FL_GPIO_SetOutputPin(GPIOC, FL_GPIO_PIN_4 | FL_GPIO_PIN_5 | FL_GPIO_PIN_6 | FL_GPIO_PIN_8 | FL_GPIO_PIN_10);
-
-    //PD0 PD1 PD6 PD11
-    GPIO_InitStruct.pin = FL_GPIO_PIN_0 | FL_GPIO_PIN_1 | FL_GPIO_PIN_6 | FL_GPIO_PIN_11;
-    GPIO_InitStruct.mode = FL_GPIO_MODE_OUTPUT;
-    GPIO_InitStruct.outputType = FL_GPIO_OUTPUT_OPENDRAIN;
-    GPIO_InitStruct.pull = FL_DISABLE;
-    FL_GPIO_Init(GPIOD, &GPIO_InitStruct);
-    FL_GPIO_SetOutputPin(GPIOD, FL_GPIO_PIN_0 | FL_GPIO_PIN_1 | FL_GPIO_PIN_6 | FL_GPIO_PIN_11);
-}
 /**
   * @brief  GPIO Initialization function
   * @param  void
@@ -178,14 +83,13 @@ void MF_GPIO_Init(void) {
     GPIO_InitStruct.outputType = FL_GPIO_OUTPUT_OPENDRAIN; // 开漏输出
     GPIO_InitStruct.pull = FL_DISABLE;
     FL_GPIO_Init(GPIOA, &GPIO_InitStruct);
-    GPIO_SET_L(GPIOA, FL_GPIO_PIN_ALL_EXCEPTSWD);
+    GPIO_SET_H(GPIOA, FL_GPIO_PIN_ALL_EXCEPTSWD);
     FL_GPIO_Init(GPIOB, &GPIO_InitStruct);
-    GPIO_SET_L(GPIOB, FL_GPIO_PIN_ALL_EXCEPTSWD);
+    GPIO_SET_H(GPIOB, FL_GPIO_PIN_ALL_EXCEPTSWD);
     FL_GPIO_Init(GPIOC, &GPIO_InitStruct);
-    GPIO_SET_L(GPIOC, FL_GPIO_PIN_ALL_EXCEPTSWD);
+    GPIO_SET_H(GPIOC, FL_GPIO_PIN_ALL_EXCEPTSWD);
     FL_GPIO_Init(GPIOD, &GPIO_InitStruct);
-    GPIO_SET_L(GPIOD, FL_GPIO_PIN_ALL_EXCEPTSWD);
-    // GPIO_FM33LC02X_Init();
+    GPIO_SET_H(GPIOD, FL_GPIO_PIN_ALL_EXCEPTSWD);
 }
 
 /**
@@ -228,15 +132,12 @@ void MF_SystemClock_Config(void) {
 void MF_Config_Init(void) {
     /* Initial PMU */
     MF_PMU_Init();
-    /* initial GP2 */
-    GP21_GPIO_Init();
-    /* initial SX1276 */
-    SX1276LoRa_GPIO_Init();
     /* Initial ADC */
     MF_ADC_Common_Init();
     MF_ADC_Sampling_Init();
-    IncludeDelayMs(100);
-    Config_Init_XTHF_And_XTLF();
+    /* initial GP2 */
+    GP21_GPIO_Init();
+    MF_I2C_MASTER_Init();
     Device_Init();      // 初始化设备
 }
 

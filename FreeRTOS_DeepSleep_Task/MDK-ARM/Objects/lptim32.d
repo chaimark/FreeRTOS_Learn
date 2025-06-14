@@ -65,8 +65,9 @@
 .\objects\\lptim32.o: ..\Interflow\Check_XTHF_Or_XTLF.h
 .\objects\\lptim32.o: ..\Include\BSTim.h
 .\objects\\lptim32.o: ..\Include\LPTim32.h
-.\objects\\lptim32.o: ..\Interflow\SetTime.h
+.\objects\\lptim32.o: ..\Include\../Interflow/SetTime.h
 .\objects\\lptim32.o: ..\Include\RTC.h
 .\objects\\lptim32.o: ..\Interflow\RTC_SetTime.h
+.\objects\\lptim32.o: ..\Interflow\MIN_SetTime.h
 .\objects\\lptim32.o: ..\Include\Main.h
 .\objects\\lptim32.o: ..\Include\fm33_assert.h

@@ -74,7 +74,7 @@ to exclude the API function. */
 
 // configUSE_TICKLESS_IDLE 1 低功耗模式
 // configUSE_TICKLESS_IDLE 0 普通模式
-#define configUSE_TICKLESS_IDLE         0
+#define configUSE_TICKLESS_IDLE         1
 
 #define configUSE_TIMERS                1
 #define configTIMER_TASK_PRIORITY       (tskIDLE_PRIORITY + 2)

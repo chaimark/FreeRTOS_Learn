@@ -6,7 +6,7 @@
 extern unsigned char SX1276_RF_TXBuffer[30];
 extern void SX1276_RF_SendPacket(unsigned char * RF_TRAN_P, unsigned char LEN);
 extern void SX1276_RF_Open(void);
-extern void SX1276_RF_Close(void);
+
 void Send_RF(int DataLen) {
     Now_NetDevParameter.SendCount++;
     if ((Now_NetDevParameter.SendCount >= 100) || (Now_NetDevParameter.ReceiveCount >= 100)) {

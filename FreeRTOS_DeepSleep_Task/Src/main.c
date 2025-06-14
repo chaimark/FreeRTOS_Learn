@@ -51,7 +51,7 @@ int main(void) {
     StartOPenDevMode();
     CheckMeterNum();
     setNetArgumentInit(NULL);
-    Send_RF_DATA_AT_The_Beginning();
+    // Send_RF_DATA_AT_The_Beginning();
     xTaskCreate(LPUart_0_And_1_Receive, "AllCmd", configMINIMAL_STACK_SIZE, NULL, LPUart_0_And_1_PRIORITY, &LPUart_0_And_1_Hand); // 1 -- x
     xTaskCreate(ReadEEprom, "ReadEEprom", configMINIMAL_STACK_SIZE, NULL, ReadEEprom_PRIORITY, &ReadEEpromHand); // 4
     xTaskCreate(TimeTask, "TestAll", configMINIMAL_STACK_SIZE, NULL, TimeTask_PRIORITY, &TimeTaskHand); // 2

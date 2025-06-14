@@ -18,18 +18,23 @@ static void _SetCloseTask(int TaskAddr) {
     }
     SetTime.Task[TaskAddr].isTaskStart = false; // 初始化标记
     SetTime.Task[TaskAddr].TimeTask_Falge = false;
-    SetTime.Task[TaskAddr].CountNumOnce10Ms = 0; // 复位初始
+    SetTime.Task[TaskAddr].CountNum = 0; // 复位初始
     SetTime.Task[TaskAddr].TaskFunc = NULL;
 }
 static void _InitSetTimeTask(int TaskAddr, uint64_t SetMax10MsNum, void (*TaskFunc)(void)) {
     if ((TaskAddr < 0) || (TaskAddr >= BSTIM_OPEN_AND_TASK_NUM)) {
         return;
     }
-    SetTime.Task[TaskAddr].TimeTask_Falge = false; // 初始化标记
+    SetTime.Task[TaskAddr].TimeTask_Falge = (SetMax10MsNum == 0 ? true : false); // 初始化标记
     SetTime.Task[TaskAddr].isTaskStart = true;     // 开启
-    SetTime.Task[TaskAddr].Max10MsNum = SetMax10MsNum; // 定时任务点
-    SetTime.Task[TaskAddr].CountNumOnce10Ms = 0; // 复位初始
+    SetTime.Task[TaskAddr].CountMaxNum = SetMax10MsNum; // 定时任务点
+    SetTime.Task[TaskAddr].CountNum = 0; // 复位初始
     SetTime.Task[TaskAddr].TaskFunc = TaskFunc;
+    if (SetTime.Task[TaskAddr].TimeTask_Falge == true) {
+        if (SetTime.Task[TaskAddr].TaskFunc != NULL) {
+            SetTime.Task[TaskAddr].TaskFunc(); // 注意:该函数, 执行时不要太长, 也不要启动同一个定时器的其他任务
+        }
+    }
 }
 // 计数函数
 void CountSetTimeTask(void) {
@@ -37,10 +42,13 @@ void CountSetTimeTask(void) {
         if (SetTime.Task[TaskAddr].isTaskStart == false) {
             continue;
         }
-        if (SetTime.Task[TaskAddr].CountNumOnce10Ms < SetTime.Task[TaskAddr].Max10MsNum) {
-            SetTime.Task[TaskAddr].CountNumOnce10Ms++;
-        } else {
+        if (SetTime.Task[TaskAddr].CountNum < SetTime.Task[TaskAddr].CountMaxNum) {
+            SetTime.Task[TaskAddr].CountNum++;
+        }
+        if (SetTime.Task[TaskAddr].CountNum >= SetTime.Task[TaskAddr].CountMaxNum) {
             SetTime.Task[TaskAddr].TimeTask_Falge = true;
+        } else {
+            SetTime.Task[TaskAddr].TimeTask_Falge = false;
         }
         if (SetTime.Task[TaskAddr].TimeTask_Falge == true) {
             if (SetTime.Task[TaskAddr].TaskFunc != NULL) {
@@ -71,35 +79,38 @@ static void _LPSetCloseTask(int TaskAddr) {
     }
     SetLPTime.Task[TaskAddr].isTaskStart = false; // 初始化标记
     SetLPTime.Task[TaskAddr].TimeTask_Falge = false;
-    SetLPTime.Task[TaskAddr].CountNumOnce250Ms = 0; // 复位初始
+    SetLPTime.Task[TaskAddr].CountNum = 0; // 复位初始
     SetLPTime.Task[TaskAddr].TaskFunc = NULL;
 }
 static void _LPInitSetTimeTask(int TaskAddr, uint64_t SetMax250MsNum, void (*TaskFunc)(void)) {
     if ((TaskAddr < 0) || (TaskAddr >= LPTIM_OPEN_AND_TASK_NUM)) {
         return;
     }
-    SetLPTime.Task[TaskAddr].TimeTask_Falge = false; // 初始化标记
+    SetLPTime.Task[TaskAddr].TimeTask_Falge = (SetMax250MsNum == 0 ? true : false); // 初始化标记
     SetLPTime.Task[TaskAddr].isTaskStart = true;     // 开启
-    SetLPTime.Task[TaskAddr].Max250MsNum = SetMax250MsNum; // 定时任务点
-    SetLPTime.Task[TaskAddr].CountNumOnce250Ms = 0; // 复位初始
+    SetLPTime.Task[TaskAddr].CountMaxNum = SetMax250MsNum; // 定时任务点
+    SetLPTime.Task[TaskAddr].CountNum = 0; // 复位初始
     SetLPTime.Task[TaskAddr].TaskFunc = TaskFunc;
+    if (SetLPTime.Task[TaskAddr].TimeTask_Falge == true) {
+        if (SetLPTime.Task[TaskAddr].TaskFunc != NULL) {
+            SetLPTime.Task[TaskAddr].TaskFunc(); // 注意:该函数, 执行时不要太长, 也不要启动同一个定时器的其他任务
+        }
+    }
 }
 #include "mf_config.h"
 // 计数函数
 void LPCountSetTimeTask(void) {
-    /*****************************************************/
-    // if (!SetLPTime.Task[IWDTClS].TimeTask_Falge) {  // 8 分钟后没有返回主函数重新复位计数器, 复位MCU
-    //     FL_IWDT_ReloadCounter(IWDT);    // 8 分钟之内 RTC 帮忙喂狗
-    // }
-    /*****************************************************/
     for (int TaskAddr = 0; TaskAddr < LPTIM_OPEN_AND_TASK_NUM; TaskAddr++) {
         if (SetLPTime.Task[TaskAddr].isTaskStart == false) {
             continue;
         }
-        if (SetLPTime.Task[TaskAddr].CountNumOnce250Ms < SetLPTime.Task[TaskAddr].Max250MsNum) {
-            SetLPTime.Task[TaskAddr].CountNumOnce250Ms++;
-        } else {
+        if (SetLPTime.Task[TaskAddr].CountNum < SetLPTime.Task[TaskAddr].CountMaxNum) {
+            SetLPTime.Task[TaskAddr].CountNum++;
+        }
+        if (SetLPTime.Task[TaskAddr].CountNum >= SetLPTime.Task[TaskAddr].CountMaxNum) {
             SetLPTime.Task[TaskAddr].TimeTask_Falge = true;
+        } else {
+            SetLPTime.Task[TaskAddr].TimeTask_Falge = false;
         }
         if (SetLPTime.Task[TaskAddr].TimeTask_Falge == true) {
             if (SetLPTime.Task[TaskAddr].TaskFunc != NULL) {

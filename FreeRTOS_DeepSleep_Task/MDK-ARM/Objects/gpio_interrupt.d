@@ -65,6 +65,7 @@
 .\objects\\gpio_interrupt.o: ..\Interflow\Check_XTHF_Or_XTLF.h
 .\objects\\gpio_interrupt.o: ..\Include\BSTim.h
 .\objects\\gpio_interrupt.o: ..\Include\LPTim32.h
-.\objects\\gpio_interrupt.o: ..\Interflow\SetTime.h
+.\objects\\gpio_interrupt.o: ..\Include\../Interflow/SetTime.h
 .\objects\\gpio_interrupt.o: ..\Include\RTC.h
 .\objects\\gpio_interrupt.o: ..\Interflow\RTC_SetTime.h
+.\objects\\gpio_interrupt.o: ..\Interflow\MIN_SetTime.h

@@ -17,6 +17,7 @@
 .\objects\\taskreadeeprom.o: ..\Interflow\StrLib.h
 .\objects\\taskreadeeprom.o: C:\Keil_v5\ARM\ARMCC\Bin\..\include\string.h
 .\objects\\taskreadeeprom.o: C:\Keil_v5\ARM\ARMCC\Bin\..\include\stdbool.h
+.\objects\\taskreadeeprom.o: ..\Interflow\MIN_SetTime.h
 .\objects\\taskreadeeprom.o: ..\Interflow\PublicLib_No_One.h
 .\objects\\taskreadeeprom.o: C:\Keil_v5\ARM\ARMCC\Bin\..\include\stdio.h
 .\objects\\taskreadeeprom.o: C:\Keil_v5\ARM\ARMCC\Bin\..\include\stdlib.h
@@ -66,7 +67,7 @@
 .\objects\\taskreadeeprom.o: ..\Interflow\Check_XTHF_Or_XTLF.h
 .\objects\\taskreadeeprom.o: ..\Include\BSTim.h
 .\objects\\taskreadeeprom.o: ..\Include\LPTim32.h
-.\objects\\taskreadeeprom.o: ..\Interflow\SetTime.h
+.\objects\\taskreadeeprom.o: ..\Include\../Interflow/SetTime.h
 .\objects\\taskreadeeprom.o: ..\Include\RTC.h
 .\objects\\taskreadeeprom.o: ..\Include\Define.h
 .\objects\\taskreadeeprom.o: ..\Interflow\RTC_SetTime.h

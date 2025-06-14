@@ -53,10 +53,11 @@
 .\objects\\gp21.o: ..\MF-config\mf_config.h
 .\objects\\gp21.o: ..\Include\BSTim.h
 .\objects\\gp21.o: ..\Include\LPTim32.h
-.\objects\\gp21.o: ..\Interflow\SetTime.h
+.\objects\\gp21.o: ..\Include\../Interflow/SetTime.h
 .\objects\\gp21.o: ..\Include\RTC.h
 .\objects\\gp21.o: ..\Include\Define.h
 .\objects\\gp21.o: ..\Interflow\RTC_SetTime.h
+.\objects\\gp21.o: ..\Interflow\MIN_SetTime.h
 .\objects\\gp21.o: ..\Interflow\PublicLib_No_One.h
 .\objects\\gp21.o: ..\FreeRTOS\include\FreeRTOS.h
 .\objects\\gp21.o: ..\Include\FreeRTOSConfig.h

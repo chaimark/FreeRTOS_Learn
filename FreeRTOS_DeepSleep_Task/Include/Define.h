@@ -154,8 +154,10 @@ extern float Now_TemperOrPress;
 #define EEprom_SCL_LOW          GPIO_SET_L(GPIOC, FL_GPIO_PIN_1) 
 #define EEprom_SCL_HIGH         GPIO_SET_H(GPIOC, FL_GPIO_PIN_1) 
 
-#define  GP21_POWER_ON          GPIO_SET_H(GPIOB, FL_GPIO_PIN_10)
-#define  GP21_POWER_OFF         GPIO_SET_L(GPIOB, FL_GPIO_PIN_10) 
+#define  VOL_GND_HIGH           GPIO_SET_H(GPIOA, FL_GPIO_PIN_6)
+#define  VOL_GND_LOW            GPIO_SET_L(GPIOA, FL_GPIO_PIN_6)
+#define  GP21_PWR_HIGH          GPIO_SET_H(GPIOB, FL_GPIO_PIN_10)
+#define  GP21_PWR_LOW         GPIO_SET_L(GPIOB, FL_GPIO_PIN_10) 
 
 #define  GP21_SCLK_H            GPIO_SET_H(GPIOB, FL_GPIO_PIN_3)
 #define  GP21_SCLK_L            GPIO_SET_L(GPIOB, FL_GPIO_PIN_3)

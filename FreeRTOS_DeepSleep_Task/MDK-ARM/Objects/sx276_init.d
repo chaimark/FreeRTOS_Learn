@@ -65,9 +65,10 @@
 .\objects\\sx276_init.o: ..\Interflow\Check_XTHF_Or_XTLF.h
 .\objects\\sx276_init.o: ..\Include\BSTim.h
 .\objects\\sx276_init.o: ..\Include\LPTim32.h
-.\objects\\sx276_init.o: ..\Interflow\SetTime.h
+.\objects\\sx276_init.o: ..\Include\../Interflow/SetTime.h
 .\objects\\sx276_init.o: ..\Include\RTC.h
 .\objects\\sx276_init.o: ..\Interflow\RTC_SetTime.h
+.\objects\\sx276_init.o: ..\Interflow\MIN_SetTime.h
 .\objects\\sx276_init.o: ..\Include\SX1276.h
 .\objects\\sx276_init.o: ..\Interflow\AT24CXXDataLoader.h
 .\objects\\sx276_init.o: ..\Interflow\NumberBaseLib.h

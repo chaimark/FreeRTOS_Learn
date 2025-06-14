@@ -70,7 +70,8 @@
 .\objects\\sx1276_tx.o: ..\Interflow\Check_XTHF_Or_XTLF.h
 .\objects\\sx1276_tx.o: ..\Include\BSTim.h
 .\objects\\sx1276_tx.o: ..\Include\LPTim32.h
-.\objects\\sx1276_tx.o: ..\Interflow\SetTime.h
+.\objects\\sx1276_tx.o: ..\Include\../Interflow/SetTime.h
 .\objects\\sx1276_tx.o: ..\Include\RTC.h
 .\objects\\sx1276_tx.o: ..\Interflow\RTC_SetTime.h
+.\objects\\sx1276_tx.o: ..\Interflow\MIN_SetTime.h
 .\objects\\sx1276_tx.o: ..\Include\PT1000.h

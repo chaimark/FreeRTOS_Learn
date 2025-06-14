@@ -69,6 +69,7 @@
 .\objects\\at24cxxdataloader.o: ..\Interflow\Check_XTHF_Or_XTLF.h
 .\objects\\at24cxxdataloader.o: ..\Include\BSTim.h
 .\objects\\at24cxxdataloader.o: ..\Include\LPTim32.h
-.\objects\\at24cxxdataloader.o: ..\Interflow\SetTime.h
+.\objects\\at24cxxdataloader.o: ..\Include\../Interflow/SetTime.h
 .\objects\\at24cxxdataloader.o: ..\Include\RTC.h
 .\objects\\at24cxxdataloader.o: ..\Interflow\RTC_SetTime.h
+.\objects\\at24cxxdataloader.o: ..\Interflow\MIN_SetTime.h

@@ -400,25 +400,38 @@ void SX1276_RF_Interupt(void) {
 
 void SX1276LoRa_GPIO_Init(void) {
     FL_GPIO_InitTypeDef GPIO_InitStruct = {0};
-    // PA0_MISO
+    // PA0_LoRa_MISO
     GPIO_InitStruct.pin = FL_GPIO_PIN_0;
     GPIO_InitStruct.mode = FL_GPIO_MODE_INPUT;
     GPIO_InitStruct.outputType = FL_GPIO_OUTPUT_PUSHPULL;
     GPIO_InitStruct.pull = FL_DISABLE;
     FL_GPIO_Init(GPIOA, &GPIO_InitStruct);
-    // PA1_MOSI  PA2_NSS   PA3_SCLK   PA4_RF_Control    PA7_RST_433          
+    // PA1_LoRa_MOSI  PA2_LoRa_NSS   PA3_LoRa_SCLK   PA4_LoRa_PWR    PA7_LoRa_RST_433          
     GPIO_InitStruct.pin = FL_GPIO_PIN_1 | FL_GPIO_PIN_2 | FL_GPIO_PIN_3 | FL_GPIO_PIN_4 | FL_GPIO_PIN_7;
     GPIO_InitStruct.mode = FL_GPIO_MODE_OUTPUT;
     GPIO_InitStruct.outputType = FL_GPIO_OUTPUT_PUSHPULL;
     GPIO_InitStruct.pull = FL_DISABLE;
     FL_GPIO_Init(GPIOA, &GPIO_InitStruct);
-    FL_GPIO_ResetOutputPin(GPIOA, FL_GPIO_PIN_1 | FL_GPIO_PIN_2 | FL_GPIO_PIN_3 | FL_GPIO_PIN_4);
-    FL_GPIO_SetOutputPin(GPIOA, FL_GPIO_PIN_7);
-    // PB2_GD0_433    
+    GPIO_SET_L(GPIOA, FL_GPIO_PIN_1 | FL_GPIO_PIN_2 | FL_GPIO_PIN_3 | FL_GPIO_PIN_4 | FL_GPIO_PIN_7);
+
+    MF_EXTI_Init();
+    /***********************GD0**********************************************/
+    FL_EXTI_InitTypeDef     EXTI_InitStruct;
+    FL_NVIC_ConfigTypeDef   InterruptConfigStruct;
+    // INT1 PB2_Lo_GD0 EXET4
     GPIO_InitStruct.pin = FL_GPIO_PIN_2;
     GPIO_InitStruct.mode = FL_GPIO_MODE_INPUT;
-    GPIO_InitStruct.outputType = FL_GPIO_OUTPUT_PUSHPULL;
+    GPIO_InitStruct.outputType = FL_GPIO_OUTPUT_OPENDRAIN;
     GPIO_InitStruct.pull = FL_DISABLE;
+    GPIO_InitStruct.remapPin = FL_DISABLE;
     FL_GPIO_Init(GPIOB, &GPIO_InitStruct);
+    EXTI_InitStruct.input = FL_GPIO_EXTI_INPUT_GROUP2;
+    EXTI_InitStruct.triggerEdge = FL_GPIO_EXTI_TRIGGER_EDGE_RISING;
+    EXTI_InitStruct.filter = FL_ENABLE;
+    FL_EXTI_Init(FL_GPIO_EXTI_LINE_4, &EXTI_InitStruct);
+    FL_GPIO_ClearFlag_EXTI(GPIO, FL_GPIO_EXTI_LINE_4);
+    /***********************end GD0**********************************************/
+    InterruptConfigStruct.preemptPriority = 0x0001;
+    FL_NVIC_Init(&InterruptConfigStruct, GPIO_IRQn);
 }
 

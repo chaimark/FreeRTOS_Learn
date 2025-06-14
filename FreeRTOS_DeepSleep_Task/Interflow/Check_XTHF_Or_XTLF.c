@@ -28,7 +28,7 @@ void LFDET_IRQHandler(void) {
     FL_RCC_SetLSCLKClockSource(FL_RCC_LSCLK_CLK_SOURCE_LPOSC);
     MF_RTC_1S_Init();
     // 创建一个RTC定时器任务 CheckPWMOfClock
-    RTC_TASK.InitSetTimeTask(CheckPWMOfClock, MinToSec(5), check_XTClock_isOk);
+    MIN_TASK.InitSetTimeTask(CheckPWMOfClock, MinToSec(5), check_XTClock_isOk);
 }
 #endif
 /**********************************************************************/
@@ -50,7 +50,7 @@ void HFDET_IRQHandler(void) {
     FL_RCC_SetLSCLKClockSource(FL_RCC_LSCLK_CLK_SOURCE_LPOSC);
     MF_RTC_1S_Init();
     // 创建一个RTC定时器任务 CheckPWMOfClock
-    RTC_TASK.InitSetTimeTask(CheckPWMOfClock, MinToSec(5), check_XTClock_isOk);
+    MIN_TASK.InitSetTimeTask(CheckPWMOfClock, MinToSec(5), check_XTClock_isOk);
 }
 #endif
 /**********************************************************************/
@@ -64,9 +64,9 @@ void Config_Init_XTHF_And_XTLF(void) {
 #endif
 }
 void check_XTClock_isOk(void) {
-    RTC_TASK.InitSetTimeTask(CheckPWMOfClock, MinToSec(5), check_XTClock_isOk);
+    MIN_TASK.InitSetTimeTask(CheckPWMOfClock, MinToSec(5), check_XTClock_isOk);
     if (XTClock_CheckTask.is_XTClock_Error == XT_CLOCK_OK) {
-        RTC_TASK.CloseTask(CheckPWMOfClock);
+        MIN_TASK.CloseTask(CheckPWMOfClock);
         return; // 时钟正常, 不需要检查
     }
     uint8_t TempErrorNum = 0;
@@ -94,7 +94,7 @@ void check_XTClock_isOk(void) {
         MF_RTC_1S_Init();
         setRtcDate(NEW_NAME(TimeStr), false);
         Config_Init_XTHF_And_XTLF();
-        RTC_TASK.CloseTask(CheckPWMOfClock);
+        MIN_TASK.CloseTask(CheckPWMOfClock);
         return;
     }
 #ifdef XTLF_FAIL

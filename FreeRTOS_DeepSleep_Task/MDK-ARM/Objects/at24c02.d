@@ -67,7 +67,8 @@
 .\objects\\at24c02.o: ..\Interflow\Check_XTHF_Or_XTLF.h
 .\objects\\at24c02.o: ..\Include\BSTim.h
 .\objects\\at24c02.o: ..\Include\LPTim32.h
-.\objects\\at24c02.o: ..\Interflow\SetTime.h
+.\objects\\at24c02.o: ..\Include\../Interflow/SetTime.h
 .\objects\\at24c02.o: ..\Include\RTC.h
 .\objects\\at24c02.o: ..\Interflow\RTC_SetTime.h
+.\objects\\at24c02.o: ..\Interflow\MIN_SetTime.h
 .\objects\\at24c02.o: ..\Interflow\NumberBaseLib.h

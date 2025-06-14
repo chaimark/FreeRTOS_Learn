@@ -47,6 +47,7 @@ void LPUart_0_And_1_Receive(void * pvParameters) {
                     LPUART0_Send((unsigned char *)LPUART0Ddata.TxBuf, LPUART0Ddata.TxLen);
                 }
                 Clr_LPUart0_RxBuffer();
+                BSTIM32_Stop();     //关闭定时器中断
             }
             if (getUartx == 1) {
                 if (HY_USB_TTL_CheckBuff(LPUART1Ddata.RxBuf, LPUART1Ddata.RxLen, getUartx)) {
@@ -54,9 +55,9 @@ void LPUart_0_And_1_Receive(void * pvParameters) {
                     LPUART1_Send((unsigned char *)LPUART1Ddata.TxBuf, LPUART1Ddata.TxLen);
                 }
                 Clr_LPUart1_RxBuffer();
+                BSTIM32_Stop();     //关闭定时器中断
             }
             getUartx = 0xFF;
-            BSTIM32_Stop();     //关闭定时器中断
         }
     }
 }

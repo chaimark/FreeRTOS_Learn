@@ -1,4 +1,12 @@
 {
+    "search.exclude": {
+        "**/.vscode": true,
+        "**/*.map": true,
+        "**/*.log": true,
+        "**/*.htm": true,
+        "**/*.uvoptx": true,
+        "**/*tags": true
+    },
     "files.associations": {
         "main.h": "c",
         "mf_config.h": "c",
@@ -29,6 +37,9 @@
         "tasklpuart1.h": "c",
         "taskabouttimer.h": "c",
         "tasklpuart0.h": "c",
-        "tasklpuart_0_and_1.h": "c"
+        "tasklpuart_0_and_1.h": "c",
+        "bstim.h": "c",
+        "min_settime.h": "c",
+        "fm33lc0xx_fl_flash.h": "c"
     }
 }

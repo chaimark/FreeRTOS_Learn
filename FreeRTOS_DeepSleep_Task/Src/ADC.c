@@ -23,7 +23,7 @@ static uint32_t GetAVREFSample_POLL(uint32_t * ADCRdresult) {
         EOC_Flag = FL_ADC_IsActiveFlag_EndOfConversion(ADC);
         counter++;
     } while ((counter != 0x1FFU) && (EOC_Flag == 0U));
-    
+
     if (EOC_Flag == 0x01U) {
         FL_ADC_ClearFlag_EndOfConversion(ADC);
         *ADCRdresult = FL_ADC_ReadConversionData(ADC);
@@ -109,7 +109,7 @@ void Battary_GND_ON(void) {
     GPIO_InitStruct.outputType = FL_GPIO_OUTPUT_PUSHPULL;
     GPIO_InitStruct.pull = FL_DISABLE;
     FL_GPIO_Init(GPIOA, &GPIO_InitStruct);
-    FL_GPIO_ResetOutputPin(GPIOA, FL_GPIO_PIN_6);
+    GPIO_SET_L(GPIOA, FL_GPIO_PIN_6);
 }
 //电池电压测量控制关闭   输入
 void Battary_GND_OFF(void) {
@@ -119,7 +119,7 @@ void Battary_GND_OFF(void) {
     GPIO_InitStruct.outputType = FL_GPIO_OUTPUT_OPENDRAIN;
     GPIO_InitStruct.pull = FL_DISABLE;
     FL_GPIO_Init(GPIOA, &GPIO_InitStruct);
-    FL_GPIO_SetOutputPin(GPIOA, FL_GPIO_PIN_6);
+    GPIO_SET_H(GPIOA, FL_GPIO_PIN_6);
 }
 
 void Test_BatVoltge(void) {
@@ -194,8 +194,22 @@ void MF_ADC_Common_Init(void) {
 void MF_ADC_Sampling_Init(void) {
     FL_GPIO_InitTypeDef    GPIO_InitStruct;
     FL_ADC_InitTypeDef    Sampling_InitStruct;
+    // PA6_Battery_GND
+    GPIO_InitStruct.pin = FL_GPIO_PIN_6;
+    GPIO_InitStruct.mode = FL_GPIO_MODE_OUTPUT;
+    GPIO_InitStruct.outputType = FL_GPIO_OUTPUT_PUSHPULL;
+    GPIO_InitStruct.pull = FL_DISABLE;
+    FL_GPIO_Init(GPIOA, &GPIO_InitStruct);
+    VOL_GND_HIGH;
+    // PB14_Press_PWR
+    GPIO_InitStruct.pin = FL_GPIO_PIN_14;
+    GPIO_InitStruct.mode = FL_GPIO_MODE_OUTPUT;
+    GPIO_InitStruct.outputType = FL_GPIO_OUTPUT_PUSHPULL;
+    GPIO_InitStruct.pull = FL_DISABLE;
+    FL_GPIO_Init(GPIOB, &GPIO_InitStruct);
+    GPIO_SET_L(GPIOB, FL_GPIO_PIN_14);
 
-    /* ADC ADC_00   PC9  OUT_3.3V */
+    /* ADC ADC_00   PC9  3.3V_ADC */
     GPIO_InitStruct.pin = FL_GPIO_PIN_9;
     GPIO_InitStruct.mode = FL_GPIO_MODE_ANALOG;
     GPIO_InitStruct.outputType = FL_GPIO_OUTPUT_PUSHPULL;
@@ -209,7 +223,7 @@ void MF_ADC_Sampling_Init(void) {
     GPIO_InitStruct.pull = FL_DISABLE;
     GPIO_InitStruct.remapPin = FL_DISABLE;
     FL_GPIO_Init(GPIOC, &GPIO_InitStruct);
-    /* ADC ADC_10   PA15  Battary_V */
+    /* ADC ADC_10   PA15  Battery_V */
     GPIO_InitStruct.pin = FL_GPIO_PIN_15;
     GPIO_InitStruct.mode = FL_GPIO_MODE_ANALOG;
     GPIO_InitStruct.outputType = FL_GPIO_OUTPUT_PUSHPULL;

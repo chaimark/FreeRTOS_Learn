@@ -66,9 +66,10 @@
 .\objects\\rtc.o: ..\Interflow\Check_XTHF_Or_XTLF.h
 .\objects\\rtc.o: ..\Include\BSTim.h
 .\objects\\rtc.o: ..\Include\LPTim32.h
-.\objects\\rtc.o: ..\Interflow\SetTime.h
+.\objects\\rtc.o: ..\Include\../Interflow/SetTime.h
 .\objects\\rtc.o: ..\Include\RTC.h
 .\objects\\rtc.o: ..\Interflow\RTC_SetTime.h
+.\objects\\rtc.o: ..\Interflow\MIN_SetTime.h
 .\objects\\rtc.o: ..\Include\Main.h
 .\objects\\rtc.o: ..\Include\fm33_assert.h
 .\objects\\rtc.o: ..\Include\AT24C02.h

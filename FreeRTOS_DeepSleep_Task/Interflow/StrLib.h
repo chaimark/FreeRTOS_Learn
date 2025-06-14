@@ -50,8 +50,8 @@ extern strnew New_Str_Obj(void * Master, int SizeNum, int SizeType); // 建立�
     char Str##name[Len] = {0}; \
     strnew name = NEW_NAME(Str##name)
 /*-----------------------------------外部接口----------------------------------*/
-extern int catString(char * OutStr, char * IntStr, int MaxSize, int IntSize);
-extern bool copyString(char * OutStr, char * IntStr, int MaxSize, int IntSize);
+extern int catString(char * OutStr, const char * IntStr, int MaxSize, int IntSize);
+extern bool copyString(char * OutStr, const char * IntStr, int MaxSize, int IntSize);
 extern char * myStrstr(char * MotherStr, char * SonStr, int MotherMaxSize);
 extern char * myStrstrCont(char * MotherStr, char * SonStr, int MotherMaxSize, int ContNum);
 extern void swapChr(char * a, char * b);
@@ -59,6 +59,10 @@ extern void swapStr(char * IntputStr, int StrLen);
 extern char swapLowHight_Of_Char(char InputCh);
 extern bool MoveDataOnBuff(strnew IntptBuff, int ShiftLen, bool IsLeft);
 extern void StringSlice(strnew OutStr, strnew Mather, int start, int end);
+
+#define strnew_malloc(name,Len) newstrobj(name,1)\
+name.Name._char = (char *)malloc(Len);\
+name.MaxLen = Len
 
 #ifdef _Alignas 
 #define GET_TYPE(var) (_Generic((var), \

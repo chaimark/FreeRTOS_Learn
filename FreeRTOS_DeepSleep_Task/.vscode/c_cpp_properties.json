@@ -6,7 +6,7 @@
             "cStandard": "c17",
             "cppStandard": "c++17",
             "includePath": [
-                "${workspaceFolder}/**",
+                "${workspaceFolder}/RTE/_FreeRTOS_DeepSleep",
                 "C:\\Keil_v5\\ARM\\ARMCC\\include",
                 "C:\\Keil_v5\\ARM\\ARMCC\\include\\rw",
                 "FreeRTOS\\portable\\RVDS\\ARM_CM0",
@@ -93,7 +93,8 @@
                 "__wfi()=",
                 "__yield()=",
                 "__vfp_status(x,y)=0"
-            ]
+            ],
+            "compilerPath": "C:\\Keil_v5\\ARM\\ARMCC\\bin\\armcc.exe"
         }
     ],
     "version": 4

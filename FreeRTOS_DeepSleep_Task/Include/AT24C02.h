@@ -24,7 +24,7 @@ extern int HY_MQTT_FLAG; // 1 汇云指令, 0 维泰指令
 
 #include "stdint.h"
 #include <stdbool.h>
-
+extern void MF_I2C_MASTER_Init(void);
 extern unsigned char EEprom_Byte1Read(unsigned char addr);
 extern unsigned char EEprom_Byte1Write(unsigned char addr, unsigned char data);
 extern unsigned int EEprom_Byte2Read(unsigned char addr);

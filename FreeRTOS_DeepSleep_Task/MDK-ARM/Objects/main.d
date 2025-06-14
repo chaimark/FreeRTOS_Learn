@@ -65,10 +65,11 @@
 .\objects\\main.o: ..\MF-config\mf_config.h
 .\objects\\main.o: ..\Include\BSTim.h
 .\objects\\main.o: ..\Include\LPTim32.h
-.\objects\\main.o: ..\Interflow\SetTime.h
+.\objects\\main.o: ..\Include\../Interflow/SetTime.h
 .\objects\\main.o: ..\Include\RTC.h
 .\objects\\main.o: ..\Include\Define.h
 .\objects\\main.o: ..\Interflow\RTC_SetTime.h
+.\objects\\main.o: ..\Interflow\MIN_SetTime.h
 .\objects\\main.o: ..\Interflow\PublicLib_No_One.h
 .\objects\\main.o: ..\Interflow\Check_XTHF_Or_XTLF.h
 .\objects\\main.o: ..\Include\fm33_assert.h

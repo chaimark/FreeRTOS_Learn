@@ -65,6 +65,7 @@
 .\objects\\tickless_hook.o: ..\Interflow\Check_XTHF_Or_XTLF.h
 .\objects\\tickless_hook.o: ..\Include\BSTim.h
 .\objects\\tickless_hook.o: ..\Include\LPTim32.h
-.\objects\\tickless_hook.o: ..\Interflow\SetTime.h
+.\objects\\tickless_hook.o: ..\Include\../Interflow/SetTime.h
 .\objects\\tickless_hook.o: ..\Include\RTC.h
 .\objects\\tickless_hook.o: ..\Interflow\RTC_SetTime.h
+.\objects\\tickless_hook.o: ..\Interflow\MIN_SetTime.h

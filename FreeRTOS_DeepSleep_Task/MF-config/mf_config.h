@@ -42,7 +42,7 @@ extern "C" {
 #endif
 
 extern void MF_IWDT_Init(void);
-extern void MF_EXTI_Line_Init(void);
+extern void MF_EXTI_Init(void);
 extern void MF_GPIO_Init(void);
 
 #endif /* __MF_CONFIG_H */

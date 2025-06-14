@@ -53,10 +53,11 @@
 .\objects\\publiclib_no_one.o: ..\Interflow\Check_XTHF_Or_XTLF.h
 .\objects\\publiclib_no_one.o: ..\Include\BSTim.h
 .\objects\\publiclib_no_one.o: ..\Include\LPTim32.h
-.\objects\\publiclib_no_one.o: ..\Interflow\SetTime.h
+.\objects\\publiclib_no_one.o: ..\Include\../Interflow/SetTime.h
 .\objects\\publiclib_no_one.o: ..\Include\RTC.h
 .\objects\\publiclib_no_one.o: ..\Include\Define.h
 .\objects\\publiclib_no_one.o: ..\Interflow\RTC_SetTime.h
+.\objects\\publiclib_no_one.o: ..\Interflow\MIN_SetTime.h
 .\objects\\publiclib_no_one.o: ..\FreeRTOS\include\FreeRTOS.h
 .\objects\\publiclib_no_one.o: ..\Include\FreeRTOSConfig.h
 .\objects\\publiclib_no_one.o: ..\FreeRTOS\include\projdefs.h

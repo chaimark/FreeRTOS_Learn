@@ -28,35 +28,28 @@ uint32_t getDaysInMonth(uint32_t year, uint32_t month) {
 }
 // RTC 时间增加秒数
 FL_RTC_InitTypeDef RTCTimeAddSecToNewTime(FL_RTC_InitTypeDef NowTime, uint32_t SecNum, uint8_t isDex) {
-    // 添加秒数
-    NowTime.second += SecNum;
-    // 处理溢出
     if (isDex) {
-        while (NowTime.second >= 0x60) {
-            NowTime.second -= 0x60;
-            NowTime.minute++;
-        }
-        while (NowTime.minute >= 0x60) {
-            NowTime.minute -= 0x60;
-            NowTime.hour++;
-        }
-        while (NowTime.hour >= 0x24) {
-            NowTime.hour -= 0x24;
-            NowTime.day++;
-        }
-    } else {
-        while (NowTime.second >= 60) {
-            NowTime.second -= 60;
-            NowTime.minute++;
-        }
-        while (NowTime.minute >= 60) {
-            NowTime.minute -= 60;
-            NowTime.hour++;
-        }
-        while (NowTime.hour >= 24) {
-            NowTime.hour -= 24;
-            NowTime.day++;
-        }
+        NowTime.year = anyBaseToAnyBase((uint64_t)NowTime.year, 10, 16); // 转换
+        NowTime.month = anyBaseToAnyBase((uint64_t)NowTime.month, 10, 16); // 转换
+        NowTime.day = anyBaseToAnyBase((uint64_t)NowTime.day, 10, 16); // 转换
+        NowTime.hour = anyBaseToAnyBase((uint64_t)NowTime.hour, 10, 16); // 转换
+        NowTime.minute = anyBaseToAnyBase((uint64_t)NowTime.minute, 10, 16); // 转换
+        NowTime.second = anyBaseToAnyBase((uint64_t)NowTime.second, 10, 16); // 转换
+    }
+
+    NowTime.second += SecNum;    // 添加秒数
+    // 处理溢出
+    while (NowTime.second >= 60) {
+        NowTime.second -= 60;
+        NowTime.minute++;
+    }
+    while (NowTime.minute >= 60) {
+        NowTime.minute -= 60;
+        NowTime.hour++;
+    }
+    while (NowTime.hour >= 24) {
+        NowTime.hour -= 24;
+        NowTime.day++;
     }
 
     // 处理天数溢出
@@ -68,6 +61,16 @@ FL_RTC_InitTypeDef RTCTimeAddSecToNewTime(FL_RTC_InitTypeDef NowTime, uint32_t S
             NowTime.year++;
         }
     }
+
+    if (isDex) {
+        NowTime.year = anyBaseToAnyBase((uint64_t)NowTime.year, 16, 10); // 转换
+        NowTime.month = anyBaseToAnyBase((uint64_t)NowTime.month, 16, 10); // 转换
+        NowTime.day = anyBaseToAnyBase((uint64_t)NowTime.day, 16, 10); // 转换
+        NowTime.hour = anyBaseToAnyBase((uint64_t)NowTime.hour, 16, 10); // 转换
+        NowTime.minute = anyBaseToAnyBase((uint64_t)NowTime.minute, 16, 10); // 转换
+        NowTime.second = anyBaseToAnyBase((uint64_t)NowTime.second, 16, 10); // 转换
+    }
+    NowWeek = getDayOfWeek(NowYear, NowMonth, NowDay); // 计算周 周不需要转换
     return NowTime;
 }
 
@@ -208,7 +211,7 @@ void RTC_SetRTC(FL_RTC_InitTypeDef * InitStructer) {
     for (int i = 0; (i < 1000 && IsWriteRTCFlag); i++) {
         IncludeDelayMs(1);
     }
-
+    (*InitStructer).week = getDayOfWeek((*InitStructer).year, (*InitStructer).month, (*InitStructer).day);
     FL_RTC_ConfigTime(RTC, InitStructer);
     return;
 }
@@ -271,9 +274,12 @@ void RTC_IRQHandler(void) {
     if (FL_ENABLE == FL_RTC_IsEnabledIT_Second(RTC) && FL_SET == FL_RTC_IsActiveFlag_Second(RTC)) {
         FL_RTC_ClearFlag_Second(RTC);   // 清除中断标志
         RTC_GetRTC(&RTC_Date);          // 获取时间
-        CountRTCTask();
+        SecondCountRTCTask();
         Reboot.RTC_ReBoot_Check(&Reboot);   // 异步重启
         if (NowSecond == 0x00) {
+#ifdef _MINTimeTaskMAX
+            MinCountRTCTask();
+#endif
             if (NowMinute == 0x00) {
 
                 if (NowHour == 0x00) {
@@ -281,8 +287,14 @@ void RTC_IRQHandler(void) {
                 }
             }
             if ((NowMinute % 0x10) == 0) {
+#ifdef Min_10_TimeTaskMAX
+                Min_10_CountRTCTask();
+#endif
             }
             if ((NowMinute % 0x15) == 0) {
+#ifdef Min_15_TimeTaskMAX
+                Min_15_CountRTCTask();
+#endif
             }
         }
         if (IsWriteRTCFlag == true) {
