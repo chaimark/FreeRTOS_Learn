@@ -65,6 +65,7 @@
 .\objects\\mf_config.o: ..\FreeRTOS\include\deprecated_definitions.h
 .\objects\\mf_config.o: ..\FreeRTOS\portable\RVDS\ARM_CM0\portmacro.h
 .\objects\\mf_config.o: ..\FreeRTOS\include\mpu_wrappers.h
+.\objects\\mf_config.o: ..\Include\PowerCtrl.h
 .\objects\\mf_config.o: ..\FreeRTOS\include\task.h
 .\objects\\mf_config.o: ..\FreeRTOS\include\list.h
 .\objects\\mf_config.o: ..\Tickless\Tickless_Hook.h

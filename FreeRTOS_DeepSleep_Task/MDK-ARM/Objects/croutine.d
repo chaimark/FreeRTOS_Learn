@@ -8,6 +8,7 @@
 .\objects\\croutine.o: ..\FreeRTOS\include\deprecated_definitions.h
 .\objects\\croutine.o: ..\FreeRTOS\portable\RVDS\ARM_CM0\portmacro.h
 .\objects\\croutine.o: ..\FreeRTOS\include\mpu_wrappers.h
+.\objects\\croutine.o: ..\Include\PowerCtrl.h
 .\objects\\croutine.o: ..\FreeRTOS\include\task.h
 .\objects\\croutine.o: ..\FreeRTOS\include\list.h
 .\objects\\croutine.o: ..\FreeRTOS\include\croutine.h

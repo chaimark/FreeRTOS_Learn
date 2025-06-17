@@ -9,5 +9,6 @@
 .\objects\\heap_4.o: ..\FreeRTOS\include\deprecated_definitions.h
 .\objects\\heap_4.o: ..\FreeRTOS\portable\RVDS\ARM_CM0\portmacro.h
 .\objects\\heap_4.o: ..\FreeRTOS\include\mpu_wrappers.h
+.\objects\\heap_4.o: ..\Include\PowerCtrl.h
 .\objects\\heap_4.o: ..\FreeRTOS\include\task.h
 .\objects\\heap_4.o: ..\FreeRTOS\include\list.h

@@ -65,6 +65,7 @@
 .\objects\\publiclib_no_one.o: ..\FreeRTOS\include\deprecated_definitions.h
 .\objects\\publiclib_no_one.o: ..\FreeRTOS\portable\RVDS\ARM_CM0\portmacro.h
 .\objects\\publiclib_no_one.o: ..\FreeRTOS\include\mpu_wrappers.h
+.\objects\\publiclib_no_one.o: ..\Include\PowerCtrl.h
 .\objects\\publiclib_no_one.o: ..\FreeRTOS\include\task.h
 .\objects\\publiclib_no_one.o: ..\FreeRTOS\include\list.h
 .\objects\\publiclib_no_one.o: ..\Tickless\Tickless_Hook.h

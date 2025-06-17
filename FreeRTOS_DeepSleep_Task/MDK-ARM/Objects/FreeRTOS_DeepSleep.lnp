@@ -64,6 +64,7 @@
 ".\objects\\taskreadeeprom.o"
 ".\objects\\taskabouttimer.o"
 ".\objects\\tasklpuart_0_and_1.o"
+".\objects\\powerctrl.o"
 --strict --scatter ".\Objects\\FreeRTOS_DeepSleep.sct"
 --summary_stderr --info summarysizes --map --load_addr_map_info --xref --callgraph --symbols
 --info sizes --info totals --info unused --info veneers

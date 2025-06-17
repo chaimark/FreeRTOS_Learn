@@ -40,6 +40,9 @@
         "tasklpuart_0_and_1.h": "c",
         "bstim.h": "c",
         "min_settime.h": "c",
-        "fm33lc0xx_fl_flash.h": "c"
+        "fm33lc0xx_fl_flash.h": "c",
+        "powerctrl.h": "c",
+        "settime.h": "c",
+        "stdio.h": "c"
     }
 }

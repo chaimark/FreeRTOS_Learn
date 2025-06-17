@@ -57,6 +57,7 @@
 .\objects\\sx276_init.o: ..\FreeRTOS\include\deprecated_definitions.h
 .\objects\\sx276_init.o: ..\FreeRTOS\portable\RVDS\ARM_CM0\portmacro.h
 .\objects\\sx276_init.o: ..\FreeRTOS\include\mpu_wrappers.h
+.\objects\\sx276_init.o: ..\Include\PowerCtrl.h
 .\objects\\sx276_init.o: ..\FreeRTOS\include\task.h
 .\objects\\sx276_init.o: ..\FreeRTOS\include\list.h
 .\objects\\sx276_init.o: ..\Tickless\Tickless_Hook.h

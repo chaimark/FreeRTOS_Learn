@@ -6,12 +6,28 @@
 #include "MIN_SetTime.h"
 #include "PublicLib_No_One.h"
 
+// 任务数量
+#define _RTCTimeTaskMAX 2
+
+#ifdef OPEN_LOWPWER_DEBUG
+typedef enum _RTCTaskName {
+    LowPwerDebug,
+    IWDTClS,
+    SendLoarTask,           // 用于判断什么时候发送数据
+}RTCTaskName;
+#else
 typedef enum _RTCTaskName {
     IWDTClS,
     SendLoarTask,           // 用于判断什么时候发送数据
 }RTCTaskName;
-// 任务数量
-#define RTCTimeTaskMAX 2
+#endif
+
+#ifdef OPEN_AT_CMD_DEBUG
+#define RTCTimeTaskMAX (_RTCTimeTaskMAX + 1)
+#else
+#define RTCTimeTaskMAX _RTCTimeTaskMAX
+#endif
+
 typedef struct _USER_SET_TASK {
     struct {
         bool TimeTask_Falge;    // 当前计时任务是否完成

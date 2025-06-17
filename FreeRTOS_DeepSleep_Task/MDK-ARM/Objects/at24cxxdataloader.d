@@ -61,6 +61,7 @@
 .\objects\\at24cxxdataloader.o: ..\FreeRTOS\include\deprecated_definitions.h
 .\objects\\at24cxxdataloader.o: ..\FreeRTOS\portable\RVDS\ARM_CM0\portmacro.h
 .\objects\\at24cxxdataloader.o: ..\FreeRTOS\include\mpu_wrappers.h
+.\objects\\at24cxxdataloader.o: ..\Include\PowerCtrl.h
 .\objects\\at24cxxdataloader.o: ..\FreeRTOS\include\task.h
 .\objects\\at24cxxdataloader.o: ..\FreeRTOS\include\list.h
 .\objects\\at24cxxdataloader.o: ..\Tickless\Tickless_Hook.h

@@ -2,6 +2,7 @@
 #include "FreeRTOS.h"
 #include "task.h"
 #include "Define.h"
+#include "MIN_SetTime.h"
 
 #define   ulGetExternalTime()    FL_LPTIM32_ReadCounter(LPTIM32)
 
@@ -69,6 +70,7 @@ void vSetWakeTimeInterrupt(TickType_t xExpectedIdleTime) {
 void vApplicationSleep(TickType_t xExpectedIdleTime) {
     unsigned long ulLowPowerTimeBeforeSleep, ulLowPowerTimeAfterSleep;
     eSleepModeStatus eSleepStatus;
+    configPRE_SLEEP_PROCESSING(NULL);   // 进入低功耗模式前的处理
     LPTIM_Setup();
     /* Read the current time from a time source that will remain operational
     while the microcontroller is in a low power state. */
@@ -79,7 +81,7 @@ void vApplicationSleep(TickType_t xExpectedIdleTime) {
 
     /* Enter a critical section that will not effect interrupts bringing the MCU
     out of sleep mode. */
-    disable_interrupts();
+    disable_interrupts(); // 屏蔽所有中断
 
     /* Ensure it is still ok to enter the sleep mode. */
     eSleepStatus = eTaskConfirmSleepModeStatus();
@@ -92,21 +94,27 @@ void vApplicationSleep(TickType_t xExpectedIdleTime) {
         enable_interrupts();
     } else {
         if (eSleepStatus == eNoTasksWaitingTimeout) {
-          /* It is not necessary to configure an interrupt to bring the
-          microcontroller out of its low power state at a fixed time in the
-          future. */
+            /* It is not necessary to configure an interrupt to bring the
+            microcontroller out of its low power state at a fixed time in the
+            future. */
             prvSleep();
         } else {
-
-          /* Configure an interrupt to bring the microcontroller out of its low
-          power state at the time the kernel next needs to execute.  The
-          interrupt must be generated from a source that remains operational
-          when the microcontroller is in a low power state. */
+            /* Exit the critical section - it might be possible to do this immediately
+            after the prvSleep() calls. */
+            enable_interrupts();
+            /* Configure an interrupt to bring the microcontroller out of its low
+            power state at the time the kernel next needs to execute.  The
+            interrupt must be generated from a source that remains operational
+            when the microcontroller is in a low power state. */
             vSetWakeTimeInterrupt(xExpectedIdleTime - 1);
-
             /* Enter the low power state. */
+#ifdef OPEN_LOWPWER_DEBUG
+            /* 需要模拟唤醒时,启动低功耗调试任务，即可退出等待
+            需要模拟睡眠时，关闭低功耗调试任务，即可开启等待*/
+            while (!RTC_TASK.Task[LowPwerDebug].isTaskStart);
+#else
             prvSleep();
-
+#endif
             /* Determine how long the microcontroller was actually in a low power
             state for, which will be less than xExpectedIdleTime if the
             microcontroller was brought out of low power mode by an interrupt
@@ -121,13 +129,9 @@ void vApplicationSleep(TickType_t xExpectedIdleTime) {
             microcontroller spent in its low power state. */
             vTaskStepTick((ulLowPowerTimeAfterSleep - ulLowPowerTimeBeforeSleep));
         }
-
-        /* Exit the critical section - it might be possible to do this immediately
-        after the prvSleep() calls. */
-        enable_interrupts();
-
         /* Restart the timer that is generating the tick interrupt. */
         prvStartTickInterruptTimer();
+        configPOST_SLEEP_PROCESSING(NULL);  // 退出低功耗模式后的处理
     }
 }
 #endif

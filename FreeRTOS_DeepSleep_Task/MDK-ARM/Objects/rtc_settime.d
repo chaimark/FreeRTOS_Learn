@@ -66,6 +66,7 @@
 .\objects\\rtc_settime.o: ..\FreeRTOS\include\deprecated_definitions.h
 .\objects\\rtc_settime.o: ..\FreeRTOS\portable\RVDS\ARM_CM0\portmacro.h
 .\objects\\rtc_settime.o: ..\FreeRTOS\include\mpu_wrappers.h
+.\objects\\rtc_settime.o: ..\Include\PowerCtrl.h
 .\objects\\rtc_settime.o: ..\FreeRTOS\include\task.h
 .\objects\\rtc_settime.o: ..\FreeRTOS\include\list.h
 .\objects\\rtc_settime.o: ..\Tickless\Tickless_Hook.h

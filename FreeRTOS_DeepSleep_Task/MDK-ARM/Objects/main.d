@@ -8,6 +8,7 @@
 .\objects\\main.o: ..\FreeRTOS\include\deprecated_definitions.h
 .\objects\\main.o: ..\FreeRTOS\portable\RVDS\ARM_CM0\portmacro.h
 .\objects\\main.o: ..\FreeRTOS\include\mpu_wrappers.h
+.\objects\\main.o: ..\Include\PowerCtrl.h
 .\objects\\main.o: ..\FreeRTOS\include\task.h
 .\objects\\main.o: ..\FreeRTOS\include\list.h
 .\objects\\main.o: ..\Tickless\Tickless_Hook.h
@@ -81,3 +82,4 @@
 .\objects\\main.o: ..\Include\TaskAboutTimer.h
 .\objects\\main.o: ..\Include\TaskReadEEprom.h
 .\objects\\main.o: ..\Include\SX1276.h
+.\objects\\main.o: ..\Include\LPUart_0_And_1_Lib.h

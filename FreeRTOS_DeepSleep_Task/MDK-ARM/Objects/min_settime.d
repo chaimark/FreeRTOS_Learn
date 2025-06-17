@@ -66,6 +66,7 @@
 .\objects\\min_settime.o: ..\FreeRTOS\include\deprecated_definitions.h
 .\objects\\min_settime.o: ..\FreeRTOS\portable\RVDS\ARM_CM0\portmacro.h
 .\objects\\min_settime.o: ..\FreeRTOS\include\mpu_wrappers.h
+.\objects\\min_settime.o: ..\Include\PowerCtrl.h
 .\objects\\min_settime.o: ..\FreeRTOS\include\task.h
 .\objects\\min_settime.o: ..\FreeRTOS\include\list.h
 .\objects\\min_settime.o: ..\Tickless\Tickless_Hook.h

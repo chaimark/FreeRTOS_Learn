@@ -37,7 +37,6 @@ void ReadEEprom(void * pvParameters) {
         xTimerStart(ReadEEpromTimer, 0);  // 启动定时器
     }
     ReadEEpromSemaphore = xSemaphoreCreateBinary(); // 初始化信号量
-    // 创建硬件定时器
     while (1) {
         // 等待信号量阻塞任务, 转为运行其他任务
         if (xSemaphoreTake(ReadEEpromSemaphore, portMAX_DELAY) == pdTRUE) {

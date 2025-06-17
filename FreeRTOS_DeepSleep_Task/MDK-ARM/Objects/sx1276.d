@@ -62,6 +62,7 @@
 .\objects\\sx1276.o: ..\FreeRTOS\include\deprecated_definitions.h
 .\objects\\sx1276.o: ..\FreeRTOS\portable\RVDS\ARM_CM0\portmacro.h
 .\objects\\sx1276.o: ..\FreeRTOS\include\mpu_wrappers.h
+.\objects\\sx1276.o: ..\Include\PowerCtrl.h
 .\objects\\sx1276.o: ..\FreeRTOS\include\task.h
 .\objects\\sx1276.o: ..\FreeRTOS\include\list.h
 .\objects\\sx1276.o: ..\Tickless\Tickless_Hook.h

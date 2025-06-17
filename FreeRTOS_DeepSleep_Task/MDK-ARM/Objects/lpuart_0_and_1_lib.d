@@ -57,6 +57,7 @@
 .\objects\\lpuart_0_and_1_lib.o: ..\FreeRTOS\include\deprecated_definitions.h
 .\objects\\lpuart_0_and_1_lib.o: ..\FreeRTOS\portable\RVDS\ARM_CM0\portmacro.h
 .\objects\\lpuart_0_and_1_lib.o: ..\FreeRTOS\include\mpu_wrappers.h
+.\objects\\lpuart_0_and_1_lib.o: ..\Include\PowerCtrl.h
 .\objects\\lpuart_0_and_1_lib.o: ..\FreeRTOS\include\task.h
 .\objects\\lpuart_0_and_1_lib.o: ..\FreeRTOS\include\list.h
 .\objects\\lpuart_0_and_1_lib.o: ..\Tickless\Tickless_Hook.h
@@ -71,3 +72,6 @@
 .\objects\\lpuart_0_and_1_lib.o: ..\Interflow\MIN_SetTime.h
 .\objects\\lpuart_0_and_1_lib.o: ..\Include\LPUart_0_And_1_Lib.h
 .\objects\\lpuart_0_and_1_lib.o: ..\Include\TaskLPUart_0_And_1.h
+.\objects\\lpuart_0_and_1_lib.o: ..\Interflow\AT24CXXDataLoader.h
+.\objects\\lpuart_0_and_1_lib.o: ..\Interflow\NumberBaseLib.h
+.\objects\\lpuart_0_and_1_lib.o: ..\Include\AT24C02.h

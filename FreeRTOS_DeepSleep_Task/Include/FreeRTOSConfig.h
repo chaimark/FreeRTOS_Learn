@@ -41,7 +41,7 @@
  *----------------------------------------------------------*/
 
 #define configUSE_PREEMPTION		1
-#define configUSE_IDLE_HOOK			0
+#define configUSE_IDLE_HOOK			1
 #define configUSE_TICK_HOOK			0
 #define configCPU_CLOCK_HZ			( ( unsigned long ) 8000000 )	
 #define configTICK_RATE_HZ			( ( TickType_t ) 1000 )
@@ -71,9 +71,7 @@ to exclude the API function. */
 #define INCLUDE_vTaskSuspend			1
 #define INCLUDE_vTaskDelayUntil			1
 #define INCLUDE_vTaskDelay				1
-
-// configUSE_TICKLESS_IDLE 1 低功耗模式
-// configUSE_TICKLESS_IDLE 0 普通模式
+// Tickless Idle 模式 1： 休眠
 #define configUSE_TICKLESS_IDLE         1
 
 #define configUSE_TIMERS                1

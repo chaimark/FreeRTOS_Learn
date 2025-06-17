@@ -66,6 +66,7 @@
 .\objects\\gp21.o: ..\FreeRTOS\include\deprecated_definitions.h
 .\objects\\gp21.o: ..\FreeRTOS\portable\RVDS\ARM_CM0\portmacro.h
 .\objects\\gp21.o: ..\FreeRTOS\include\mpu_wrappers.h
+.\objects\\gp21.o: ..\Include\PowerCtrl.h
 .\objects\\gp21.o: ..\FreeRTOS\include\task.h
 .\objects\\gp21.o: ..\FreeRTOS\include\list.h
 .\objects\\gp21.o: ..\Tickless\Tickless_Hook.h

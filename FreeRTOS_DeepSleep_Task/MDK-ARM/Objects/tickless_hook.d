@@ -9,6 +9,7 @@
 .\objects\\tickless_hook.o: ..\FreeRTOS\include\deprecated_definitions.h
 .\objects\\tickless_hook.o: ..\FreeRTOS\portable\RVDS\ARM_CM0\portmacro.h
 .\objects\\tickless_hook.o: ..\FreeRTOS\include\mpu_wrappers.h
+.\objects\\tickless_hook.o: ..\Include\PowerCtrl.h
 .\objects\\tickless_hook.o: ..\FreeRTOS\include\task.h
 .\objects\\tickless_hook.o: ..\FreeRTOS\include\list.h
 .\objects\\tickless_hook.o: ..\Include\Define.h

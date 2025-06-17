@@ -10,6 +10,7 @@
 .\objects\\queue.o: ..\FreeRTOS\include\deprecated_definitions.h
 .\objects\\queue.o: ..\FreeRTOS\portable\RVDS\ARM_CM0\portmacro.h
 .\objects\\queue.o: ..\FreeRTOS\include\mpu_wrappers.h
+.\objects\\queue.o: ..\Include\PowerCtrl.h
 .\objects\\queue.o: ..\FreeRTOS\include\task.h
 .\objects\\queue.o: ..\FreeRTOS\include\list.h
 .\objects\\queue.o: ..\FreeRTOS\include\queue.h

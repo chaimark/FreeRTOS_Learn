@@ -33,7 +33,7 @@ typedef enum _MINTaskName {
 #endif
 
 #ifdef OPEN_AT_CMD_DEBUG
-#define MINTimeTaskMAX (_MINTimeTaskMAX + 1)
+#define MINTimeTaskMAX (_MINTimeTaskMAX + 2)
 #else
 #define MINTimeTaskMAX _MINTimeTaskMAX
 #endif

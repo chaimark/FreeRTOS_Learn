@@ -57,6 +57,7 @@
 .\objects\\gpio_interrupt.o: ..\FreeRTOS\include\deprecated_definitions.h
 .\objects\\gpio_interrupt.o: ..\FreeRTOS\portable\RVDS\ARM_CM0\portmacro.h
 .\objects\\gpio_interrupt.o: ..\FreeRTOS\include\mpu_wrappers.h
+.\objects\\gpio_interrupt.o: ..\Include\PowerCtrl.h
 .\objects\\gpio_interrupt.o: ..\FreeRTOS\include\task.h
 .\objects\\gpio_interrupt.o: ..\FreeRTOS\include\list.h
 .\objects\\gpio_interrupt.o: ..\Tickless\Tickless_Hook.h

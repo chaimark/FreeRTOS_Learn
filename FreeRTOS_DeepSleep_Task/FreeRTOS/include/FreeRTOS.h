@@ -709,11 +709,13 @@ extern "C" {
 #endif
 
 #ifndef configPRE_SLEEP_PROCESSING
-	#define configPRE_SLEEP_PROCESSING( x )
+    #include "PowerCtrl.h"
+	#define configPRE_SLEEP_PROCESSING( x ) EnterLowPowerMode( x )
 #endif
 
 #ifndef configPOST_SLEEP_PROCESSING
-	#define configPOST_SLEEP_PROCESSING( x )
+    #include "PowerCtrl.h"
+	#define configPOST_SLEEP_PROCESSING( x ) ExitLowPowerMode( x )
 #endif
 
 #ifndef configUSE_QUEUE_SETS

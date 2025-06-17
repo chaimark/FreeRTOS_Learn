@@ -58,6 +58,7 @@
 .\objects\\rtc.o: ..\FreeRTOS\include\deprecated_definitions.h
 .\objects\\rtc.o: ..\FreeRTOS\portable\RVDS\ARM_CM0\portmacro.h
 .\objects\\rtc.o: ..\FreeRTOS\include\mpu_wrappers.h
+.\objects\\rtc.o: ..\Include\PowerCtrl.h
 .\objects\\rtc.o: ..\FreeRTOS\include\task.h
 .\objects\\rtc.o: ..\FreeRTOS\include\list.h
 .\objects\\rtc.o: ..\Tickless\Tickless_Hook.h

@@ -10,6 +10,7 @@
 .\objects\\tasks.o: ..\FreeRTOS\include\deprecated_definitions.h
 .\objects\\tasks.o: ..\FreeRTOS\portable\RVDS\ARM_CM0\portmacro.h
 .\objects\\tasks.o: ..\FreeRTOS\include\mpu_wrappers.h
+.\objects\\tasks.o: ..\Include\PowerCtrl.h
 .\objects\\tasks.o: ..\FreeRTOS\include\task.h
 .\objects\\tasks.o: ..\FreeRTOS\include\list.h
 .\objects\\tasks.o: ..\FreeRTOS\include\timers.h

@@ -9,4 +9,5 @@
 .\objects\\list.o: ..\FreeRTOS\include\deprecated_definitions.h
 .\objects\\list.o: ..\FreeRTOS\portable\RVDS\ARM_CM0\portmacro.h
 .\objects\\list.o: ..\FreeRTOS\include\mpu_wrappers.h
+.\objects\\list.o: ..\Include\PowerCtrl.h
 .\objects\\list.o: ..\FreeRTOS\include\list.h

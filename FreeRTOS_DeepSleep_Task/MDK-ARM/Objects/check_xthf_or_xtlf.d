@@ -58,6 +58,7 @@
 .\objects\\check_xthf_or_xtlf.o: ..\FreeRTOS\include\deprecated_definitions.h
 .\objects\\check_xthf_or_xtlf.o: ..\FreeRTOS\portable\RVDS\ARM_CM0\portmacro.h
 .\objects\\check_xthf_or_xtlf.o: ..\FreeRTOS\include\mpu_wrappers.h
+.\objects\\check_xthf_or_xtlf.o: ..\Include\PowerCtrl.h
 .\objects\\check_xthf_or_xtlf.o: ..\FreeRTOS\include\task.h
 .\objects\\check_xthf_or_xtlf.o: ..\FreeRTOS\include\list.h
 .\objects\\check_xthf_or_xtlf.o: ..\Tickless\Tickless_Hook.h

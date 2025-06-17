@@ -395,11 +395,11 @@ bool HY_USB_TTL_CheckBuff(char * RxBuf, int RxLen, uint8_t Now_LPUartx) {
     memcpy(EEprom_METERID, AT24CXX_Manager_NET.MeterID, 4);
 
     int SendDataLen = 0;
-    if ((Now_LPUartx != 0) && (Now_LPUartx != 1)) {
+    if ((Now_LPUartx != 0xF1) && (Now_LPUartx != 0xF2)) {
         return false;
     }
     newstrobj(SendBuf, 1);
-    SendBuf = (Now_LPUartx == 0 ? NEW_NAME(LPUART0Ddata.TxBuf) : NEW_NAME(LPUART1Ddata.TxBuf));
+    SendBuf = (Now_LPUartx == 0xF1 ? NEW_NAME(LPUART0Ddata.TxBuf) : NEW_NAME(LPUART1Ddata.TxBuf));
     memset(SendBuf.Name._char, 0, SendBuf.MaxLen);
     SendBuf.Name._char[SendDataLen++] = 0x68;
     SendBuf.Name._char[SendDataLen++] = 0x44;
@@ -462,7 +462,7 @@ bool HY_USB_TTL_CheckBuff(char * RxBuf, int RxLen, uint8_t Now_LPUartx) {
     SendBuf.Name._char[0x0A] = ((SendDataLen >> 0) & 0x00FF);
     SendBuf.Name._char[SendDataLen] = get_CheckSum((unsigned char *)SendBuf.Name._char, SendDataLen);
     SendBuf.Name._char[++SendDataLen] = 0x16;
-    if (Now_LPUartx == 0) {
+    if (Now_LPUartx == 0xF1) {
         LPUART0Ddata.TxLen = ++SendDataLen;
     } else {
         LPUART1Ddata.TxLen = ++SendDataLen;

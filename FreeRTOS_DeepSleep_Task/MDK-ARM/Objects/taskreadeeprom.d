@@ -9,6 +9,7 @@
 .\objects\\taskreadeeprom.o: ..\FreeRTOS\include\deprecated_definitions.h
 .\objects\\taskreadeeprom.o: ..\FreeRTOS\portable\RVDS\ARM_CM0\portmacro.h
 .\objects\\taskreadeeprom.o: ..\FreeRTOS\include\mpu_wrappers.h
+.\objects\\taskreadeeprom.o: ..\Include\PowerCtrl.h
 .\objects\\taskreadeeprom.o: ..\FreeRTOS\include\task.h
 .\objects\\taskreadeeprom.o: ..\FreeRTOS\include\list.h
 .\objects\\taskreadeeprom.o: ..\FreeRTOS\include\semphr.h

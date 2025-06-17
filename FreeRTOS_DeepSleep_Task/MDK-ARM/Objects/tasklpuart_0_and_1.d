@@ -9,6 +9,7 @@
 .\objects\\tasklpuart_0_and_1.o: ..\FreeRTOS\include\deprecated_definitions.h
 .\objects\\tasklpuart_0_and_1.o: ..\FreeRTOS\portable\RVDS\ARM_CM0\portmacro.h
 .\objects\\tasklpuart_0_and_1.o: ..\FreeRTOS\include\mpu_wrappers.h
+.\objects\\tasklpuart_0_and_1.o: ..\Include\PowerCtrl.h
 .\objects\\tasklpuart_0_and_1.o: ..\FreeRTOS\include\task.h
 .\objects\\tasklpuart_0_and_1.o: ..\FreeRTOS\include\list.h
 .\objects\\tasklpuart_0_and_1.o: ..\FreeRTOS\include\semphr.h

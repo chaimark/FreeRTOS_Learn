@@ -78,7 +78,7 @@ void TimeTask(void * pvParameters) {
                 }
                 if (!(Front_TemperOrPress - 1 < Now_TemperOrPress && Now_TemperOrPress < Front_TemperOrPress + 1)) {
                     Alarm_Falge = true;
-                    vTaskDelay(5000);
+                    vTaskDelay(500);
                     if (!(Front_TemperOrPress - 1 < Now_TemperOrPress && Now_TemperOrPress < Front_TemperOrPress + 1)) {
                         FlagBit_Task |= 0x04; // 设置标志位, 发送数据
                     }
@@ -92,7 +92,7 @@ void TimeTask(void * pvParameters) {
                 }
                 if (!(Front_TemperOrPress - 0.05 < Now_TemperOrPress && Now_TemperOrPress < Front_TemperOrPress + 0.05)) {
                     Alarm_Falge = true;
-                    vTaskDelay(5000);
+                    vTaskDelay(500);
                     if (!(Front_TemperOrPress - 0.05 < Now_TemperOrPress && Now_TemperOrPress < Front_TemperOrPress + 0.05)) {
                         FlagBit_Task |= 0x04; // 设置标志位, 发送数据
                     }

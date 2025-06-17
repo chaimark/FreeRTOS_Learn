@@ -9,6 +9,7 @@
 .\objects\\taskabouttimer.o: ..\FreeRTOS\include\deprecated_definitions.h
 .\objects\\taskabouttimer.o: ..\FreeRTOS\portable\RVDS\ARM_CM0\portmacro.h
 .\objects\\taskabouttimer.o: ..\FreeRTOS\include\mpu_wrappers.h
+.\objects\\taskabouttimer.o: ..\Include\PowerCtrl.h
 .\objects\\taskabouttimer.o: ..\FreeRTOS\include\task.h
 .\objects\\taskabouttimer.o: ..\FreeRTOS\include\list.h
 .\objects\\taskabouttimer.o: ..\FreeRTOS\include\semphr.h

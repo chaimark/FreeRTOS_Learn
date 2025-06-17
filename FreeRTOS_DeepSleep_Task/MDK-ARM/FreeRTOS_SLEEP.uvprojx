@@ -326,7 +326,7 @@
             <uThumb>0</uThumb>
             <uSurpInc>0</uSurpInc>
             <uC99>1</uC99>
-            <uGnu>0</uGnu>
+            <uGnu>1</uGnu>
             <useXO>0</useXO>
             <v6Lang>3</v6Lang>
             <v6LangP>3</v6LangP>
@@ -778,6 +778,11 @@
               <FileType>5</FileType>
               <FilePath>..\Include\PT1000.h</FilePath>
             </File>
+            <File>
+              <FileName>PowerCtrl.h</FileName>
+              <FileType>5</FileType>
+              <FilePath>..\Include\PowerCtrl.h</FilePath>
+            </File>
           </Files>
         </Group>
         <Group>
@@ -872,6 +877,11 @@
               <FileName>TaskLPUart_0_And_1.c</FileName>
               <FileType>1</FileType>
               <FilePath>..\Src\TaskLPUart_0_And_1.c</FilePath>
+            </File>
+            <File>
+              <FileName>PowerCtrl.c</FileName>
+              <FileType>1</FileType>
+              <FilePath>..\Src\PowerCtrl.c</FilePath>
             </File>
           </Files>
         </Group>
