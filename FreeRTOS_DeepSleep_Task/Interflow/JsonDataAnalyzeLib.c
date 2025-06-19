@@ -88,7 +88,7 @@ int Arr_sizeItemNum(struct _JsonArray This) {
     char * HeadItem = This.JsonString.Name._char + 1;   // 获取第一个元素位置
     char * EndItem = HeadItem;
     bool isStringArray = false;
-    if (myStrstrCont(This.JsonString.Name._char, "\"", This.JsonString.MaxLen, 3) != NULL) {
+    if (myStrstrCont(This.JsonString.Name._char, "\"", This.JsonString.MaxLen, 2) != NULL) {
         isStringArray = true;
     }
     while (*EndItem != '\0') {
@@ -131,7 +131,7 @@ void Arr_get(struct _JsonArray This, strnew OutStr, int ItemNum) {
     char * HeadItem = This.JsonString.Name._char + 1;   // 获取第一个元素位置
     char * EndItem = HeadItem;
     bool isStringArray = false;
-    if (myStrstrCont(This.JsonString.Name._char, "\"", This.JsonString.MaxLen, 3) != NULL) {
+    if (myStrstrCont(This.JsonString.Name._char, "\"", This.JsonString.MaxLen, 2) != NULL) {
         isStringArray = true;
     }
     while (ItemNum > 0 && *EndItem != '\0') {
