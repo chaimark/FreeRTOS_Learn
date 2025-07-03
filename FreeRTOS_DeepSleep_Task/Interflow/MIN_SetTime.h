@@ -16,19 +16,19 @@
 // 任务数量
 #define _MINTimeTaskMAX 2
 // #define Min_10_TimeTaskMAX 0
-// #define Min_15_TimeTaskMAX 0
+#define Min_15_TimeTaskMAX 1
 
 #ifdef _MINTimeTaskMAX
 #ifdef OPEN_AT_CMD_DEBUG
 typedef enum _MINTaskName {
     ATDebug,
     CheckPWMOfClock,
-    TestArgument,           // 用于判断当前温度或压力s
+    TestArgument,
 }MINTaskName;
 #else
 typedef enum _MINTaskName {
     CheckPWMOfClock,
-    TestArgument,           // 用于判断当前温度或压力
+    NoPwrOpenValve,
 }MINTaskName;
 #endif
 
@@ -76,6 +76,7 @@ extern void Min_10_CountRTCTask(void);
 //////////////////////////////////////////////////////////////
 #ifdef Min_15_TimeTaskMAX
 typedef enum _Min_15_TaskName {
+    testConnectFor433,
 }Min_15_TaskName;
 typedef struct _USER_Min_15_SET_TASK {
     struct {
