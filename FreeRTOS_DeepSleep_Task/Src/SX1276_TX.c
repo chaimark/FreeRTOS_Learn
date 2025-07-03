@@ -13,10 +13,6 @@ void Send_RF(int DataLen) {
         Now_NetDevParameter.SendCount = 0;
         Now_NetDevParameter.ReceiveCount = 0;
     }
-    // if ((Now_NetDevParameter.SendCount >= 10) || (Now_NetDevParameter.ReceiveCount >= 10)) {
-    //     Now_NetDevParameter.SendCount = 0;
-    //     Now_NetDevParameter.ReceiveCount = 0;
-    // }
     if (Now_NetDevParameter.ReceiveCount > Now_NetDevParameter.SendCount) {
         Now_NetDevParameter.SendCount = 0;
         Now_NetDevParameter.ReceiveCount = 0;
@@ -24,14 +20,13 @@ void Send_RF(int DataLen) {
     SX1276_RF_Open();
     Now_NetDevParameter.ReceiveFlag = false;
     SX1276_RF_SendPacket(SX1276_RF_TXBuffer, DataLen);
-    for (int i = 400; i > 0; i--) {
+    for (int i = 500; i > 0; i--) {  
         if (Now_NetDevParameter.ReceiveFlag) {
             break;
         }
-        IncludeDelayMs(4);
+        IncludeDelayMs(2);
     }
     SX1276_RF_Close();
-    IncludeDelayMs(1000);
     Alarm_Falge = false;
 }
 

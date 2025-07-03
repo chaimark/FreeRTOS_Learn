@@ -13,11 +13,6 @@
 
 // 内部 RTC ***************************
 FL_RTC_InitTypeDef * _RTC_Date;
-// 判断是否为闰年
-int isLeapYear(uint32_t year) {
-    return (year % 4 == 0 && year % 100 != 0) || (year % 400 == 0);
-}
-
 // 获取每月的天数
 uint32_t getDaysInMonth(uint32_t year, uint32_t month) {
     if (month == 2) {
@@ -72,41 +67,6 @@ FL_RTC_InitTypeDef RTCTimeAddSecToNewTime(FL_RTC_InitTypeDef NowTime, uint32_t S
     }
     NowWeek = getDayOfWeek(NowYear, NowMonth, NowDay); // 计算周 周不需要转换
     return NowTime;
-}
-
-// 计算从1970年1月1日到指定日期的总天数
-int calculate_days(int year, int month, int day) {
-    int days_in_month[] = {31, 28, 31, 30, 31, 30, 31, 31, 30, 31, 30, 31};
-    int total_days = 0;
-    int i;
-
-    // 计算从1970年到当前年份的总天数
-    for (i = 1970; i < year; i++) {
-        total_days += isLeapYear(i) ? 366 : 365;
-    }
-
-    // 计算当前年份从1月1日到指定日期的天数
-    for (i = 0; i < month - 1; i++) {
-        total_days += days_in_month[i];
-        if (i == 1 && isLeapYear(year)) { // 2月需要额外加一天（闰年）
-            total_days++;
-        }
-    }
-    // 加上当前月份的天数
-    total_days += day - 1;
-    return total_days;
-}
-
-// 计算时间戳（秒数）
-long get_timestamp(void) {
-    // 计算从1970年1月1日到指定日期的总天数
-    int days = calculate_days(NowYear, NowMonth, NowDay);
-    // 转换为秒数
-    long OverTimeSec = days * 86400LL;  // 每天86400秒
-    OverTimeSec += NowHour * 3600LL;            // 小时转秒
-    OverTimeSec += NowMinute * 60LL;            // 分钟转秒
-    OverTimeSec += NowSecond;                   // 加上秒
-    return OverTimeSec;
 }
 
 // 计算周
@@ -281,9 +241,8 @@ void RTC_IRQHandler(void) {
             MinCountRTCTask();
 #endif
             if (NowMinute == 0x00) {
-
+                NowWeek = getDayOfWeek(NowYear, NowMonth, NowDay); // 计算周 周不需要转换
                 if (NowHour == 0x00) {
-                    NowWeek = getDayOfWeek(NowYear, NowMonth, NowDay); // 计算周 周不需要转换
                 }
             }
             if ((NowMinute % 0x10) == 0) {

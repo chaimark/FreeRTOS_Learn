@@ -5,9 +5,10 @@
 #include <stdint.h>
 #include "MIN_SetTime.h"
 #include "PublicLib_No_One.h"
-
-// 任务数量
-#define _RTCTimeTaskMAX 2
+// 将小时转换为分钟
+#define HourToMin(x) (x*60)
+// 将分钟转换为秒
+#define MinToSec(x) (x*60)
 
 #ifdef OPEN_LOWPWER_DEBUG
 typedef enum _RTCTaskName {
@@ -22,7 +23,10 @@ typedef enum _RTCTaskName {
 }RTCTaskName;
 #endif
 
-#ifdef OPEN_AT_CMD_DEBUG
+// 任务数量
+#define _RTCTimeTaskMAX 2
+
+#ifdef OPEN_LOWPWER_DEBUG
 #define RTCTimeTaskMAX (_RTCTimeTaskMAX + 1)
 #else
 #define RTCTimeTaskMAX _RTCTimeTaskMAX

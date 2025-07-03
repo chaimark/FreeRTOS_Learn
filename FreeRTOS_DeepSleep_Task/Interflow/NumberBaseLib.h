@@ -67,5 +67,6 @@ extern uint16_t U8_Connect_U8(uint8_t H_Part, uint8_t L_Part);
     numberArrayToStrArray(asc, asc, asc_len)
 #endif
 
-
+// 获取某个值在某段区间类所在点的百分比
+extern float getPartOfSetPointOnRing(uint32_t SetPoint, uint32_t Min_Ring, uint32_t Max_Ring);
 

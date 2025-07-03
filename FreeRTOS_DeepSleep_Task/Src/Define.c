@@ -484,7 +484,7 @@ void Device_Init(void) {
     // BSTIM 开启定时器中断
     // BSTIM32_Setup();    //开启定时器中断
     // BSTIM32_Stop();     //关闭定时器中断
-    RTC_TASK.InitSetTimeTask(IWDTClS, SecTo250Ms(MinToSec(8)), NULL); // 8min 内定时器喂狗
+    RTC_TASK.InitSetTimeTask(IWDTClS, MinToSec(8), NULL); // 8min 内定时器喂狗
 }
 void StartOPenDevMode(void) {
     Device_Init();
@@ -509,3 +509,13 @@ void CheckMeterNum(void) {
         EEprom_AT24C0XXData_Write(&AT24CXX_Manager_NET.MeterPress_Adjust, sizeof(AT24CXX_Manager_NET.MeterPress_Adjust));
     }
 }
+#include "StrLib.h"
+#define IS_NVIC_VECTTAB(VECTTAB)  (((VECTTAB) == 0x00000000) || ((VECTTAB) == 0x08000000) || ((VECTTAB) == 0x20000000))
+#define IS_NVIC_OFFSET(OFFSET)  (((OFFSET) & 0x1FFFFF80) == (OFFSET))
+void NVIC_SetVectorTable(uint32_t NVIC_VectTab, uint32_t Offset) {
+    /*Check the parameters */
+    assert_param(IS_NVIC_VECTTAB(NVIC_VectTab));
+    assert_param(IS_NVIC_OFFSET(Offset));
+    SCB->VTOR = NVIC_VectTab | (Offset & (uint32_t)0x1FFFFF80);
+}
+

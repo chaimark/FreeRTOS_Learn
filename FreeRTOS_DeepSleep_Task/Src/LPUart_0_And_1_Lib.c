@@ -141,7 +141,6 @@ void LPUART1_ReadData_Deal(void) {
     }
 }
 //===========================================================//
-#include "AT24CXXDataLoader.h"
 void LPUART1_IRQHandler(void) {
     //接收中断处理
     if ((FL_ENABLE == FL_LPUART_IsEnabledIT_RXBuffFull(LPUART1)) && (FL_SET == FL_LPUART_IsActiveFlag_RXBuffFull(LPUART1))) {

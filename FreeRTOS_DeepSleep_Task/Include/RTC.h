@@ -20,11 +20,9 @@ extern FL_RTC_InitTypeDef * _RTC_Date;
 // extern unsigned char RTC_Heart_LED_Count;
 // extern void Set_Heart_LED_ON();
 
-extern int isLeapYear(uint32_t year);
 extern FL_RTC_InitTypeDef RTCTimeAddSecToNewTime(FL_RTC_InitTypeDef NowTime, uint32_t SecNum, uint8_t isDex);
 #define RTCTime_Hex_AddSecToNewTime(TempTime, SecNum) RTCTimeAddSecToNewTime(TempTime, SecNum, 0)
 #define RTCTime_Dex_AddSecToNewTime(TempTime, SecNum) RTCTimeAddSecToNewTime(TempTime, SecNum, 1)
-extern long get_timestamp(void);
 extern int getDayOfWeek(uint32_t iYear, uint32_t iMonth, uint32_t iDay);
 extern void setRtcDate(strnew SteStrRTCData, char isWriteEEPROM);
 extern void getStrUserTime(FL_RTC_InitTypeDef UserDate, char NowStrRTCData[]);

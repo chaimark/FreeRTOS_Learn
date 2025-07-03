@@ -56,6 +56,7 @@ void TimeTask(void * pvParameters) {
     if (TestBatVoltgeTimer != NULL) {
         xTimerStart(TestBatVoltgeTimer, 0);  // 启动定时器 测电压
     }
+    Send_RF_DATA_AT_The_Beginning(); // 发送 第一次 LoRa
     // 创建硬件定时器
     MIN_TASK.InitSetTimeTask(TestArgument, AT24CXX_Manager_NET.Test_TemperOrPress_Interval, startTimeTask); // 测温度或压力
     // 创建硬件定时器

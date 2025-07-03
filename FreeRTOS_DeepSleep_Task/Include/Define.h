@@ -212,6 +212,6 @@ extern bool HY_USB_TTL_CheckBuff(char * RxBuf, int RxLen, uint8_t Now_LPUartx);
 extern void Device_Init(void);
 extern void StartOPenDevMode(void);
 extern void CheckMeterNum(void);
-
+extern void NVIC_SetVectorTable(uint32_t NVIC_VectTab, uint32_t Offset);
 #endif
 

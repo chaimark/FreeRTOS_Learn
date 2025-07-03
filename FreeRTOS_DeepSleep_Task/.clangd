@@ -1,16 +1,16 @@
 CompileFlags:
   Add:
-    - '-Ie:\work\git_room\QiuLei_WorkSpace\ReadDevOfTemperatureOrPressure\FreeRTOS_DeepSleep_Task/RTE/_FreeRTOS_DeepSleep'
-    - '-IC:\Keil_v5\ARM\ARMCC\include'
-    - '-IC:\Keil_v5\ARM\ARMCC\include\rw'
-    - '-IFreeRTOS\portable\RVDS\ARM_CM0'
-    - '-IFreeRTOS\include'
-    - '-IDrivers\CMSIS\Device\FM\FM33xx\Include'
-    - '-IDrivers\FM33LC0xx_FL_Driver\Inc'
-    - '-IMF-config'
-    - '-ITickless'
-    - '-IInterflow\'
-    - '-IInclude'
+    - '--target=arm-none-eabi'
+    - '-Ic:/Keil_v5/ARM/ARMCC/include'
+    - '-Ic:/Keil_v5/ARM/ARMCC/include/rw'
+    - '-Ie:/work/git_room/QiuLei_WorkSpace/ReadDevOfTemperatureOrPressure/FreeRTOS_DeepSleep_Task/FreeRTOS/portable/RVDS/ARM_CM0'
+    - '-Ie:/work/git_room/QiuLei_WorkSpace/ReadDevOfTemperatureOrPressure/FreeRTOS_DeepSleep_Task/FreeRTOS/include'
+    - '-Ie:/work/git_room/QiuLei_WorkSpace/ReadDevOfTemperatureOrPressure/FreeRTOS_DeepSleep_Task/Drivers/CMSIS/Device/FM/FM33xx/Include'
+    - '-Ie:/work/git_room/QiuLei_WorkSpace/ReadDevOfTemperatureOrPressure/FreeRTOS_DeepSleep_Task/Drivers/FM33LC0xx_FL_Driver/Inc'
+    - '-Ie:/work/git_room/QiuLei_WorkSpace/ReadDevOfTemperatureOrPressure/FreeRTOS_DeepSleep_Task/MF-config'
+    - '-Ie:/work/git_room/QiuLei_WorkSpace/ReadDevOfTemperatureOrPressure/FreeRTOS_DeepSleep_Task/Tickless'
+    - '-Ie:/work/git_room/QiuLei_WorkSpace/ReadDevOfTemperatureOrPressure/FreeRTOS_DeepSleep_Task/Interflow/'
+    - '-Ie:/work/git_room/QiuLei_WorkSpace/ReadDevOfTemperatureOrPressure/FreeRTOS_DeepSleep_Task/Include'
     - '-DFM33LC0XX'
     - '-DUSE_FULL_ASSERT'
     - '-D__CC_ARM'
@@ -85,4 +85,11 @@ CompileFlags:
     - '-D__wfi()='
     - '-D__yield()='
     - '-D__vfp_status(x,y)=0'
-  Compiler: C:\Keil_v5\ARM\ARMCC\bin\armcc.exe
+  Compiler: C:/Keil_v5/ARM/ARMCC/bin/armcc.exe
+
+
+---
+If:
+  PathMatch: */CMSIS/.*
+Diagnostics:
+  Suppress: ["*", undeclared_var_use_suggest]

@@ -43,6 +43,8 @@
         "fm33lc0xx_fl_flash.h": "c",
         "powerctrl.h": "c",
         "settime.h": "c",
-        "stdio.h": "c"
+        "stdio.h": "c",
+        "fm33lc0xx_fl_wwdt.h": "c",
+        "lptim32.h": "c"
     }
 }

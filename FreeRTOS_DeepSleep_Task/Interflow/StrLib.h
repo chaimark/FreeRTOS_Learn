@@ -5,6 +5,7 @@
 #include <stddef.h>
 #include <string.h>
 #include <stdbool.h>
+#include "stdint.h"
 /*-----------------------------------定义数组类----------------------------------*/
 // #define ThisObj &##ThisObj
 #define This (*this)
@@ -59,7 +60,17 @@ extern void swapStr(char * IntputStr, int StrLen);
 extern char swapLowHight_Of_Char(char InputCh);
 extern bool MoveDataOnBuff(strnew IntptBuff, int ShiftLen, bool IsLeft);
 extern void StringSlice(strnew OutStr, strnew Mather, int start, int end);
-
+///////////////////////////////////////////////////////////
+extern int isLeapYear(uint32_t year);
+extern uint32_t get_timestamp(
+    uint32_t NowYear,
+    uint32_t NowMonth,
+    uint32_t NowDay,
+    uint32_t NowHour,
+    uint32_t NowMinute,
+    uint32_t NowSecond);
+extern uint32_t getTimeNumber_UTCByRTCTime(strnew RTCTime_String);
+///////////////////////////////////////////////////////////
 #define strnew_malloc(name,Len) newstrobj(name,1)\
 name.Name._char = (char *)malloc(Len);\
 name.MaxLen = Len

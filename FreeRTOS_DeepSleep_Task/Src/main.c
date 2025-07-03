@@ -12,11 +12,10 @@
 #include "TaskLPUart_0_And_1.h"
 #include "TaskAboutTimer.h"
 #include "TaskReadEEprom.h"
-#include "SX1276.h"
 #include "LPUart_0_And_1_Lib.h"
-// 空闲钩子函数
+// 空闲钩子函数, 任务执行一段时间后必须返回空闲任务
 void vApplicationIdleHook(void) {
-
+    RTC_TASK.InitSetTimeTask(IWDTClS, MinToSec(8), NULL); // 8min 内定时器喂狗
 }
 
 /**
@@ -41,6 +40,7 @@ void vApplicationIdleHook(void) {
   */
 
 int main(void) {
+    NVIC_SetVectorTable(0, 0x4000);
     /* Reset of all peripherals, Initializes the Flash interface and the Systick. */
     MF_GPIO_Init();
     /* SHOULD BE KEPT!!! */
@@ -56,8 +56,6 @@ int main(void) {
     StartOPenDevMode();
     CheckMeterNum();
     setNetArgumentInit(NULL);
-    #warning "lora 导致复位"
-    //Send_RF_DATA_AT_The_Beginning();
     xTaskCreate(LPUart_0_And_1_Receive, "AllCmd", configMINIMAL_STACK_SIZE, NULL, LPUart_0_And_1_PRIORITY, &LPUart_0_And_1_Hand); // 1 -- x
     xTaskCreate(ReadEEprom, "ReadEEprom", configMINIMAL_STACK_SIZE, NULL, ReadEEprom_PRIORITY, &ReadEEpromHand); // 4
     xTaskCreate(TimeTask, "TestAll", configMINIMAL_STACK_SIZE, NULL, TimeTask_PRIORITY, &TimeTaskHand); // 2

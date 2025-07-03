@@ -76,18 +76,16 @@ lpCtrlTypefunc_t  ctrlTypefunc = {
 
 void SX1276_PWR_ON(void) {
     SX1276_PWR_H;
-    IncludeDelayMs(20);
+    IncludeDelayMs(500);
 }
 
 void SX1276_PWR_OFF(void) {
     SX1276_PWR_L;
-    SX1276_NSS_L;
     IncludeDelayMs(200);
 }
 
 void SX1276_RF_Open(void) {
     SX1276_PWR_ON();
-    IncludeDelayMs(50);
     SX1276LoRa_SPI_Init();
     register_rf_func(&ctrlTypefunc);
     SX1276LoRa_Reset();
@@ -96,7 +94,6 @@ void SX1276_RF_Open(void) {
 
 void SX1276_RF_Close() {
     SX1276_PWR_OFF();
-    IncludeDelayMs(50);
     SX1276_SCLK_L;
     SX1276_NSS_L;
     SX1276_SIMO_L;
