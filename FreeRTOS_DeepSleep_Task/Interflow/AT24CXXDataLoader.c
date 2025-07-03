@@ -25,11 +25,12 @@ bool checkTimeFrom(FL_RTC_InitTypeDef InputTimeData) {
     return ((InputTimeData.year & 0x00FF) < 0x0019 ? false : true);
 }
 #include "StrLib.h"
+#include "Display.h"
 // AT 参数初始化
-// 初始化 Now_NetDevParameter
+// 初始化 Get_Module_Data
 void setNetArgumentInit(void (*UserShowdownNowDev)(void)) {
-    Now_NetDevParameter.ReceiveCount = 0;
-    Now_NetDevParameter.SendCount = 0;
+    Get_Module_Data.CtrlDev_ReceiveCount = 0;
+    Get_Module_Data.CtrlDev_SendCount = 0;
     // 初始化 SetTime 任务
     // 初始化 SetLPTime 任务
     // 初始化 RTC_TASK 任务  
