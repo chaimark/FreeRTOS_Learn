@@ -14,9 +14,9 @@
 #define HourToMin_10(x) (x*6)
 
 // 任务数量
-#define _MINTimeTaskMAX 2
+// #define _MINTimeTaskMAX 2
 // #define Min_10_TimeTaskMAX 0
-#define Min_15_TimeTaskMAX 1
+// #define Min_15_TimeTaskMAX 1
 
 #ifdef _MINTimeTaskMAX
 #ifdef OPEN_AT_CMD_DEBUG

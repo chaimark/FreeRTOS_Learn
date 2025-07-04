@@ -1,10 +1,11 @@
 #ifndef __UPDATA_H
 #define __UPDATA_H
 
-#define ISBootLoader 0
+#define ISBootLoader 1
 //true 
 //false
-
+#include "PublicLib_No_One.h"
+#ifdef OPEN_FL33LXX_LIB
 #include <stdint.h>
 #include <stdio.h>
 #include <stdlib.h>
@@ -19,7 +20,11 @@
 #endif
 
 // PAGE_SIZE == 512
+#ifdef FL_FLASH_PAGE_SIZE_BYTE
 #define  PAGE_SIZE FL_FLASH_PAGE_SIZE_BYTE
+#else
+#define PAGE_SIZE 512
+#endif
 int flash_write_page(uint32_t addr, uint8_t * buf);
 void flash_read_page(uint32_t addr, uint8_t * buf);
 
@@ -70,4 +75,5 @@ int updataCopyProgram(void);
 extern int UpData_Receive_Hex(JsonObject BinCode);
 #endif
 
+#endif
 #endif

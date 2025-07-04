@@ -1,4 +1,6 @@
 #include "Check_XTHF_Or_XTLF.h"
+#include "PublicLib_No_One.h"
+#ifdef OPEN_FL33LXX_LIB
 #include "fm33lc0xx_fl.h"
 #include "Define.h"
 #include "mf_config.h"
@@ -63,6 +65,7 @@ void Config_Init_XTHF_And_XTLF(void) {
     XTHF_Config_init();
 #endif
 }
+#ifdef XT_CLOCK_OK
 void check_XTClock_isOk(void) {
     MIN_TASK.InitSetTimeTask(CheckPWMOfClock, MinToSec(5), check_XTClock_isOk);
     if (XTClock_CheckTask.is_XTClock_Error == XT_CLOCK_OK) {
@@ -107,4 +110,5 @@ void check_XTClock_isOk(void) {
 #endif
     return;
 }
-
+#endif
+#endif

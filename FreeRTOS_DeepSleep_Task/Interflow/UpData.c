@@ -1,4 +1,5 @@
-#include "updata.h"
+#include "UpData.h"
+#ifdef OPEN_FL33LXX_LIB
 #include "mf_config.h"
 
 // FL_FLASH_PAGE_SIZE_BYTE   512 页大小
@@ -243,4 +244,5 @@ OverSub:
     }
     return FlagCodeNum; // 返回标志位
 }
+#endif
 #endif

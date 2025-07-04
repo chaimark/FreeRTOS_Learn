@@ -3,7 +3,7 @@
 
 #include <stdbool.h>
 #include "NumberBaseLib.h"
-#include "AT24C02.h"
+// #include "AT24C02.h"
 
 #ifndef __AT24C0XXX_H
 typedef struct {

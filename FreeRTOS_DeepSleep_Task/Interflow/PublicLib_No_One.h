@@ -3,6 +3,7 @@
 
 // #define OPEN_AT_CMD_DEBUG
 // #define OPEN_LOWPWER_DEBUG
+// #define OPEN_FL33LXX_LIB
 #include <stdint.h>
 #include <stdio.h>
 #include <stdlib.h>
@@ -13,14 +14,18 @@
 #include <stdbool.h>
 #include <stddef.h>
 #include <stdint.h>
-#include "fm33lc0xx_fl.h"
 #include "StrLib.h"
+#ifdef OPEN_FL33LXX_LIB
+#include "fm33lc0xx_fl.h"
 #include "Define.h"
+#endif
+#ifdef configMAX_TASK_NAME_LEN
 #include "FreeRTOS.h"
 #include "task.h"
 #include "Tickless_Hook.h" 
 #include "semphr.h"
 #include "timers.h"
+#endif
 
 extern void FL_DelayUs(uint32_t nus);
 #define IncludeDelayMs FL_DelayMs
