@@ -1,6 +1,5 @@
 #include "AT24CXXDataLoader.h"
 #include "stddef.h"
-#include "StrLib.h"
 
 struct AT24CXX_MANAGER_S * _AT24CXX_Manager_NET = NULL;
 #ifndef __AT24C0XXX_H
@@ -25,12 +24,12 @@ bool checkTimeFrom(FL_RTC_InitTypeDef InputTimeData) {
     }
     return ((InputTimeData.year & 0x00FF) < 0x0019 ? false : true);
 }
-// #include "Display.h"
+#include "StrLib.h"
 // AT 参数初始化
-// 初始化 Get_Module_Data
+// 初始化 Now_NetDevParameter
 void setNetArgumentInit(void (*UserShowdownNowDev)(void)) {
-    // Get_Module_Data.CtrlDev_ReceiveCount = 0;
-    // Get_Module_Data.CtrlDev_SendCount = 0;
+    Now_NetDevParameter.ReceiveCount = 0;
+    Now_NetDevParameter.SendCount = 0;
     // 初始化 SetTime 任务
     // 初始化 SetLPTime 任务
     // 初始化 RTC_TASK 任务  

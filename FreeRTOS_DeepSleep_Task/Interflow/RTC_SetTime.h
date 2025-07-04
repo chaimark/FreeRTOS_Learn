@@ -14,11 +14,12 @@
 typedef enum _RTCTaskName {
     LowPwerDebug,
     IWDTClS,
+    SendLoarTask,           // 用于判断什么时候发送数据
 }RTCTaskName;
 #else
 typedef enum _RTCTaskName {
     IWDTClS,
-    HomePageRefresh,    // 用于判断什么时候开启主页面刷新功能
+    SendLoarTask,           // 用于判断什么时候发送数据
 }RTCTaskName;
 #endif
 
@@ -45,6 +46,5 @@ typedef struct _USER_SET_TASK {
 }USER_SET_TASK;
 extern USER_SET_TASK RTC_TASK;
 extern void SecondCountRTCTask(void);
-
 #endif
 

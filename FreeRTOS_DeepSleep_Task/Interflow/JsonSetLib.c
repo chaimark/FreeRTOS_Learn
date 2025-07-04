@@ -3,7 +3,7 @@
 #include <stdarg.h>
 #include <stdio.h>
 
-// #define IsOpenFloatHelp_Ability
+#define IsOpenFloatHelp_Ability
 
 #ifdef IsOpenFloatHelp_Ability
 char getNowType(const char * NowAddr, char * UserFromNow) {

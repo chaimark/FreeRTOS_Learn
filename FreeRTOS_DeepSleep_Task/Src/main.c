@@ -40,7 +40,6 @@ void vApplicationIdleHook(void) {
   */
 
 int main(void) {
-    NVIC_SetVectorTable(0, 0x4000);
     /* Reset of all peripherals, Initializes the Flash interface and the Systick. */
     MF_GPIO_Init();
     /* SHOULD BE KEPT!!! */
