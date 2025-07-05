@@ -1068,7 +1068,7 @@ __STATIC_INLINE uint32_t FL_LPUART_ReadBitModulation(LPUART_Type *LPUARTx)
   */
 FL_ErrorStatus FL_LPUART_DeInit(LPUART_Type *LPUARTx);
 void FL_LPUART_StructInit(FL_LPUART_InitTypeDef *initStruct);
-FL_ErrorStatus FL_LPUART_Init(LPUART_Type *LPUARTx, FL_LPUART_InitTypeDef *initStruct);
+FL_ErrorStatus FL_LPUART0_Init(LPUART_Type *LPUARTx, FL_LPUART_InitTypeDef *initStruct);
 
 /**
   * @}

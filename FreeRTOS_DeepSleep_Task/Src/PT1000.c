@@ -269,23 +269,36 @@ void quicksort(unsigned long int arr[], int low, int high) {
 }
 extern void GP21_Goto_Realy(void);
 extern void GP21_Goto_Low_Pwr(void);
-float Test_PT1000(void) {
-    unsigned long int TEST_PT1000_VALUE[6];
+void Test_PT1000(float * PT1000_T1, float * PT1000_T2) {
+    unsigned long int TEST_PT1000_T1_VALUE[6];
+    unsigned long int TEST_PT1000_T2_VALUE[6];
     GP21_Goto_Realy();
     for (int i = 0; i < 6; i++) {
-        Current_meter_status = TEST_GP21_Temp(&TEST_PT1000_VALUE[i], NULL);
+        Current_meter_status = TEST_GP21_Temp(&TEST_PT1000_T1_VALUE[i], &TEST_PT1000_T2_VALUE[i]);
         if (Current_meter_status != 0) {
             break;
         }
     }
-    float PT1000_T1;
+
     if (Current_meter_status == 0) {
-        quicksort(TEST_PT1000_VALUE, 0, 5);
-        TEMP_R_VALUE_PT1 = (TEST_PT1000_VALUE[1] + TEST_PT1000_VALUE[2] + TEST_PT1000_VALUE[3] + TEST_PT1000_VALUE[4]) >> 2;
-        if (TEMP_R_VALUE_PT1 != 0)
-            PT1000_T1 = TEMP_CAL(TEMP_R_VALUE_PT1) + (AT24CXX_Manager_NET.MeterTemperature_Adjust / 10.0);
+        // Test T1
+        SetErrerCode(CODE_ERR_T1_SENSOR_FAULT_GP2, false);
+        quicksort(TEST_PT1000_T1_VALUE, 0, 5);
+        TEMP_R_VALUE_PT1 = (TEST_PT1000_T1_VALUE[1] + TEST_PT1000_T1_VALUE[2] + TEST_PT1000_T1_VALUE[3] + TEST_PT1000_T1_VALUE[4]) >> 2;
+        if (TEMP_R_VALUE_PT1 != 0) {
+            (*PT1000_T1) = TEMP_CAL(TEMP_R_VALUE_PT1);
+        }
+        // Test T2
+        SetErrerCode(CODE_ERR_T2_SENSOR_FAULT_GP2, false);
+        quicksort(TEST_PT1000_T2_VALUE, 0, 5);
+        TEMP_R_VALUE_PT2 = (TEST_PT1000_T2_VALUE[1] + TEST_PT1000_T2_VALUE[2] + TEST_PT1000_T2_VALUE[3] + TEST_PT1000_T2_VALUE[4]) >> 2;
+        if (TEMP_R_VALUE_PT2 != 0) {
+            (*PT1000_T2) = TEMP_CAL(TEMP_R_VALUE_PT2);
+        }
+    } else {
+        SetErrerCode(CODE_ERR_T1_SENSOR_FAULT_GP2, true);
+        SetErrerCode(CODE_ERR_T2_SENSOR_FAULT_GP2, true);
     }
     //½øÈëµÍ¹¦ºÄ
     GP21_Goto_Low_Pwr();
-    return PT1000_T1;
 }

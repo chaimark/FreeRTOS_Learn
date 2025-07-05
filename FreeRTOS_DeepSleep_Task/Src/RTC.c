@@ -3,7 +3,7 @@
 #include <stdio.h>
 #include "RTC.h"
 #include "Define.h"
-#include "Main.h"
+#include "main.h"
 #include "AT24C02.h"
 #include "PublicLib_No_One.h"
 #include "StrLib.h"

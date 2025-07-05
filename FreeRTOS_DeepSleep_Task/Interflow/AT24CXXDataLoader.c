@@ -14,6 +14,7 @@ void AT24CXXLoader_Init(void) {
     AT24CXX_Manager_NET.Time_Data.minute = 0x30;
     AT24CXX_Manager_NET.Time_Data.second = 0x59;
     AT24CXX_Manager_NET.Time_Data.week = getDayOfWeek(0x2020, 0x01, 0x01);
+    AT24CXX_Manager_NET.ModeCode = 0x3FFF;
 }
 bool checkTimeFrom(FL_RTC_InitTypeDef InputTimeData) {
     if (!Check_Time_ByHEX(InputTimeData.hour, InputTimeData.minute, InputTimeData.second)) {
@@ -25,14 +26,16 @@ bool checkTimeFrom(FL_RTC_InitTypeDef InputTimeData) {
     return ((InputTimeData.year & 0x00FF) < 0x0019 ? false : true);
 }
 #include "StrLib.h"
+#include "Display.h"
 // AT 参数初始化
-// 初始化 Now_NetDevParameter
+// 初始化 Get_Module_Data
 void setNetArgumentInit(void (*UserShowdownNowDev)(void)) {
-    Now_NetDevParameter.ReceiveCount = 0;
-    Now_NetDevParameter.SendCount = 0;
+    Get_Module_Data.CtrlDev_ReceiveCount = 0;
+    Get_Module_Data.CtrlDev_SendCount = 0;
     // 初始化 SetTime 任务
     // 初始化 SetLPTime 任务
-    // 初始化 RTC_TASK 任务  
+    // 初始化 RTC_TASK 任务 
+    RTC_TASK.InitSetTimeTask(HomePageRefresh, 0, ShowHomePage);
     return;
 }
 

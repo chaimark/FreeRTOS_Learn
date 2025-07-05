@@ -1,0 +1,10 @@
+.\objects\\jsonsetlib.o: ..\Interflow\JsonSetLib.c
+.\objects\\jsonsetlib.o: ..\Interflow\JsonDataAnalyzeLib.h
+.\objects\\jsonsetlib.o: C:\Keil_v5\ARM\ARMCC\Bin\..\include\stdint.h
+.\objects\\jsonsetlib.o: ..\Interflow\StrLib.h
+.\objects\\jsonsetlib.o: C:\Keil_v5\ARM\ARMCC\Bin\..\include\stddef.h
+.\objects\\jsonsetlib.o: C:\Keil_v5\ARM\ARMCC\Bin\..\include\string.h
+.\objects\\jsonsetlib.o: C:\Keil_v5\ARM\ARMCC\Bin\..\include\stdbool.h
+.\objects\\jsonsetlib.o: ..\Interflow\JsonSetLib.h
+.\objects\\jsonsetlib.o: C:\Keil_v5\ARM\ARMCC\Bin\..\include\stdarg.h
+.\objects\\jsonsetlib.o: C:\Keil_v5\ARM\ARMCC\Bin\..\include\stdio.h

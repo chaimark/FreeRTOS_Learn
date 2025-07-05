@@ -44,6 +44,7 @@ extern "C" {
 extern void MF_IWDT_Init(void);
 extern void MF_EXTI_Init(void);
 extern void MF_GPIO_Init(void);
+extern void Check_Temper_Battery_Init(void);
 
 #endif /* __MF_CONFIG_H */
 

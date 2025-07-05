@@ -143,39 +143,40 @@ unsigned int GP21_Read_Status(void) {
 }
 
 void GP21_GPIO_Init(void) {
-    FL_GPIO_InitTypeDef gpioInitStruction = {0};
-    // PA8_GP2_SO
-    gpioInitStruction.pin = FL_GPIO_PIN_8;
-    gpioInitStruction.mode = FL_GPIO_MODE_INPUT;
-    gpioInitStruction.outputType = FL_GPIO_OUTPUT_PUSHPULL;
-    gpioInitStruction.pull = FL_DISABLE;
-    FL_GPIO_Init(GPIOA, &gpioInitStruction);
-    // PA9_GP2_RST    PA10_GP2_SI 
-    gpioInitStruction.pin = FL_GPIO_PIN_9 | FL_GPIO_PIN_10;
-    gpioInitStruction.mode = FL_GPIO_MODE_OUTPUT;
-    gpioInitStruction.outputType = FL_GPIO_OUTPUT_PUSHPULL;
-    gpioInitStruction.pull = FL_DISABLE;
-    FL_GPIO_Init(GPIOA, &gpioInitStruction);
-    GPIO_SET_L(GPIOA, FL_GPIO_PIN_9 | FL_GPIO_PIN_10);
-    // PB3_GP2_SCK    PB4_GP2_SSN
-    gpioInitStruction.pin = FL_GPIO_PIN_3 | FL_GPIO_PIN_4;
-    gpioInitStruction.mode = FL_GPIO_MODE_OUTPUT;
-    gpioInitStruction.outputType = FL_GPIO_OUTPUT_PUSHPULL;
-    gpioInitStruction.pull = FL_DISABLE;
-    FL_GPIO_Init(GPIOB, &gpioInitStruction);
-    GPIO_SET_L(GPIOB, FL_GPIO_PIN_3 | FL_GPIO_PIN_4);
-    // PB5_GP2_INT
-    gpioInitStruction.pin = FL_GPIO_PIN_5;
-    gpioInitStruction.mode = FL_GPIO_MODE_INPUT;
-    gpioInitStruction.outputType = FL_GPIO_OUTPUT_PUSHPULL;
-    gpioInitStruction.pull = FL_DISABLE;
-    FL_GPIO_Init(GPIOB, &gpioInitStruction);
-    //PB9_GP21_EN761    PB10_GP2_PWR    PB12_ACLK
-    gpioInitStruction.pin = FL_GPIO_PIN_9 | FL_GPIO_PIN_10 | FL_GPIO_PIN_12;
-    gpioInitStruction.mode = FL_GPIO_MODE_OUTPUT;
-    gpioInitStruction.outputType = FL_GPIO_OUTPUT_OPENDRAIN;
-    gpioInitStruction.pull = FL_DISABLE;
-    FL_GPIO_Init(GPIOB, &gpioInitStruction);
-    GPIO_SET_L(GPIOB, FL_GPIO_PIN_9 | FL_GPIO_PIN_10 | FL_GPIO_PIN_12);
+#warning "GP2 Config";
+// FL_GPIO_InitTypeDef gpioInitStruction = {0};
+// // PA8_GP2_SO
+// gpioInitStruction.pin = FL_GPIO_PIN_8;
+// gpioInitStruction.mode = FL_GPIO_MODE_INPUT;
+// gpioInitStruction.outputType = FL_GPIO_OUTPUT_PUSHPULL;
+// gpioInitStruction.pull = FL_DISABLE;
+// FL_GPIO_Init(GPIOA, &gpioInitStruction);
+// // PA9_GP2_RST    PA10_GP2_SI 
+// gpioInitStruction.pin = FL_GPIO_PIN_9 | FL_GPIO_PIN_10;
+// gpioInitStruction.mode = FL_GPIO_MODE_OUTPUT;
+// gpioInitStruction.outputType = FL_GPIO_OUTPUT_PUSHPULL;
+// gpioInitStruction.pull = FL_DISABLE;
+// FL_GPIO_Init(GPIOA, &gpioInitStruction);
+// GPIO_SET_L(GPIOA, FL_GPIO_PIN_9 | FL_GPIO_PIN_10);
+// // PB3_GP2_SCK    PB4_GP2_SSN
+// gpioInitStruction.pin = FL_GPIO_PIN_3 | FL_GPIO_PIN_4;
+// gpioInitStruction.mode = FL_GPIO_MODE_OUTPUT;
+// gpioInitStruction.outputType = FL_GPIO_OUTPUT_PUSHPULL;
+// gpioInitStruction.pull = FL_DISABLE;
+// FL_GPIO_Init(GPIOB, &gpioInitStruction);
+// GPIO_SET_L(GPIOB, FL_GPIO_PIN_3 | FL_GPIO_PIN_4);
+// // PB5_GP2_INT
+// gpioInitStruction.pin = FL_GPIO_PIN_5;
+// gpioInitStruction.mode = FL_GPIO_MODE_INPUT;
+// gpioInitStruction.outputType = FL_GPIO_OUTPUT_PUSHPULL;
+// gpioInitStruction.pull = FL_DISABLE;
+// FL_GPIO_Init(GPIOB, &gpioInitStruction);
+// //PB9_GP21_EN761    PB10_GP2_PWR    PB12_ACLK
+// gpioInitStruction.pin = FL_GPIO_PIN_9 | FL_GPIO_PIN_10 | FL_GPIO_PIN_12;
+// gpioInitStruction.mode = FL_GPIO_MODE_OUTPUT;
+// gpioInitStruction.outputType = FL_GPIO_OUTPUT_OPENDRAIN;
+// gpioInitStruction.pull = FL_DISABLE;
+// FL_GPIO_Init(GPIOB, &gpioInitStruction);
+// GPIO_SET_L(GPIOB, FL_GPIO_PIN_9 | FL_GPIO_PIN_10 | FL_GPIO_PIN_12);
 }
 

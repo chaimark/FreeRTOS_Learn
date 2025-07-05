@@ -1,6 +1,6 @@
 #include "fm33lc0xx_fl.h"
 #include "Define.h"
-#include "Main.h"
+#include "main.h"
 #include "LPTim32.h"
 
 void MF_LPTIM_Init(void) {

@@ -1,9 +1,7 @@
 #include "PowerCtrl.h"
-#include "TaskLPUart_0_And_1.h"
 #include "RTC_SetTime.h"
 #include "SetTime.h"
 #include "BSTim.h"
-#include "SX1276.h"
 #include "LPUart_0_And_1_Lib.h"
 
 void EnterLowPowerMode(void * InputConfig) {

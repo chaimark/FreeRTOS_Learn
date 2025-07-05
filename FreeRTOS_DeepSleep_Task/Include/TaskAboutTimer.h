@@ -7,7 +7,7 @@
 
 extern TaskHandle_t TimeTaskHand;
 #define TimeTask_PRIORITY (tskIDLE_PRIORITY + 2)
-extern void TimeTask(void *pvParameters);
-
+extern void TimeTask(void * pvParameters);
+extern void Test433AlarmTask(void);
 #endif
 

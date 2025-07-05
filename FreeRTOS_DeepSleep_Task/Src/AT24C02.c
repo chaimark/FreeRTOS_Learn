@@ -9,26 +9,21 @@ int HY_FLAG = true;
 // public
 AT24CXX_MANAGER_T AT24CXX_Manager = {
     .Sing = 0xB2,
-    .MeterID = {0x00, 0x00, 0x56, 0x78}, // 0x12 0x34 0x56 0x78
-    .FrequencyPoint = 0x12, // 分频点
-    .SendInterval = 60,
-    .Meter_Type = 1,  // 1：PT1000, 2:压力
-    .Test_TemperOrPress_Interval = 30,
-    .MeterTemperature_Adjust = 0,   // 修正值 单位0.1
-    .MeterPress_Adjust = 0,         // 修正值 单位0.1
+    .MeterID = {0x12, 0x34, 0x56, 0x78},
+    .ModeCode = 0x3FFF,
+    .InsetT_Max = 100,
+    .InsetT_Min = 0,
+    .LimitTime = {"1999-05-20 13:14:00"},
+    .RunTimeBack_AddrNum = 0,
+    .T2AutoCtrlBuf = {0},
     .Time_Data = {0},
 };
-NetDevParameter Now_NetDevParameter = {
-    .NowRunTag = true,
-    .SendCount = 0,
-    .ReceiveCount = 0,
-    .ReceiveFlag = false,
-};
+
 // void SaveDevData(void) {
 //     unsigned int HourInt = 0;
 //     HourInt = (NowHour / 0x10) * 10 + (NowHour % 0x10);
 //     if (HourInt < 24) {
-//         // Meter_Manager.EnterQueue(&Meter_Manager, Now_Temper);        // 当前温度为正值
+//         // Meter_Manager.EnterQueue(&Meter_Manager, Get_Module_Data.Now_Temper_T1);        // 当前温度为正值
 //     }
 // }
 #define TRUE        1
@@ -43,14 +38,14 @@ unsigned char  EEprom_Err_Flage;   //0:正常   1：错误
   */
 void MF_I2C_MASTER_Init(void) {
     FL_GPIO_InitTypeDef    GPIO_InitStruct;
-    //PC1_SCLK   PC0_SDATA   高阻
-    GPIO_InitStruct.pin = FL_GPIO_PIN_1 | EEProm_SDA_GPIO_PIN;
+    //PA11_SCLK   PA12_SDATA   高阻
+    GPIO_InitStruct.pin = FL_GPIO_PIN_11 | EEProm_SDA_GPIO_PIN;
     GPIO_InitStruct.mode = FL_GPIO_MODE_OUTPUT;
     GPIO_InitStruct.outputType = FL_GPIO_OUTPUT_OPENDRAIN;
     GPIO_InitStruct.pull = FL_DISABLE;
     GPIO_InitStruct.remapPin = FL_DISABLE;
-    FL_GPIO_Init(GPIOC, &GPIO_InitStruct);
-    GPIO_SET_H(GPIOC, FL_GPIO_PIN_1 | EEProm_SDA_GPIO_PIN);
+    FL_GPIO_Init(GPIOA, &GPIO_InitStruct);
+    GPIO_SET_H(GPIOA, FL_GPIO_PIN_11 | EEProm_SDA_GPIO_PIN);
 }
 static void EEprom_SDA_IN(void) {
     FL_GPIO_InitTypeDef    GPIO_InitStruct = {0};

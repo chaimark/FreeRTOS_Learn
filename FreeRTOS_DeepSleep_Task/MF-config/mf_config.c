@@ -24,6 +24,7 @@
 #include "mf_config.h"
 #include "ADC.h"
 #include "PublicLib_No_One.h"
+
 /* Private function prototypes -----------------------------------------------*/
 void MF_IWDT_Init(void) {
     FL_IWDT_InitTypeDef    IWDT_InitStruct;
@@ -32,12 +33,6 @@ void MF_IWDT_Init(void) {
     IWDT_InitStruct.iwdtWindows = 0;
 
     FL_IWDT_Init(IWDT, &IWDT_InitStruct);
-}
-
-void MF_EXTI_Init(void) {
-    FL_EXTI_CommonInitTypeDef    EXTI_InitStruct;
-    EXTI_InitStruct.clockSource = FL_RCC_EXTI_CLK_SOURCE_LSCLK;
-    FL_EXTI_CommonInit(&EXTI_InitStruct);
 }
 
 void MF_PMU_Init(void) {
@@ -127,17 +122,33 @@ void MF_SystemClock_Config(void) {
 
 }
 
+#include "AT24CXXDataLoader.h"
 #include "GP21.h"
-#include "SX1276.h"
+#include "Define.h"
+#include "Display_LCD_Lib.h"
+#include "NumberBaseLib.h"
+#include "RF_CMT2300A_Init.h"
+#include "MotorCtrlDev.h"
+#include "SI522A_interface.h"
+// 测温设备初始化
+void Check_Temper_Battery_Init(void) {
+#warning "GP2 和 ADC 配置有问题"
+    MF_ADC_Common_Init();
+    if (readDataBit(AT24CXX_Manager_NET.ModeCode, EnableADCTestTemper)) {
+        MF_ADC_Sampling_Init(true);
+    } else {
+        MF_ADC_Sampling_Init(false);
+        GP21_GPIO_Init();
+    }
+}
 void MF_Config_Init(void) {
     /* Initial PMU */
     MF_PMU_Init();
-    /* Initial ADC */
-    MF_ADC_Common_Init();
-    MF_ADC_Sampling_Init();
-    /* initial GP2 */
-    GP21_GPIO_Init();
+    Check_Temper_Battery_Init();
+    MF_LCD_Init();
     MF_I2C_MASTER_Init();
+    MF_Motor_Init();
+    MF_SI522A_Init();
     Device_Init();      // 初始化设备
 }
 

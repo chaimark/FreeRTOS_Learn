@@ -132,7 +132,7 @@ FL_ErrorStatus FL_LPUART_DeInit(LPUART_Type *LPUARTx)
   *         -FL_PASS 配置成功
   *         -FL_FAIL 配置过程发生错误
   */
-FL_ErrorStatus FL_LPUART_Init(LPUART_Type *LPUARTx, FL_LPUART_InitTypeDef *initStruct)
+FL_ErrorStatus FL_LPUART0_Init(LPUART_Type *LPUARTx, FL_LPUART_InitTypeDef *initStruct)
 {
     FL_ErrorStatus status = FL_FAIL;
     uint16_t  MCTLVel = 0;
