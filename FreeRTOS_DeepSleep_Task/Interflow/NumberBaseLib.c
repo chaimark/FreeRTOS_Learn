@@ -339,10 +339,10 @@ uint16_t U8_Connect_U8(uint8_t H_Part_Input, uint8_t L_Part_Input) {
 }
 
 float getPartOfSetPointOnRing(uint32_t SetPoint, uint32_t Min_Ring, uint32_t Max_Ring) {
-    if ((SetPoint < Min_Ring) || (Max_Ring < Min_Ring)) {
+    if ((SetPoint < Min_Ring) || (SetPoint > Max_Ring) || (Max_Ring < Min_Ring)) {
         return -1;
     }
-    return ((SetPoint - Min_Ring) / (Max_Ring - Min_Ring));
+    return ((SetPoint * 1.0 - Min_Ring * 1.0) / (Max_Ring * 1.0 - Min_Ring * 1.0));
 }
 
 
