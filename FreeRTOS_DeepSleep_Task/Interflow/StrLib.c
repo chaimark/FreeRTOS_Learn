@@ -283,4 +283,42 @@ uint32_t getTimeNumber_UTCByRTCTime(strnew RTCTime_String) {
     uint32_t timestamp = days * 86400 + hour * 3600 + min * 60 + sec;
     return timestamp;
 }
+// 将时间戳转换为时间结构体
+TimeStuClass TimestampToRTCData(uint32_t timestamp) {
+    TimeStuClass TempRTCData = {0};
+    // Calculate seconds, minutes, hours, day, month, year from timestamp
+    uint32_t remaining_seconds = timestamp;
+    // Calculate seconds
+    TempRTCData.second = remaining_seconds % 60;
+    remaining_seconds /= 60;
+    // Calculate minutes
+    TempRTCData.minute = remaining_seconds % 60;
+    remaining_seconds /= 60;
+    // Calculate hours
+    TempRTCData.hour = remaining_seconds % 24;
+    remaining_seconds /= 24;
+    // Calculate day, month, year
+    uint32_t days = remaining_seconds;
+    uint32_t year = 1970;
+    while (1) {
+        uint32_t days_in_year = isLeapYear(year) ? 366 : 365;
+        if (days < days_in_year) break;
+        days -= days_in_year;
+        year++;
+    }
 
+    TempRTCData.year = year;
+    uint8_t days_in_month[12] = {31,28,31,30,31,30,31,31,30,31,30,31};
+    uint8_t month = 0;
+    if (isLeapYear(year)) {
+        days_in_month[1] = 29;
+    }
+    while (days >= days_in_month[month]) {
+        days -= days_in_month[month];
+        month++;
+    }
+    days_in_month[1] = 28; // Reset February days
+    TempRTCData.month = month + 1;
+    TempRTCData.day = days + 1;
+    return TempRTCData;
+}
