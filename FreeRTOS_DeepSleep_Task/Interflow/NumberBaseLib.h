@@ -26,7 +26,7 @@ extern void strArrayToNumberArray(char NumberArray[], char StrArray[], int Array
 // 任意进制互转
 extern uint64_t anyBaseToAnyBase(uint64_t Number, int IntputBase, int OutputBase);
 
-// 任意进制数 转 任意进制数组 返回长度 Dex(56) ==> 0x05 0x06
+// 任意进制数 转 任意进制数组 返回长度 Dex(56) ==> 0x05 0x06 （注意：OutArray 的长度需要大于 Number 的长度, 不支持原地转换）
 extern int anyBaseNumberToAnyBaseArray(uint64_t Number, int IntputBase, int OutputBase, char OutArray[], int ArrayMaxLen);
 
 // 任意进制数组 转 任意进制数 string:12345600 ==> 12345600

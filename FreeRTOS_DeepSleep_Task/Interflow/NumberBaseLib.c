@@ -172,19 +172,14 @@ uint64_t anyArrayToSameBaseNumber(int NumberBase, uint8_t * InputStr, int StrSiz
     }
     return ResNumber;
 }
-
+#include <string.h>
 // 任意进制数 转 任意进制数组
 int anyBaseNumberToAnyBaseArray(uint64_t Number, int IntputBase, int OutputBase, char OutArray[], int ArrayMaxLen) {
-    int ResLen = 0;
     uint64_t TempNum = anyBaseToAnyBase(Number, IntputBase, OutputBase);
     char TempArray[16] = {0};
     int ArrayLen = anyBaseNumberToSameArray((uint8_t *)TempArray, 16, TempNum);
-    if ((ResLen = copyString(OutArray, TempArray, ArrayMaxLen, ArrayLen)) == -1) {
-        ResLen = ArrayMaxLen;
-    } else {
-        ResLen = ArrayLen;
-    }
-    return ResLen;
+    memcpy(OutArray, TempArray, ArrayLen);
+    return ArrayLen;
 }
 
 // 任意进制数组 转 任意进制数 Array:12345600 ==> 12345600
