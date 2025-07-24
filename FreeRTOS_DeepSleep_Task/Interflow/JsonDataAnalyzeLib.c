@@ -169,7 +169,7 @@ void Arr_get(struct _JsonArray This, strnew OutStr, int ItemNum) {
     memset(OutStr.Name._char, 0, OutStr.MaxLen);
     copyString(OutStr.Name._char, HeadItem, OutStr.MaxLen, strlen(HeadItem));
     *(EndItem - 1) = Temp;
-    int NowLineMaxLen = strlen(HeadItem);
+    int NowLineMaxLen = strlen(OutStr.Name._char);
     // 找第一个非空字符
     for (int i = 0; i < NowLineMaxLen; i++) {
         if ((OutStr.Name._char[i] != '\0') && (OutStr.Name._char[i] != '[') && (OutStr.Name._char[i] != ' ') && (OutStr.Name._char[i] != '\r') && (OutStr.Name._char[i] != '\n') && (OutStr.Name._char[i] != '\"')) {
