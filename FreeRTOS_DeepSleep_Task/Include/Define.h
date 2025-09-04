@@ -56,6 +56,7 @@
 #define Type_ValveData_obj          0x15   // ValveData_obj
 #define Typ_T2Ctrl_obj              0x16   // T2Ctrl_obj
 
+extern unsigned char _Module_Start_Flage;
 enum TagName {
     positiveHeat_TAG = 0x01,        // 正向热量
     negativeHeat_TAG = 0x02,        // 反向热量
@@ -111,6 +112,8 @@ enum TagName {
     HotInsidTRang_TAG = 0x34,       // 热力公司规定的温度范围
     T2CtrlData_TAG = 0x35,          // 回温控制参数
     OpenValveRunTime_TAG = 0x36,    // 累计开阀时间
+    RebootDev_TAG = 0x37,           // 重启设备
+    TesTLCD_TAG = 0x38,             // 测试LCD
 };
 extern char TagToType[][2];
 // 控制码
@@ -145,83 +148,14 @@ typedef struct {
     char Rxdata;
 }ShortUART;
 
-// extern ShortUART LPUART0Ddata;
-extern ShortUART LPUART0Ddata, LPUART1Ddata;
+extern LongUART LPUART0Ddata, UART1Ddata;
+// extern ShortUART LPUART1Ddata;
 
-#define GPIO_SET_H(GPIOX,PINX)        FL_GPIO_SetOutputPin(GPIOX,PINX)      // 设置高电平
-#define GPIO_SET_L(GPIOX,PINX)        FL_GPIO_ResetOutputPin(GPIOX,PINX)    // 设置低电平
+#define GPIO_SET_H(GPIOX,PINX)          FL_GPIO_SetOutputPin(GPIOX,PINX)      // 设置高电平
+#define GPIO_SET_L(GPIOX,PINX)          FL_GPIO_ResetOutputPin(GPIOX,PINX)    // 设置低电平
 
-#define EEProm_SDA_GPIO_X       GPIOA
-#define EEProm_SDA_GPIO_PIN     FL_GPIO_PIN_12
-#define EEprom_SDA_HIGH         GPIO_SET_H(EEProm_SDA_GPIO_X, EEProm_SDA_GPIO_PIN)
-#define EEprom_SDA_LOW          GPIO_SET_L(EEProm_SDA_GPIO_X, EEProm_SDA_GPIO_PIN)  
-#define EEprom_SDA_VALUE        (FL_GPIO_ReadInputPort(EEProm_SDA_GPIO_X)&EEProm_SDA_GPIO_PIN)
-#define EEprom_SCL_LOW          GPIO_SET_L(GPIOA, FL_GPIO_PIN_11) 
-#define EEprom_SCL_HIGH         GPIO_SET_H(GPIOA, FL_GPIO_PIN_11) 
-
-#define Temper_NTC_PWR_HIGH     GPIO_SET_H(GPIOC,FL_GPIO_PIN_0)
-#define Temper_NTC_PWR_LOW      GPIO_SET_L(GPIOC,FL_GPIO_PIN_0)
-#define VOL_GND_HIGH            GPIO_SET_H(GPIOC, FL_GPIO_PIN_5)
-#define VOL_GND_LOW             GPIO_SET_L(GPIOC, FL_GPIO_PIN_5)
-
-#define Motor_PWR_HIGH          GPIO_SET_L(GPIOC, FL_GPIO_PIN_7)
-#define Motor_PWR_LOW           GPIO_SET_L(GPIOC, FL_GPIO_PIN_7)
-#define CloseBitValue           (FL_GPIO_ReadInputPort(GPIOB)&FL_GPIO_PIN_12)
-#define CloseBitValue           (FL_GPIO_ReadInputPort(GPIOB)&FL_GPIO_PIN_12)
-#define OpenBitValue            (FL_GPIO_ReadInputPort(GPIOB)&FL_GPIO_PIN_13)
-#define OpenBitValue            (FL_GPIO_ReadInputPort(GPIOB)&FL_GPIO_PIN_13)
-
-#define  GP21_PWR_HIGH          GPIO_SET_H(GPIOB, FL_GPIO_PIN_10)
-#define  GP21_PWR_LOW           GPIO_SET_L(GPIOB, FL_GPIO_PIN_10) 
-#define  GP21_SCLK_H            GPIO_SET_H(GPIOB, FL_GPIO_PIN_3)
-#define  GP21_SCLK_L            GPIO_SET_L(GPIOB, FL_GPIO_PIN_3)
-#define  GP21_SIMO_H            GPIO_SET_H(GPIOA, FL_GPIO_PIN_10)
-#define  GP21_SIMO_L            GPIO_SET_L(GPIOA, FL_GPIO_PIN_10)
-#define  GP21_RST_H             GPIO_SET_H(GPIOA, FL_GPIO_PIN_9)
-#define  GP21_RST_L             GPIO_SET_L(GPIOA, FL_GPIO_PIN_9) 
-#define  GP21_NSS_H             GPIO_SET_H(GPIOB, FL_GPIO_PIN_4)
-#define  GP21_NSS_L             GPIO_SET_L(GPIOB, FL_GPIO_PIN_4) 
-#define  GP21_ACLK_H            GPIO_SET_H(GPIOB, FL_GPIO_PIN_12)
-#define  GP21_ACLK_L            GPIO_SET_L(GPIOB, FL_GPIO_PIN_12) 
-#define  EN761_HIGH             GPIO_SET_H(GPIOB, FL_GPIO_PIN_9)
-#define  EN761_LOW              GPIO_SET_L(GPIOB, FL_GPIO_PIN_9) 
-#define  GP21_SOMI_VALUE        (FL_GPIO_ReadInputPort(GPIOA)&FL_GPIO_PIN_8)
-#define  GP21_INT_VALUE         (FL_GPIO_ReadInputPort(GPIOB)&FL_GPIO_PIN_5)
-
-#define Infrared_POWER_ON       GPIO_SET_H(GPIOA, FL_GPIO_PIN_15)
-#define Infrared_POWER_OFF      GPIO_SET_L(GPIOA, FL_GPIO_PIN_15) 
-
-#define M1_POWER_ON             GPIO_SET_H(GPIOB, FL_GPIO_PIN_0)
-#define M1_POWER_OFF            GPIO_SET_L(GPIOB, FL_GPIO_PIN_0) 
-#define BL113_IN1_HIGH          GPIO_SET_H(GPIOB, FL_GPIO_PIN_2)
-#define BL113_IN1_LOW           GPIO_SET_L(GPIOB, FL_GPIO_PIN_2) 
-#define BL113_IN2_HIGH          GPIO_SET_H(GPIOB, FL_GPIO_PIN_3)
-#define BL113_IN2_LOW           GPIO_SET_L(GPIOB, FL_GPIO_PIN_3) 
-
-#define Read_External_PWR       (FL_GPIO_ReadInputPort(GPIOC)&FL_GPIO_PIN_8)
-#define CMT2300A_PWR_HIGH       GPIO_SET_H(GPIOC, FL_GPIO_PIN_11) 
-#define CMT2300A_PWR_LOW        GPIO_SET_L(GPIOC, FL_GPIO_PIN_11)
-#define CMT2300A_ReadGpio1()    (FL_GPIO_ReadInputPort(GPIOC)&FL_GPIO_PIN_10) 
-#define CMT2300A_ReadGpio2()    (FL_GPIO_ReadInputPort(GPIOC)&FL_GPIO_PIN_11) 
-#define CMT2300A_PWR_Out()      FL_GPIO_SetPinMode(GPIOC,FL_GPIO_PIN_3,FL_GPIO_MODE_OUTPUT)
-#define CMT_SPI_FCSB_Out()      FL_GPIO_SetPinMode(GPIOC,FL_GPIO_PIN_12,FL_GPIO_MODE_OUTPUT)
-#define CMT_SPI_CSB_Out()       FL_GPIO_SetPinMode(GPIOC,FL_GPIO_PIN_7,FL_GPIO_MODE_OUTPUT)
-#define CMT_SPI_SCLK_Out()      FL_GPIO_SetPinMode(GPIOC,FL_GPIO_PIN_8,FL_GPIO_MODE_OUTPUT)
-#define CMT_SPI_FCSB_H()        GPIO_SET_H(GPIOC,FL_GPIO_PIN_12)
-#define CMT_SPI_FCSB_L()        GPIO_SET_L(GPIOC,FL_GPIO_PIN_12)
-#define CMT_SPI_CSB_H()         GPIO_SET_H(GPIOC,FL_GPIO_PIN_7)
-#define CMT_SPI_CSB_L()         GPIO_SET_L(GPIOC,FL_GPIO_PIN_7)
-#define CMT_SPI_SCLK_H()        GPIO_SET_H(GPIOC,FL_GPIO_PIN_8)
-#define CMT_SPI_SCLK_L()        GPIO_SET_L(GPIOC,FL_GPIO_PIN_8)
-#define CMT_SPI_SDIO_H()        GPIO_SET_H(GPIOB, FL_GPIO_PIN_3)
-#define CMT_SPI_SDIO_L()        GPIO_SET_L(GPIOB, FL_GPIO_PIN_3)
-#define CMT_SPI_SDIO_Read()     (FL_GPIO_ReadInputPort(GPIOB)& FL_GPIO_PIN_3)
-
-#define ReadKeyValue            ((FL_GPIO_ReadInputPort(GPIOC)&FL_GPIO_PIN_10))
-// Define
-extern void CMT_SPI_GPIO1_Set_In(void);
-extern void CMT_SPI_SDIO_Set_Out(void);
-extern void CMT_SPI_SDIO_Set_In(void);
+#define GP21_NTC_PWR_HIGH               GPIO_SET_H(GPIOD, FL_GPIO_PIN_4)
+#define GP21_NTC_PWR_LOW                GPIO_SET_L(GPIOD, FL_GPIO_PIN_4) 
 
 #define EEPROM_AT24CXXDATA_ADDRESS 0    // AT24CxxData
 #define EEPROM_OTHER_ADDRESS 184       // EEPROM_Other
@@ -236,12 +170,14 @@ extern void CMT_SPI_SDIO_Set_In(void);
 #define NowHour RTC_Date.hour
 #define NowMinute RTC_Date.minute
 #define NowSecond RTC_Date.second
+extern unsigned char Cault_CS(void * Buffer, unsigned char start_num, unsigned int stop_num);
+extern int Add_HY_DataClass(strnew OutPutBuff, int startAddr, unsigned char DataTAG, unsigned char VIF);
 
 #define GetDateHex(DateIemt) anyBaseToAnyBase(DateIemt, 10, 16) // 获取当前年月日的16进制值
 #include "../Interflow/StrLib.h"
 #include "../Interflow/PublicLib_No_One.h"
-extern int floatToUint6410Rate(float Num);
-extern bool HY_USB_TTL_CheckBuff(char * RxBuf, int RxLen, uint8_t Now_LPUartx);
+extern int floatToint6410Rate(float Num);
+extern uint8_t HY_USB_TTL_CheckBuff(char * RxBuf, int RxLen, uint8_t Now_LPUartx);
 extern void Device_Init(void);
 extern void StartOPenDevMode(void);
 extern void CheckMeterNum(void);
@@ -252,14 +188,14 @@ typedef enum _CodeErr {
     CODE_ERR_T2_SENSOR_FAULT_GP2,     // N 回温T2故障
     CODE_ERR_T1_SENSOR_FAULT_GP2,     // M 进温T1故障
     CODE_ERR_VALVE_OPEN_OUT_OF_RANGE, // L 测开启度数值0-100.0%越界
-    CODE_ERR_VALVE_OPEN_FAULT,        // K 测开启度故障
+    CODE_ERR_VALVE_OPEN_FAULT,        // K 开启度故障
     CODE_ERR_MOTOR_LIMIT_FAULT,       // J 电机限位故障
     CODE_ERR_WIRELESS_FAULT,          // I 无线故障 
     CODE_ERR_CARD_FAULT,              // H 刷卡故障 
     CODE_ERR_VALVE_LOW_BATTERY,       // G 阀门低电报警 
-    CODE_ERR_THERMOSTAT_LOW_BATTERY,  // F 温控器低电报警  
-    CODE_ERR_THERMOSTAT_LOST,         // E 温控器无线失联超2小时  
-    CODE_ERR_THERMOSTAT_TAMPER,       // D 温控器被拆卸报警 
+    yuliu2,                           // F 温控器低电报警  
+    yuliu3,                           // E 温控器无线失联超2小时  
+    yuliu4,                           // D 温控器被拆卸报警
     CodeErr_yuliuC,
     CodeErr_yuliuB,
     CodeErr_yuliuA,
@@ -267,29 +203,44 @@ typedef enum _CodeErr {
 extern void SetErrerCode(CodeErr ErrId, bool UserSet);
 
 typedef struct {
-    uint16_t CtrlDev_Now_Volt;          // 温控电压
-    uint8_t CtrlDev_NowRunMode;         // 温控运行模式
-    uint16_t CtrlDev_TemperRoom;        // 室内温度
-    uint16_t CtrlDev_TemperSet;         // 设定温度
     uint16_t CtrlDev_Set_Degree_Part;   // 预期阀门状态
-    uint16_t CtrlDev_SendCount;         // 发送次数
-    uint16_t CtrlDev_ReceiveCount;      // 接收次数
-    uint8_t CtrlDev_Drive_Be_Moved;
-    int CtrlDev_CMT2300A_RF_TX_dbm;
-    int CtrlDev_CMT2300A_RF_RX_dbm;
-    unsigned int Now_DEV_Volt;
-    float Now_Temper_T1;
-    float Now_Temper_T2;
-    uint16_t Now_Degree_Part;       // 0 关 100 开
-    uint8_t TempRunTimeForValve;    // 距离上次写入后开阀时间后的运行时间
-    uint8_t FronValveDoneCode;      // 阀门动作的ID
-    uint16_t RunTimeFor433;         // 433 运行时间
-    uint16_t StytemErrorCode;       // 系统错误码
-    bool ReceiveFlag;               // 上次通信是否接收到标记
-    bool isOpen433;
+    unsigned int Now_DEV_Volt;          // 当前电压
+    float Now_Temper_T1;                // 当前 T1
+    float Now_Temper_T2;                // 当前 T2
+    uint16_t Now_Degree_Part;           // 0 关 1000 开
+    uint8_t TempRunTimeForValve;        // 当前阀门大于 40% 的状态下的运行时间
+    uint8_t FronValveDoneCode;          // 上一次阀门动作的 ID
+    uint16_t FrontValveDegree_Part;     // 上一次阀门动作的角度
+    uint16_t StytemErrorCode;           // 系统错误码
+    bool ReceiveFlag;                   // 上次通信是否接收到标记
+    bool isUpCode;                      // 是否升级
+    struct {
+        bool isSendOk;                      // 是否发送成功
+        uint8_t isWriteEEprom;              // 是否写eeprom
+        bool NowNetOnlineFlag;              // 网络在线标记
+        unsigned char isGetDownCmd;         // 是否定时主动获取指令
+        char * checkFlagStr;                // 主动获取指令时模组主动推出的提示字符串
+        void (*GetDownCmd)(void);           // 获取下行指令
+        bool (*SendData)(void);             // 发送数据
+    }Now_NetDevParameter;
 } NetDevParameter;
+extern NetDevParameter System_RunData;    // 网络状态标记与下行指令表
 
-extern NetDevParameter Get_Module_Data;    // 网络状态标记与下行指令表
+#include "../Interflow/StrLib.h"
+typedef struct _MeterData {
+    char DataStartHour;         // 数据的开始点
+    char DataCount;             // 数据的个数
+    struct _MeterTemperature {
+        double RoomTemperature;     // 室内温度 Clock_InsideTH & Clock_InsideTL
+        char CollectionTime[20];    // 采集时间 (yyyy-MM-dd HH:mm:ss)
+    }MeterTemperature[24];          // 24小时温度数据
+    void (*EnterQueue)(struct _MeterData This, double Temperature);     // 入队函数
+    double (*DeleteQueue)(struct _MeterData This);   // 出队函数
+}MeterData;
+extern void _EnterQueue(struct _MeterData This, double Temperature);
+extern double _DeleteQueue(struct _MeterData This);
+extern MeterData Meter_Manager;
+
 #define METERID AT24CXX_Manager_NET.MeterID         // 表号
 extern void NVIC_SetVectorTable(uint32_t NVIC_VectTab, uint32_t Offset);
 #endif

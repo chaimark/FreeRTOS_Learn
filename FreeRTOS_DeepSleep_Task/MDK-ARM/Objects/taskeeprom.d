@@ -10,6 +10,9 @@
 .\objects\\taskeeprom.o: ..\FreeRTOS\portable\RVDS\ARM_CM0\portmacro.h
 .\objects\\taskeeprom.o: ..\FreeRTOS\include\mpu_wrappers.h
 .\objects\\taskeeprom.o: ..\Include\PowerCtrl.h
+.\objects\\taskeeprom.o: ..\Interflow\StrLib.h
+.\objects\\taskeeprom.o: C:\Keil_v5\ARM\ARMCC\Bin\..\include\string.h
+.\objects\\taskeeprom.o: C:\Keil_v5\ARM\ARMCC\Bin\..\include\stdbool.h
 .\objects\\taskeeprom.o: ..\FreeRTOS\include\task.h
 .\objects\\taskeeprom.o: ..\FreeRTOS\include\list.h
 .\objects\\taskeeprom.o: ..\FreeRTOS\include\semphr.h
@@ -17,9 +20,7 @@
 .\objects\\taskeeprom.o: ..\Interflow\PublicLib_No_One.h
 .\objects\\taskeeprom.o: C:\Keil_v5\ARM\ARMCC\Bin\..\include\stdio.h
 .\objects\\taskeeprom.o: C:\Keil_v5\ARM\ARMCC\Bin\..\include\stdlib.h
-.\objects\\taskeeprom.o: C:\Keil_v5\ARM\ARMCC\Bin\..\include\string.h
 .\objects\\taskeeprom.o: C:\Keil_v5\ARM\ARMCC\Bin\..\include\time.h
-.\objects\\taskeeprom.o: C:\Keil_v5\ARM\ARMCC\Bin\..\include\stdbool.h
 .\objects\\taskeeprom.o: ..\Drivers\FM33LC0xx_FL_Driver\Inc\fm33lc0xx_fl.h
 .\objects\\taskeeprom.o: ..\Drivers\FM33LC0xx_FL_Driver\Inc\fm33lc0xx_fl_conf.h
 .\objects\\taskeeprom.o: ..\Drivers\FM33LC0xx_FL_Driver\Inc\fm33lc0xx_fl_adc.h
@@ -59,7 +60,6 @@
 .\objects\\taskeeprom.o: ..\Drivers\FM33LC0xx_FL_Driver\Inc\fm33lc0xx_fl_uart.h
 .\objects\\taskeeprom.o: ..\Drivers\FM33LC0xx_FL_Driver\Inc\fm33lc0xx_fl_vref.h
 .\objects\\taskeeprom.o: ..\Drivers\FM33LC0xx_FL_Driver\Inc\fm33lc0xx_fl_wwdt.h
-.\objects\\taskeeprom.o: ..\Interflow\StrLib.h
 .\objects\\taskeeprom.o: ..\Include\Define.h
 .\objects\\taskeeprom.o: ..\MF-config\mf_config.h
 .\objects\\taskeeprom.o: ..\Interflow\PublicLib_No_One.h
@@ -77,3 +77,8 @@
 .\objects\\taskeeprom.o: ..\Interflow\NumberBaseLib.h
 .\objects\\taskeeprom.o: ..\Include\AT24C02.h
 .\objects\\taskeeprom.o: ..\FreeRTOS\include\event_groups.h
+.\objects\\taskeeprom.o: ..\Include\Task_Valve.h
+.\objects\\taskeeprom.o: ..\Include\MotorCtrlDev.h
+.\objects\\taskeeprom.o: ..\Include\Display.h
+.\objects\\taskeeprom.o: ..\Include\Display_LCD_Lib.h
+.\objects\\taskeeprom.o: ..\Include\NB_Mode_Lib.h

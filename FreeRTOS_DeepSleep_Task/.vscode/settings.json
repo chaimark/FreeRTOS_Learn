@@ -64,6 +64,31 @@
         "time.h": "c",
         "string": "c",
         "array": "c",
-        "string_view": "c"
-    }
+        "string_view": "c",
+        "updata.h": "c",
+        "rf_cmt2300a.h": "c",
+        "cmt2300a.h": "c",
+        "si522a_app.h": "c",
+        "typeindex": "c",
+        "typeinfo": "c",
+        "cmt2300a_spi.h": "c",
+        "rope": "c",
+        "regex": "c",
+        "string.h": "c",
+        "pt1000.h": "c",
+        "ci522_app.h": "c",
+        "nbmodeandweb.h": "c",
+        "fm33lc0xx_fl_def.h": "c",
+        "fm33lc0xx_fl_uart.h": "c",
+        "fm33lc0xx_fl_gptim.h": "c",
+        "netprot_module.h": "c",
+        "functional": "c",
+        "_module_atcmd_functionsum.h": "c",
+        "hy_txrx.h": "c",
+        "tasknb_modeandweb.h": "c",
+        "nb_mode_lib.h": "c"
+    },
+    "codingcopilot.floatShortcut": false,
+    "codingcopilot.enableCloseCompletionShortcutTip": true,
+    "codingcopilot.enableCodelens": false
 }

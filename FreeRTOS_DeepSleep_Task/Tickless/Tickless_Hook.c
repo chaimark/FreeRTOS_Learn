@@ -31,7 +31,6 @@ void sleepConfig(void) {
 
     FL_PMU_SetLowPowerMode(PMU, FL_PMU_POWER_MODE_SLEEP_OR_DEEPSLEEP);
     __WFI();
-
 }
 void prvStopTickInterruptTimer(void) {
     NVIC_DisableIRQ(SysTick_IRQn);
@@ -55,12 +54,9 @@ void enable_interrupts(void) {
 }
 
 void prvSleep(void) {
-    FL_LPTIM32_EnableIT_CC(LPTIM32, FL_LPTIM32_CHANNEL_1);
-    NVIC_DisableIRQ(LPTIM_IRQn);
-    NVIC_SetPriority(LPTIM_IRQn, 2);
-    NVIC_EnableIRQ(LPTIM_IRQn);
+    LPTIM_Setup();
     sleepConfig();
-    FL_LPTIM32_DisableIT_CC(LPTIM32, FL_LPTIM32_CHANNEL_1);
+    LPTIM_Stop();
 }
 
 void vSetWakeTimeInterrupt(TickType_t xExpectedIdleTime) {
@@ -70,8 +66,11 @@ void vSetWakeTimeInterrupt(TickType_t xExpectedIdleTime) {
 void vApplicationSleep(TickType_t xExpectedIdleTime) {
     unsigned long ulLowPowerTimeBeforeSleep, ulLowPowerTimeAfterSleep;
     eSleepModeStatus eSleepStatus;
-    configPRE_SLEEP_PROCESSING(NULL);   // 进入低功耗模式前的处理
-    LPTIM_Setup();
+     // 进入低功耗模式前的处理
+    if (configPRE_SLEEP_PROCESSING(NULL) == false) {
+        // 暂时不进入低功耗
+        return;
+    }
     /* Read the current time from a time source that will remain operational
     while the microcontroller is in a low power state. */
     ulLowPowerTimeBeforeSleep = ulGetExternalTime();
@@ -98,10 +97,10 @@ void vApplicationSleep(TickType_t xExpectedIdleTime) {
             microcontroller out of its low power state at a fixed time in the
             future. */
             prvSleep();
-        } else {
             /* Exit the critical section - it might be possible to do this immediately
             after the prvSleep() calls. */
             enable_interrupts();
+        } else {
             /* Configure an interrupt to bring the microcontroller out of its low
             power state at the time the kernel next needs to execute.  The
             interrupt must be generated from a source that remains operational
@@ -115,6 +114,9 @@ void vApplicationSleep(TickType_t xExpectedIdleTime) {
 #else
             prvSleep();
 #endif
+            /* Exit the critical section - it might be possible to do this immediately
+            after the prvSleep() calls. */
+            enable_interrupts();
             /* Determine how long the microcontroller was actually in a low power
             state for, which will be less than xExpectedIdleTime if the
             microcontroller was brought out of low power mode by an interrupt
@@ -124,7 +126,6 @@ void vApplicationSleep(TickType_t xExpectedIdleTime) {
             portSUPPRESS_TICKS_AND_SLEEP() returns.  Therefore no other tasks will
             execute until this function completes. */
             ulLowPowerTimeAfterSleep = ulGetExternalTime();
-            LPTIM_Stop();
             /* Correct the kernels tick count to account for the time the
             microcontroller spent in its low power state. */
             vTaskStepTick((ulLowPowerTimeAfterSleep - ulLowPowerTimeBeforeSleep));

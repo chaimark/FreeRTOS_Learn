@@ -73,4 +73,6 @@
 .\objects\\at24c02.o: ..\Include\RTC.h
 .\objects\\at24c02.o: ..\Interflow\RTC_SetTime.h
 .\objects\\at24c02.o: ..\Interflow\MIN_SetTime.h
+.\objects\\at24c02.o: ..\Include\TaskEEprom.h
 .\objects\\at24c02.o: ..\Interflow\NumberBaseLib.h
+.\objects\\at24c02.o: ..\Include\MotorCtrlDev.h

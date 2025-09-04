@@ -9,6 +9,9 @@
 .\objects\\croutine.o: ..\FreeRTOS\portable\RVDS\ARM_CM0\portmacro.h
 .\objects\\croutine.o: ..\FreeRTOS\include\mpu_wrappers.h
 .\objects\\croutine.o: ..\Include\PowerCtrl.h
+.\objects\\croutine.o: ..\Interflow\StrLib.h
+.\objects\\croutine.o: C:\Keil_v5\ARM\ARMCC\Bin\..\include\string.h
+.\objects\\croutine.o: C:\Keil_v5\ARM\ARMCC\Bin\..\include\stdbool.h
 .\objects\\croutine.o: ..\FreeRTOS\include\task.h
 .\objects\\croutine.o: ..\FreeRTOS\include\list.h
 .\objects\\croutine.o: ..\FreeRTOS\include\croutine.h

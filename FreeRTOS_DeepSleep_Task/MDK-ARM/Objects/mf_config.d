@@ -77,9 +77,5 @@
 .\objects\\mf_config.o: ..\Interflow\AT24CXXDataLoader.h
 .\objects\\mf_config.o: ..\Interflow\NumberBaseLib.h
 .\objects\\mf_config.o: ..\Include\AT24C02.h
-.\objects\\mf_config.o: ..\Include\GP21.h
+.\objects\\mf_config.o: ..\Include\TaskEEprom.h
 .\objects\\mf_config.o: ..\Include\Display_LCD_Lib.h
-.\objects\\mf_config.o: ..\Interflow\NumberBaseLib.h
-.\objects\\mf_config.o: ..\Include\RF_CMT2300A_Init.h
-.\objects\\mf_config.o: ..\Include\MotorCtrlDev.h
-.\objects\\mf_config.o: ..\Include\SI522A_interface.h

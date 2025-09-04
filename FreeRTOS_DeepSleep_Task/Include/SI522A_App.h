@@ -1,6 +1,6 @@
 
-#ifndef _Si522A_APP_H
-#define _Si522A_APP_H
+#ifndef _SI522A_APP_H
+#define _SI522A_APP_H
 
 #include "stdbool.h"
 
@@ -115,12 +115,11 @@
 #define 	MI_NOTAGERR           1
 #define 	MI_ERR                2
 
-
 /////////////////////////////////////////////////////////////////////
 //MF522 FIFO长度定义
 /////////////////////////////////////////////////////////////////////
 #define DEF_FIFO_LENGTH       64                 //FIFO size=64byte
-#define MAXRLEN 24
+#define MAXRLEN 18
 /////////////////////////////////////////////////////////////////////
 //Mifare_One卡片命令字
 /////////////////////////////////////////////////////////////////////
@@ -140,48 +139,6 @@
 #define PICC_TRANSFER         0xB0               //保存缓冲区中数据
 #define PICC_HALT             0x50               //休眠
 
-
-void PcdAntennaOn(void);
-void PcdAntennaOff(void);
-void CalulateCRC(char * pIndata, unsigned char len, char * pOutData);
-
-char PcdComMF522(unsigned char Command, char * pInData, unsigned char InLenByte, char * pOutData, unsigned int * pOutLenBit);
-
-char PcdRequest(unsigned char req_code, unsigned char * pTagType); //寻卡
-char PcdAnticoll(unsigned char * pSnr, unsigned char anticollision_level); //读卡号
-char PcdSelect(unsigned char * pSnr, unsigned char * sak);
-char PcdSelect1(unsigned char * pSnr, unsigned char * sak);
-char PcdSelect2(unsigned char * pSnr, unsigned char * sak);
-char PcdSelect3(unsigned char * pSnr, unsigned char * sak);
-char PcdHalt(void);
-
-char PcdWrite(unsigned char ucAddr, unsigned char * pData, int DataLen);
-char PcdRead(unsigned char ucAddr, unsigned char * pData, int DataLen);
-
-//***********************************//修改新增内容
-
-#include "stdint.h"
-typedef struct _UserCard {
-    uint16_t SetDegree;
-    uint8_t CmdFlag;
-    uint8_t MeterID[4];
-    uint8_t SetLimitTime[7];
-    uint8_t SetRTCTime[7];
-} UserCard;
-extern void PCD_SI522A_TypeA_Init(void);		//读A卡初始化
-extern char PCD_SI522A_TypeA_GetUID(void);
-extern bool PCD_SI522A_TypeA_rw_block(bool (*DoneFun)(UserCard UserCardData));    //读A卡扇区
-
-//***********************************//修改新增内容
-
-void PcdReset(void); //软复位
-void Pcd_Hard_Reset(void); //硬复位
-
-void I_SI522A_ClearBitMask(unsigned char reg, unsigned char mask);
-void I_SI522A_SetBitMask(unsigned char reg, unsigned char mask);
-void I_SI522A_SiModifyReg(unsigned char RegAddr, unsigned char ModifyVal, unsigned char MaskByte);
-
-//
 #define ACDConfigA			 0x00
 #define ACDConfigB			 0x01
 #define ACDConfigC			 0x02
@@ -199,11 +156,21 @@ void I_SI522A_SiModifyReg(unsigned char RegAddr, unsigned char ModifyVal, unsign
 #define ACDConfigO			 0x0e
 #define ACDConfigP			 0x0f
 
-void ACD_init_Fun(void);
-void ACD_Fun(void);
-void PCD_ACD_AutoCalc(void);
-void PCD_ACD_Init(void);
-char PCD_IRQ(void);
+//***********************************//修改新增内容
+#include "stdint.h"
+typedef struct _UserCard {
+    ///////////////////// Block 04 ////////////////////////
+    uint16_t ValidNum;          // 有效次数
+    uint8_t CardType;           // 卡类型
+    uint8_t MeterID[4];         // 表号
+    ///////////////////// Block 05 ////////////////////////
+    uint8_t RTC_Time_Set[6];    // 卡时间
+    uint8_t LimitTime[3];       // 截止日期
+    uint16_t LimitTimeDegree;   // 截止日期的开阀角度
+    uint16_t ModeCode;
+} UserCard;
+extern void PCD_SI522A_TypeA_Init(void);    //读A卡初始化
+extern bool PCD_SI522A_TypeA_rw_block(bool (*DoneFun)(UserCard * UserCardData));  //读写 A 卡数据
 
 #endif
 

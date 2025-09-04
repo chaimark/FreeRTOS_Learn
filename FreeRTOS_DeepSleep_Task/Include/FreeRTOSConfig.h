@@ -41,13 +41,13 @@
  *----------------------------------------------------------*/
 
 #define configUSE_PREEMPTION		1
-#define configUSE_IDLE_HOOK			1
+#define configUSE_IDLE_HOOK			0
 #define configUSE_TICK_HOOK			0
 #define configCPU_CLOCK_HZ			( ( unsigned long ) 8000000 )	
 #define configTICK_RATE_HZ			( ( TickType_t ) 1000 )
 #define configMAX_PRIORITIES		( 5 )
 #define configMINIMAL_STACK_SIZE	( ( unsigned short ) 128 )
-#define configTOTAL_HEAP_SIZE		( ( size_t ) ( 10 * 1024 ) )
+#define configTOTAL_HEAP_SIZE		( ( size_t ) ( 11 * 1024 ) )
 #define configMAX_TASK_NAME_LEN		( 16 )
 #define configUSE_TRACE_FACILITY	0
 #define configUSE_16_BIT_TICKS		0
@@ -72,11 +72,12 @@ to exclude the API function. */
 #define INCLUDE_vTaskDelayUntil			1
 #define INCLUDE_vTaskDelay				1
 // Tickless Idle 模式 1： 休眠
-#define configUSE_TICKLESS_IDLE         0
+#define configUSE_TICKLESS_IDLE         1
+
 
 #define configUSE_TIMERS                1
-#define configTIMER_TASK_PRIORITY       (tskIDLE_PRIORITY + 5)
-#define configTIMER_QUEUE_LENGTH        8
+#define configTIMER_TASK_PRIORITY       (tskIDLE_PRIORITY + 4)
+#define configTIMER_QUEUE_LENGTH        9
 #define configTIMER_TASK_STACK_DEPTH    (configMINIMAL_STACK_SIZE * 2)
 
 /* This is the raw value as per the Cortex-M3 NVIC.  Values can be 255

@@ -1,6 +1,8 @@
 #include "Define.h"
 #include "PT1000.h"
 #include "AT24CXXDataLoader.h"
+#include "GP21.h"
+
 const unsigned int MeterTemperature_Table[][10] = {
     {10000, 10004, 10008, 10012, 10016, 10020, 10023, 10027, 10031, 10035,},
     {10039, 10043, 10047, 10051, 10055, 10059, 10063, 10066, 10070, 10074,},
@@ -180,15 +182,14 @@ float TEMP_CAL(unsigned int value) {
     Send SO = 0xB3,
     Read SI = RES_3
 
-    Rhot/Rref  = RES_1/RES_0
-    Rcold/Rref = RES_3/RES_2
+    Rhot/Rref  = RES_3/RES_2
+    Rcold/Rref = RES_0/RES_1
     跳转到查询表查询对应的温度.
 */
-extern unsigned long GP21_Get_Data32(void);
-extern void GP21_Write_Reg16(unsigned int DA2, unsigned char CISHU);
-extern unsigned int GP21_Read_Status(void);
+
 unsigned char TEST_GP21_Temp(unsigned long int * Hot_value, unsigned long int * Col_value) {
-    unsigned int gp21_status = 0;
+    unsigned int gp21_status = 0;   // 芯片故障码
+    uint8_t GP2_Res_Bit = 0;        // 公司故障码
     //检测GP21芯片状态
     GP21_NSS_L;
     GP21_Write_Reg16(0X0200, 8);
@@ -197,23 +198,31 @@ unsigned char TEST_GP21_Temp(unsigned long int * Hot_value, unsigned long int * 
         if (GP21_INT_VALUE == 0)goto TEST_TEMP;
     }
     GP21_NSS_H;
-    Current_meter_status |= 0x08;
-    return 1;
+    return (uint8_t)setDataBit(GP2_Res_Bit, 2, true);
 TEST_TEMP:
     GP21_NSS_L;
     GP21_Write_Reg16(0XB400, 8);
     gp21_status = GP21_Read_Status();
     GP21_NSS_H;
     if ((gp21_status & 0x1E00) != 0) {
-        if ((gp21_status & 0x1000) != 0) Current_meter_status |= 0x01;
-        if ((gp21_status & 0x0800) != 0) Current_meter_status |= 0x02;
-        return 2;
+        if (readDataBit(gp21_status, 12) == true) {
+            // Err_short
+            return (uint8_t)setDataBit(GP2_Res_Bit, 1, true);
+        }
+        if ((readDataBit(gp21_status, 9) == true) || (readDataBit(gp21_status, 10) == true)) {
+            // Err_OverCount  Err_TDC_OverCount
+            return (uint8_t)setDataBit(GP2_Res_Bit, 2, true);
+        }
+        if (readDataBit(gp21_status, 11) == true) {
+            // Err_open
+            GP2_Res_Bit = (uint8_t)setDataBit(GP2_Res_Bit, 0, true);
+        }
     }
 
-    uint64_t FLOW_VALUE_PS0;
-    uint64_t FLOW_VALUE_PS1;
-    uint64_t FLOW_VALUE_PS2;
-    uint64_t FLOW_VALUE_PS3;
+    uint64_t FLOW_VALUE_PS0 = 0;
+    uint64_t FLOW_VALUE_PS1 = 0;
+    uint64_t FLOW_VALUE_PS2 = 0;
+    uint64_t FLOW_VALUE_PS3 = 0;
     GP21_NSS_L;
     GP21_Write_Reg16(0XB000, 8);
     FLOW_VALUE_PS0 = GP21_Get_Data32();
@@ -234,17 +243,17 @@ TEST_TEMP:
     FLOW_VALUE_PS3 = GP21_Get_Data32();
     GP21_NSS_H;
 
-    // Rhot/Rref  = RES_1/RES_0
-    // Rcold/Rref = RES_3/RES_2
+    // Rhot/Rref  = RES_3/RES_2
+    // Rcold/Rref = RES_0/RES_1
     if (Hot_value != NULL) {
-        (*Hot_value) = (FLOW_VALUE_PS1 * 10000) / FLOW_VALUE_PS0;
+        (*Hot_value) = (FLOW_VALUE_PS3 * 10000) / (FLOW_VALUE_PS2 == 0 ? 1 : FLOW_VALUE_PS2);
     }
 
     if (Col_value != NULL) {
-        (*Col_value) = (FLOW_VALUE_PS3 * 10000) / FLOW_VALUE_PS2;
+        (*Col_value) = (FLOW_VALUE_PS0 * 10000) / (FLOW_VALUE_PS1 == 0 ? 1 : FLOW_VALUE_PS1);
     }
     /*****************************/
-    return 0;
+    return GP2_Res_Bit;
 }
 void quicksort(unsigned long int arr[], int low, int high) {
     if (low < high) {
@@ -267,33 +276,42 @@ void quicksort(unsigned long int arr[], int low, int high) {
         quicksort(arr, pi + 1, high);
     }
 }
-extern void GP21_Goto_Realy(void);
-extern void GP21_Goto_Low_Pwr(void);
+
 void Test_PT1000(float * PT1000_T1, float * PT1000_T2) {
     unsigned long int TEST_PT1000_T1_VALUE[6];
     unsigned long int TEST_PT1000_T2_VALUE[6];
     GP21_Goto_Realy();
     for (int i = 0; i < 6; i++) {
         Current_meter_status = TEST_GP21_Temp(&TEST_PT1000_T1_VALUE[i], &TEST_PT1000_T2_VALUE[i]);
-        if (Current_meter_status != 0) {
+        if (!((Current_meter_status == 0) || (Current_meter_status == 1))) {
             break;
         }
     }
 
-    if (Current_meter_status == 0) {
+    if ((Current_meter_status == 0) || (Current_meter_status == 1)) {
         // Test T1
-        SetErrerCode(CODE_ERR_T1_SENSOR_FAULT_GP2, false);
         quicksort(TEST_PT1000_T1_VALUE, 0, 5);
         TEMP_R_VALUE_PT1 = (TEST_PT1000_T1_VALUE[1] + TEST_PT1000_T1_VALUE[2] + TEST_PT1000_T1_VALUE[3] + TEST_PT1000_T1_VALUE[4]) >> 2;
         if (TEMP_R_VALUE_PT1 != 0) {
             (*PT1000_T1) = TEMP_CAL(TEMP_R_VALUE_PT1);
+            if (((*PT1000_T1) == 0) || ((*PT1000_T1) == 130)) {
+                (*PT1000_T1) = 45.0;
+                SetErrerCode(CODE_ERR_T1_SENSOR_FAULT_GP2, true);
+            } else {
+                SetErrerCode(CODE_ERR_T1_SENSOR_FAULT_GP2, false);
+            }
         }
         // Test T2
-        SetErrerCode(CODE_ERR_T2_SENSOR_FAULT_GP2, false);
         quicksort(TEST_PT1000_T2_VALUE, 0, 5);
         TEMP_R_VALUE_PT2 = (TEST_PT1000_T2_VALUE[1] + TEST_PT1000_T2_VALUE[2] + TEST_PT1000_T2_VALUE[3] + TEST_PT1000_T2_VALUE[4]) >> 2;
         if (TEMP_R_VALUE_PT2 != 0) {
             (*PT1000_T2) = TEMP_CAL(TEMP_R_VALUE_PT2);
+            if (((*PT1000_T2) == 0) || ((*PT1000_T2) == 130)) {
+                (*PT1000_T2) = 42.0;
+                SetErrerCode(CODE_ERR_T2_SENSOR_FAULT_GP2, true);
+            } else {
+                SetErrerCode(CODE_ERR_T2_SENSOR_FAULT_GP2, false);
+            }
         }
     } else {
         SetErrerCode(CODE_ERR_T1_SENSOR_FAULT_GP2, true);

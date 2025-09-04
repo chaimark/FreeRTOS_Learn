@@ -81,5 +81,6 @@
 .\objects\\display.o: ..\Src\../Interflow/AT24CXXDataLoader.h
 .\objects\\display.o: ..\Src\../Interflow/NumberBaseLib.h
 .\objects\\display.o: ..\Include\AT24C02.h
-.\objects\\display.o: ..\Include\Task_Valve.h
+.\objects\\display.o: ..\Include\TaskEEprom.h
 .\objects\\display.o: ..\Include\MotorCtrlDev.h
+.\objects\\display.o: ..\Include\Task_Valve.h

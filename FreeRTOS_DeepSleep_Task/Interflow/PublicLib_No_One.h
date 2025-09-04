@@ -25,8 +25,13 @@
 extern void FL_DelayUs(uint32_t nus);
 #define IncludeDelayMs FL_DelayMs
 
-#define ATCMD_MAXNUMBER 1
+#define ATCMD_MAXNUMBER 20
 #define AT24CXX_Manager_NET (*_AT24CXX_Manager_NET)
+
+#define _Module_UserSend    60   // 最大不能超过 255
+#define _Module_AutoSend    61   // 最大不能超过 255
+#define _Module_EEpromSend  62   // 最大不能超过 255
+#define _Module_EEpromTime  63   // 最大不能超过 255
 
 extern void IPstrToHexArray(strnew IpHex, const char * Ipstr);
 extern unsigned char get_CheckSum(unsigned char data[], int length);

@@ -1,0 +1,4 @@
+--cpu Cortex-M0 -g --apcs=interwork 
+-IC:\Keil_v5\Arm\Packs\FMSH\FM33LC0XX_DFP\3.0.4\Device\Include
+--pd "__UVISION_VERSION SETA 535" --pd "FM33LC0xx SETA 1"
+--list .\listings\\startup_fm33lc0xx.lst --xref -o .\objects\\startup_fm33lc0xx.o --depend .\objects\\startup_fm33lc0xx.d "../Drivers/CMSIS/Device/FM/FM33xx/Source/Templates/arm/startup_fm33lc0xx.s"

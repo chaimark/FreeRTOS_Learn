@@ -10,27 +10,16 @@
 // 将分钟转换为秒
 #define MinToSec(x) (x*60)
 
-#ifdef OPEN_LOWPWER_DEBUG
-typedef enum _RTCTaskName {
-    LowPwerDebug,
-    IWDTClS,
-}RTCTaskName;
-#else
 typedef enum _RTCTaskName {
     IWDTClS,
     HomePageRefresh,    // 用于判断什么时候开启主页面刷新功能
+    ValveDoneErrMaxTime,
+    CloseReadM1,
+    TaskAllTime,
+    SendIntervalTask,
 }RTCTaskName;
-#endif
-
 // 任务数量
-#define _RTCTimeTaskMAX 2
-
-#ifdef OPEN_LOWPWER_DEBUG
-#define RTCTimeTaskMAX (_RTCTimeTaskMAX + 1)
-#else
-#define RTCTimeTaskMAX _RTCTimeTaskMAX
-#endif
-
+#define RTCTimeTaskMAX 6
 typedef struct _USER_SET_TASK {
     struct {
         bool TimeTask_Falge;    // 当前计时任务是否完成

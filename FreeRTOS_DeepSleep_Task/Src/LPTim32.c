@@ -9,7 +9,7 @@ void MF_LPTIM_Init(void) {
     lptim32.clockSource = FL_RCC_LPTIM32_CLK_SOURCE_LSCLK;
     lptim32.prescalerClockSource = FL_LPTIM32_CLK_SOURCE_INTERNAL;
     lptim32.prescaler = FL_LPTIM32_PSC_DIV1;
-    lptim32.autoReload = 0xffffffff;
+    lptim32.autoReload = 0xFFFFFFFF;
     lptim32.mode = FL_LPTIM32_OPERATION_MODE_NORMAL;
     lptim32.onePulseMode = FL_LPTIM32_ONE_PULSE_MODE_CONTINUOUS;
     lptim32.countEdge = FL_LPTIM32_ETR_COUNT_EDGE_RISING;

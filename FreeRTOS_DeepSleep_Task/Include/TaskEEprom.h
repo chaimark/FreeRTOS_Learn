@@ -6,12 +6,20 @@
 #include "semphr.h"
 
 extern TaskHandle_t ReadEEpromHand;
-#define ReadEEprom_PRIORITY (tskIDLE_PRIORITY + 4)
+#define ReadEEprom_PRIORITY (tskIDLE_PRIORITY + 1)
 extern void ReadEEprom(void * pvParameters);
 
 extern TaskHandle_t WriteEEpromHand;
-#define WriteEEprom_PRIORITY (tskIDLE_PRIORITY + 4)
+#define WriteEEprom_PRIORITY (tskIDLE_PRIORITY + 5)
 extern void WriteEEprom(void * pvParameters);
 
+extern SemaphoreHandle_t EEprom_RunFlag;
+extern void isRunEEprom(void);
+#define clearEEpromFlag xSemaphoreGive(EEprom_RunFlag);\
+IncludeDelayMs(1)
+
+extern void Task_WriteNowRTCTime(void);
+extern void Task_WriteValveRunTime(void);
+extern void Task_WriteAT24C0xxData(void);
 #endif
 

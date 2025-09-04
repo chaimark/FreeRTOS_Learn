@@ -1,11 +1,11 @@
 .\objects\\powerctrl.o: ..\Src\PowerCtrl.c
 .\objects\\powerctrl.o: ..\Include\PowerCtrl.h
-.\objects\\powerctrl.o: ..\Interflow\RTC_SetTime.h
 .\objects\\powerctrl.o: ..\Interflow\StrLib.h
 .\objects\\powerctrl.o: C:\Keil_v5\ARM\ARMCC\Bin\..\include\stddef.h
 .\objects\\powerctrl.o: C:\Keil_v5\ARM\ARMCC\Bin\..\include\string.h
 .\objects\\powerctrl.o: C:\Keil_v5\ARM\ARMCC\Bin\..\include\stdbool.h
 .\objects\\powerctrl.o: C:\Keil_v5\ARM\ARMCC\Bin\..\include\stdint.h
+.\objects\\powerctrl.o: ..\Interflow\RTC_SetTime.h
 .\objects\\powerctrl.o: ..\Interflow\MIN_SetTime.h
 .\objects\\powerctrl.o: ..\Interflow\PublicLib_No_One.h
 .\objects\\powerctrl.o: C:\Keil_v5\ARM\ARMCC\Bin\..\include\stdio.h
@@ -74,3 +74,4 @@
 .\objects\\powerctrl.o: ..\FreeRTOS\include\queue.h
 .\objects\\powerctrl.o: ..\FreeRTOS\include\timers.h
 .\objects\\powerctrl.o: ..\Include\LPUart_0_And_1_Lib.h
+.\objects\\powerctrl.o: ..\Interflow\NumberBaseLib.h

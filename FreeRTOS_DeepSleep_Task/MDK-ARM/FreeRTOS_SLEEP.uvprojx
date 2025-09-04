@@ -80,9 +80,9 @@
             <nStopB2X>0</nStopB2X>
           </BeforeMake>
           <AfterMake>
-            <RunUserProg1>0</RunUserProg1>
+            <RunUserProg1>1</RunUserProg1>
             <RunUserProg2>0</RunUserProg2>
-            <UserProg1Name></UserProg1Name>
+            <UserProg1Name>fromelf --bin --output Objects/@L.bin Objects/@L.axf</UserProg1Name>
             <UserProg2Name></UserProg2Name>
             <UserProg1Dos16Mode>0</UserProg1Dos16Mode>
             <UserProg2Dos16Mode>0</UserProg2Dos16Mode>
@@ -326,7 +326,7 @@
             <uThumb>0</uThumb>
             <uSurpInc>0</uSurpInc>
             <uC99>1</uC99>
-            <uGnu>1</uGnu>
+            <uGnu>0</uGnu>
             <useXO>0</useXO>
             <v6Lang>3</v6Lang>
             <v6LangP>3</v6LangP>
@@ -738,6 +738,36 @@
               <FileType>5</FileType>
               <FilePath>..\Interflow\UpData.h</FilePath>
             </File>
+            <File>
+              <FileName>NetProt_Module.c</FileName>
+              <FileType>1</FileType>
+              <FilePath>..\Interflow\NetProt_Module.c</FilePath>
+            </File>
+            <File>
+              <FileName>NetProt_Module.h</FileName>
+              <FileType>5</FileType>
+              <FilePath>..\Interflow\NetProt_Module.h</FilePath>
+            </File>
+            <File>
+              <FileName>HY_TXRX.c</FileName>
+              <FileType>1</FileType>
+              <FilePath>..\Interflow\HY_TXRX.c</FilePath>
+            </File>
+            <File>
+              <FileName>HY_TXRX.h</FileName>
+              <FileType>5</FileType>
+              <FilePath>..\Interflow\HY_TXRX.h</FilePath>
+            </File>
+            <File>
+              <FileName>_Module_ATCmd_FunctionSum.c</FileName>
+              <FileType>1</FileType>
+              <FilePath>..\Interflow\_Module_ATCmd_FunctionSum.c</FilePath>
+            </File>
+            <File>
+              <FileName>_Module_ATCmd_FunctionSum.h</FileName>
+              <FileType>5</FileType>
+              <FilePath>..\Interflow\_Module_ATCmd_FunctionSum.h</FilePath>
+            </File>
           </Files>
         </Group>
         <Group>
@@ -757,26 +787,6 @@
               <FileName>BSTim.h</FileName>
               <FileType>5</FileType>
               <FilePath>..\Include\BSTim.h</FilePath>
-            </File>
-            <File>
-              <FileName>CMT2300A.h</FileName>
-              <FileType>5</FileType>
-              <FilePath>..\Include\CMT2300A.h</FilePath>
-            </File>
-            <File>
-              <FileName>CMT2300A_Defs.h</FileName>
-              <FileType>5</FileType>
-              <FilePath>..\Include\CMT2300A_Defs.h</FilePath>
-            </File>
-            <File>
-              <FileName>CMT2300A_Params.h</FileName>
-              <FileType>5</FileType>
-              <FilePath>..\Include\CMT2300A_Params.h</FilePath>
-            </File>
-            <File>
-              <FileName>CMT2300A_SPI.h</FileName>
-              <FileType>5</FileType>
-              <FilePath>..\Include\CMT2300A_SPI.h</FilePath>
             </File>
             <File>
               <FileName>Define.h</FileName>
@@ -814,6 +824,11 @@
               <FilePath>..\Include\LPTim32.h</FilePath>
             </File>
             <File>
+              <FileName>NB_Mode_Lib.h</FileName>
+              <FileType>5</FileType>
+              <FilePath>..\Include\NB_Mode_Lib.h</FilePath>
+            </File>
+            <File>
               <FileName>LPUart_0_And_1_Lib.h</FileName>
               <FileType>5</FileType>
               <FilePath>..\Include\LPUart_0_And_1_Lib.h</FilePath>
@@ -839,39 +854,19 @@
               <FilePath>..\Include\PT1000.h</FilePath>
             </File>
             <File>
-              <FileName>RF_CMT2300A.h</FileName>
-              <FileType>5</FileType>
-              <FilePath>..\Include\RF_CMT2300A.h</FilePath>
-            </File>
-            <File>
-              <FileName>RF_CMT2300A_Init.h</FileName>
-              <FileType>5</FileType>
-              <FilePath>..\Include\RF_CMT2300A_Init.h</FilePath>
-            </File>
-            <File>
-              <FileName>RF_CMT2300A_Receive.h</FileName>
-              <FileType>5</FileType>
-              <FilePath>..\Include\RF_CMT2300A_Receive.h</FilePath>
-            </File>
-            <File>
-              <FileName>RF_CMT2300A_TX.h</FileName>
-              <FileType>5</FileType>
-              <FilePath>..\Include\RF_CMT2300A_TX.h</FilePath>
-            </File>
-            <File>
               <FileName>RTC.h</FileName>
               <FileType>5</FileType>
               <FilePath>..\Include\RTC.h</FilePath>
             </File>
             <File>
-              <FileName>SI522A_App.h</FileName>
+              <FileName>CI522_App.h</FileName>
               <FileType>5</FileType>
-              <FilePath>..\Include\SI522A_App.h</FilePath>
+              <FilePath>..\Include\CI522_App.h</FilePath>
             </File>
             <File>
-              <FileName>SI522A_interface.h</FileName>
+              <FileName>CI522_interface.h</FileName>
               <FileType>5</FileType>
-              <FilePath>..\Include\SI522A_interface.h</FilePath>
+              <FilePath>..\Include\CI522_interface.h</FilePath>
             </File>
             <File>
               <FileName>TaskAboutTimer.h</FileName>
@@ -898,6 +893,11 @@
               <FileType>5</FileType>
               <FilePath>..\Include\TaskGpioInit.h</FilePath>
             </File>
+            <File>
+              <FileName>TaskNBAndWeb.h</FileName>
+              <FileType>5</FileType>
+              <FilePath>..\Include\TaskNBAndWeb.h</FilePath>
+            </File>
           </Files>
         </Group>
         <Group>
@@ -917,16 +917,6 @@
               <FileName>BSTim.c</FileName>
               <FileType>1</FileType>
               <FilePath>..\Src\BSTim.c</FilePath>
-            </File>
-            <File>
-              <FileName>CMT2300A.c</FileName>
-              <FileType>1</FileType>
-              <FilePath>..\Src\CMT2300A.c</FilePath>
-            </File>
-            <File>
-              <FileName>CMT2300A_SPI.c</FileName>
-              <FileType>1</FileType>
-              <FilePath>..\Src\CMT2300A_SPI.c</FilePath>
             </File>
             <File>
               <FileName>Define.c</FileName>
@@ -954,6 +944,11 @@
               <FilePath>..\Src\LPTim32.c</FilePath>
             </File>
             <File>
+              <FileName>NB_Mode_Lib.c</FileName>
+              <FileType>1</FileType>
+              <FilePath>..\Src\NB_Mode_Lib.c</FilePath>
+            </File>
+            <File>
               <FileName>LPUart_0_And_1_Lib.c</FileName>
               <FileType>1</FileType>
               <FilePath>..\Src\LPUart_0_And_1_Lib.c</FilePath>
@@ -979,39 +974,19 @@
               <FilePath>..\Src\PT1000.c</FilePath>
             </File>
             <File>
-              <FileName>RF_CMT2300A.c</FileName>
-              <FileType>1</FileType>
-              <FilePath>..\Src\RF_CMT2300A.c</FilePath>
-            </File>
-            <File>
-              <FileName>RF_CMT2300A_Init.c</FileName>
-              <FileType>1</FileType>
-              <FilePath>..\Src\RF_CMT2300A_Init.c</FilePath>
-            </File>
-            <File>
-              <FileName>RF_CMT2300A_Receive.c</FileName>
-              <FileType>1</FileType>
-              <FilePath>..\Src\RF_CMT2300A_Receive.c</FilePath>
-            </File>
-            <File>
-              <FileName>RF_CMT2300A_TX.c</FileName>
-              <FileType>1</FileType>
-              <FilePath>..\Src\RF_CMT2300A_TX.c</FilePath>
-            </File>
-            <File>
               <FileName>RTC.c</FileName>
               <FileType>1</FileType>
               <FilePath>..\Src\RTC.c</FilePath>
             </File>
             <File>
-              <FileName>SI522A_App.c</FileName>
+              <FileName>CI522_App.c</FileName>
               <FileType>1</FileType>
-              <FilePath>..\Src\SI522A_App.c</FilePath>
+              <FilePath>..\Src\CI522_App.c</FilePath>
             </File>
             <File>
-              <FileName>SI522A_interface.c</FileName>
+              <FileName>CI522_interface.c</FileName>
               <FileType>1</FileType>
-              <FilePath>..\Src\SI522A_interface.c</FilePath>
+              <FilePath>..\Src\CI522_interface.c</FilePath>
             </File>
             <File>
               <FileName>TaskAboutTimer.c</FileName>
@@ -1037,6 +1012,11 @@
               <FileName>TaskGpioInit.c</FileName>
               <FileType>1</FileType>
               <FilePath>..\Src\TaskGpioInit.c</FilePath>
+            </File>
+            <File>
+              <FileName>TaskNBAndWeb.c</FileName>
+              <FileType>1</FileType>
+              <FilePath>..\Src\TaskNBAndWeb.c</FilePath>
             </File>
           </Files>
         </Group>

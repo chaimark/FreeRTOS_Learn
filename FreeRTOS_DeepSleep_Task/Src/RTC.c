@@ -10,6 +10,8 @@
 #include "RTC_SetTime.h"
 #include "NumberBaseLib.h"
 #include "AT24CXXDataLoader.h"
+#include "LPUart_0_And_1_Lib.h"
+#include "NB_Mode_Lib.h"
 
 // 内部 RTC ***************************
 FL_RTC_InitTypeDef * _RTC_Date;
@@ -132,7 +134,7 @@ void RTC_IRQ_Second(void) {
     FL_NVIC_ConfigTypeDef    InterruptConfigStruct;
     FL_RCC_EnableGroup1BusClock(FL_RCC_GROUP1_BUSCLK_RTC);
     FL_RTC_EnableIT_Second(RTC);
-    InterruptConfigStruct.preemptPriority = 0x0001;
+    InterruptConfigStruct.preemptPriority = 0x0002;
     FL_NVIC_Init(&InterruptConfigStruct, RTC_IRQn);
 }
 void MF_RTC_1S_Init(void) {
@@ -173,6 +175,7 @@ void RTC_SetRTC(FL_RTC_InitTypeDef * InitStructer) {
     }
     (*InitStructer).week = getDayOfWeek((*InitStructer).year, (*InitStructer).month, (*InitStructer).day);
     FL_RTC_ConfigTime(RTC, InitStructer);
+    RTC_GetRTC(&RTC_Date);  // 获取时间
     return;
 }
 // 设置时间
@@ -190,7 +193,6 @@ void setRtcDate(strnew SteStrRTCData, char isWriteEEPROM) {
     SetRTC.week = getDayOfWeek(SetRTC.year, SetRTC.month, SetRTC.day); // 计算周 周不需要转换, 因为 1-7 的 16进制 和 10进制 相同
 
     RTC_SetRTC(&SetRTC);    // 设置时间结构体
-    RTC_GetRTC(&RTC_Date);  // 获取时间
 
     if (isWriteEEPROM) {
         // 写 eeprom
@@ -200,10 +202,6 @@ void setRtcDate(strnew SteStrRTCData, char isWriteEEPROM) {
 void getStrUserTime(FL_RTC_InitTypeDef UserDate, char NowStrRTCData[]) {
     // 年月日时分秒
     sprintf(NowStrRTCData, "20%02x-%02x-%02x %02x:%02x:%02x", UserDate.year, UserDate.month, UserDate.day, UserDate.hour, UserDate.minute, UserDate.second);
-}
-void getStrNowDataAndTimeByRTC(char NowStrRTCData[]) {
-    FL_RTC_GetTime(RTC, &RTC_Date); // 获取时间
-    getStrUserTime(RTC_Date, NowStrRTCData);
 }
 /************************************************************************************/
 
@@ -241,8 +239,12 @@ void RTC_IRQHandler(void) {
             MinCountRTCTask();
 #endif
             if (NowMinute == 0x00) {
+                SaveDevData();
                 NowWeek = getDayOfWeek(NowYear, NowMonth, NowDay); // 计算周 周不需要转换
                 if (NowHour == 0x00) {
+                }
+                if (NowHour == AT24CXX_Manager_NET.SendManageObj.SendStartHour) {
+                    InitSendModeAndTimeTask();  // 起始点刷新任务 计算当天的发送模式和时间任务
                 }
             }
             if ((NowMinute % 0x10) == 0) {

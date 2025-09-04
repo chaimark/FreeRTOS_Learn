@@ -123,35 +123,14 @@ void MF_SystemClock_Config(void) {
 }
 
 #include "AT24CXXDataLoader.h"
-#include "GP21.h"
 #include "Define.h"
 #include "Display_LCD_Lib.h"
-#include "NumberBaseLib.h"
-#include "RF_CMT2300A_Init.h"
-#include "MotorCtrlDev.h"
-#include "SI522A_interface.h"
-// 测温设备初始化
-void Check_Temper_Battery_Init(void) {
-#warning "GP2 和 ADC 配置有问题"
-    MF_ADC_Common_Init();
-    if (readDataBit(AT24CXX_Manager_NET.ModeCode, EnableADCTestTemper)) {
-        MF_ADC_Sampling_Init(true);
-    } else {
-        MF_ADC_Sampling_Init(false);
-        GP21_GPIO_Init();
-    }
-}
 void MF_Config_Init(void) {
     /* Initial PMU */
     MF_PMU_Init();
-    Check_Temper_Battery_Init();
     MF_LCD_Init();
     MF_I2C_MASTER_Init();
-    MF_Motor_Init();
-    MF_SI522A_Init();
-    Device_Init();      // 初始化设备
 }
-
 
 /**
   * @brief  This function is executed in case of error occurrence.

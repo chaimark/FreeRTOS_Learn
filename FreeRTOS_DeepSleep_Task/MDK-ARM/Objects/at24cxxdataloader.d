@@ -75,5 +75,6 @@
 .\objects\\at24cxxdataloader.o: ..\Include\RTC.h
 .\objects\\at24cxxdataloader.o: ..\Interflow\RTC_SetTime.h
 .\objects\\at24cxxdataloader.o: ..\Interflow\MIN_SetTime.h
+.\objects\\at24cxxdataloader.o: ..\Include\TaskEEprom.h
 .\objects\\at24cxxdataloader.o: ..\Include\Display.h
 .\objects\\at24cxxdataloader.o: ..\Include\Display_LCD_Lib.h

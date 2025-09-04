@@ -9,14 +9,16 @@
 #define SecTo10Ms(sec) (uint64_t)((sec * 100 == 0) ? 1 : (sec * 100))
 #define SecTo5Ms(sec) (uint64_t)((sec * 200 == 0) ? 1 : (sec * 200))
 
-#define BSTIM_OPEN_AND_TASK_NUM 2
+#define BSTIM_OPEN_AND_TASK_NUM 3
 // #define LPTIM_OPEN_AND_TASK_NUM 0
 
 #ifdef BSTIM_OPEN_AND_TASK_NUM
 /********************BSTIM********************/
 typedef enum _TimeTaskName {	// 发送AT指令时调用什么函数发送, 对应的函数名
     RecTimeLPUART0,     // 用于判断 LPuart0 串口是否接收结束
-    RecTimeLPUART1,     // 用于判断 LPuart1 串口是否接收结束
+    RecTimeUART1,     // 用于判断 LPuart1 串口是否接收结束
+    //------------------------//
+    TempReadCrad,
 } TimeTaskName;
 
 typedef struct _BSTIM_USER_SET_TASK {

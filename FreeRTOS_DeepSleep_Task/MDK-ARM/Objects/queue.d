@@ -11,6 +11,8 @@
 .\objects\\queue.o: ..\FreeRTOS\portable\RVDS\ARM_CM0\portmacro.h
 .\objects\\queue.o: ..\FreeRTOS\include\mpu_wrappers.h
 .\objects\\queue.o: ..\Include\PowerCtrl.h
+.\objects\\queue.o: ..\Interflow\StrLib.h
+.\objects\\queue.o: C:\Keil_v5\ARM\ARMCC\Bin\..\include\stdbool.h
 .\objects\\queue.o: ..\FreeRTOS\include\task.h
 .\objects\\queue.o: ..\FreeRTOS\include\list.h
 .\objects\\queue.o: ..\FreeRTOS\include\queue.h

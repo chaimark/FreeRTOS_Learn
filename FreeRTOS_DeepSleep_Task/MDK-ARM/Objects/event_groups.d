@@ -10,6 +10,9 @@
 .\objects\\event_groups.o: ..\FreeRTOS\portable\RVDS\ARM_CM0\portmacro.h
 .\objects\\event_groups.o: ..\FreeRTOS\include\mpu_wrappers.h
 .\objects\\event_groups.o: ..\Include\PowerCtrl.h
+.\objects\\event_groups.o: ..\Interflow\StrLib.h
+.\objects\\event_groups.o: C:\Keil_v5\ARM\ARMCC\Bin\..\include\string.h
+.\objects\\event_groups.o: C:\Keil_v5\ARM\ARMCC\Bin\..\include\stdbool.h
 .\objects\\event_groups.o: ..\FreeRTOS\include\task.h
 .\objects\\event_groups.o: ..\FreeRTOS\include\list.h
 .\objects\\event_groups.o: ..\FreeRTOS\include\timers.h

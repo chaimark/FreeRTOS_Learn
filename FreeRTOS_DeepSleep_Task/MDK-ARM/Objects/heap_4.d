@@ -10,5 +10,8 @@
 .\objects\\heap_4.o: ..\FreeRTOS\portable\RVDS\ARM_CM0\portmacro.h
 .\objects\\heap_4.o: ..\FreeRTOS\include\mpu_wrappers.h
 .\objects\\heap_4.o: ..\Include\PowerCtrl.h
+.\objects\\heap_4.o: ..\Interflow\StrLib.h
+.\objects\\heap_4.o: C:\Keil_v5\ARM\ARMCC\Bin\..\include\string.h
+.\objects\\heap_4.o: C:\Keil_v5\ARM\ARMCC\Bin\..\include\stdbool.h
 .\objects\\heap_4.o: ..\FreeRTOS\include\task.h
 .\objects\\heap_4.o: ..\FreeRTOS\include\list.h

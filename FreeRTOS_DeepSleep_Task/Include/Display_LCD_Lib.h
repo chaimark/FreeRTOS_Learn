@@ -88,13 +88,13 @@ const uint8_t FONT_CODE_TABLE[] = {
 #define LCD_BATT_BACK                   Display_Buffer[6] |= BIT1  // X5        6 10 ； 左移 1 位
 #define LCD_BATTERYX4                   Display_Buffer[7] |= BIT1  // X4        7 10 ； 左移 1 位
 #define LCD_BATTERYX3                   Display_Buffer[7] |= BIT2  // X3        7 11 ； 左移 2 位
-#define LCD_ChineseRoomTemper           Display_Buffer[0] |= BIT4  // T2        0 13 ； 左移 4 位
-#define LCD_PleasePay                   Display_Buffer[1] |= BIT4  // T3        1 13 ； 左移 4 位
-#define LCD_ChineseHeat                 Display_Buffer[2] |= BIT4  // 热量      2 13 ； 左移 4 位
-#define LCD_ChineseSet                  Display_Buffer[3] |= BIT4  // T4        3 13 ； 左移 4 位
-#define LCD_ChineseTemper               Display_Buffer[4] |= BIT4  // T7        4 13 ； 左移 4 位
-#define LCD_COL                         Display_Buffer[5] |= BIT4  // COL       5 13 ； 左移 4 位
-#define LCD_Time                        Display_Buffer[7] |= BIT4  // 时钟      7 13 ； 左移 4 位
+// #define LCD_ChineseRoomTemper           Display_Buffer[0] |= BIT4  // T2        0 13 ； 左移 4 位
+// #define LCD_PleasePay                   Display_Buffer[1] |= BIT4  // T3        1 13 ； 左移 4 位
+// #define LCD_ChineseHeat                 Display_Buffer[2] |= BIT4  // 热量      2 13 ； 左移 4 位
+// #define LCD_ChineseSet                  Display_Buffer[3] |= BIT4  // T4        3 13 ； 左移 4 位
+// #define LCD_ChineseTemper               Display_Buffer[4] |= BIT4  // T7        4 13 ； 左移 4 位
+// #define LCD_COL                         Display_Buffer[5] |= BIT4  // COL       5 13 ； 左移 4 位
+// #define LCD_Time                        Display_Buffer[7] |= BIT4  // 时钟      7 13 ； 左移 4 位
 
 #define NO_LCD_ChineseOpen_VALVE        Display_Buffer[0] &= ~BIT0  // 开阀      0 9 ； 左移 0 位
 #define NO_LCD_ChineseClose_VALVE       Display_Buffer[1] &= ~BIT0  // 关阀      1 9 ； 左移 0 位
@@ -113,18 +113,18 @@ const uint8_t FONT_CODE_TABLE[] = {
 #define NO_LCD_BATT_BACK                Display_Buffer[6] &= ~BIT1  // X5        6 10 ； 左移 1 位
 #define NO_LCD_BATTERYX4                Display_Buffer[7] &= ~BIT1  // X4        7 10 ； 左移 1 位
 #define NO_LCD_BATTERYX3                Display_Buffer[7] &= ~BIT2  // X3        7 11 ； 左移 2 位
-#define NO_LCD_ChineseRoomTemper        Display_Buffer[0] &= ~BIT4  // T2        0 13 ； 左移 4 位
-#define NO_LCD_PleasePay                Display_Buffer[1] &= ~BIT4  // T3        1 13 ； 左移 4 位
-#define NO_LCD_ChineseHeat              Display_Buffer[2] &= ~BIT4  // 热量      2 13 ； 左移 4 位
-#define NO_LCD_ChineseSet               Display_Buffer[3] &= ~BIT4  // T4        3 13 ； 左移 4 位
-#define NO_LCD_ChineseTemper            Display_Buffer[4] &= ~BIT4  // T7        4 13 ； 左移 4 位
-#define NO_LCD_COL                      Display_Buffer[5] &= ~BIT4  // COL       5 13 ； 左移 4 位
-#define NO_LCD_Time                     Display_Buffer[7] &= ~BIT4  // 时钟      7 13 ； 左移 4 位
+// #define NO_LCD_ChineseRoomTemper        Display_Buffer[0] &= ~BIT4  // T2        0 13 ； 左移 4 位
+// #define NO_LCD_PleasePay                Display_Buffer[1] &= ~BIT4  // T3        1 13 ； 左移 4 位
+// #define NO_LCD_ChineseHeat              Display_Buffer[2] &= ~BIT4  // 热量      2 13 ； 左移 4 位
+// #define NO_LCD_ChineseSet               Display_Buffer[3] &= ~BIT4  // T4        3 13 ； 左移 4 位
+// #define NO_LCD_ChineseTemper            Display_Buffer[4] &= ~BIT4  // T7        4 13 ； 左移 4 位
+// #define NO_LCD_COL                      Display_Buffer[5] &= ~BIT4  // COL       5 13 ； 左移 4 位
+// #define NO_LCD_Time                     Display_Buffer[7] &= ~BIT4  // 时钟      7 13 ； 左移 4 位
 
 extern void LcdDisplayRefresh(void);
 extern void ClearDisplayAll(void);
 extern void MF_LCD_Init(void);
 extern void LCD_Num_Data(uint8_t Show, uint8_t Num);
-extern void LCD_SetDotPx(uint8_t DotNum);
+extern void LCD_SetDotPx(uint8_t DotNum, bool isShow);
 
 #endif

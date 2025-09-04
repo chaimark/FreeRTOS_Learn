@@ -75,3 +75,5 @@
 .\objects\\pt1000.o: ..\Interflow\AT24CXXDataLoader.h
 .\objects\\pt1000.o: ..\Interflow\NumberBaseLib.h
 .\objects\\pt1000.o: ..\Include\AT24C02.h
+.\objects\\pt1000.o: ..\Include\TaskEEprom.h
+.\objects\\pt1000.o: ..\Include\GP21.h

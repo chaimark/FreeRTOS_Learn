@@ -4,28 +4,48 @@
 #include "NumberBaseLib.h"
 #include "RTC_SetTime.h"
 #include "PublicLib_No_One.h"
+#include "MotorCtrlDev.h"
 
 int HY_FLAG = true;
 // public
 AT24CXX_MANAGER_T AT24CXX_Manager = {
     .Sing = 0xB2,
     .MeterID = {0x12, 0x34, 0x56, 0x78},
-    .ModeCode = 0x3FFF,
-    .InsetT_Max = 100,
-    .InsetT_Min = 0,
-    .LimitTime = {"1999-05-20 13:14:00"},
+    .ModeCode = 0,
+    .LimitTime = {"1999-05-20 00:00:00"},
     .RunTimeBack_AddrNum = 0,
-    .T2AutoCtrlBuf = {0},
+    .OpenVOL = 2600,
+    .CloseVOL = 1000,
+    .UserSet_DegreePart = 0,
+    .SendManageObj = {
+        .SendIntervalDay = 0x00,
+        .SendStartHour = 6,
+        .SendFlagMode = {
+            {105, 7, 4},
+            {258, 1, 4},
+            {288, 1, 4},
+            {305, 1, 4},
+        }
+    },
+    .Get_Module_Data = {
+        ._Module_SIM_BAND = 0x00,
+        ._Module_SIM_ICCID = {0x00},
+        ._Module_SIM_IMSI = {0x00},
+        ._Module_DEV_IMEI = {0x00},
+        ._Module_DEV_CSQ = 0x00,
+        ._Module_DEV_RSRP = 0x00,
+        ._Module_DEV_RSRQ = 0x00,
+        ._Module_Socket_Num = 0x00,
+    },
     .Time_Data = {0},
 };
-
-// void SaveDevData(void) {
-//     unsigned int HourInt = 0;
-//     HourInt = (NowHour / 0x10) * 10 + (NowHour % 0x10);
-//     if (HourInt < 24) {
-//         // Meter_Manager.EnterQueue(&Meter_Manager, Get_Module_Data.Now_Temper_T1);        // 当前温度为正值
-//     }
-// }
+void SaveDevData(void) {
+    unsigned int HourInt = 0;
+    HourInt = (NowHour / 0x10) * 10 + (NowHour % 0x10);
+    if (HourInt < 24) {
+        Meter_Manager.EnterQueue(&Meter_Manager, System_RunData.Now_Temper_T1);        // 当前温度为正值
+    }
+}
 #define TRUE        1
 #define FALSE       0
 #define AckError    0x55

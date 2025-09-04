@@ -89,10 +89,10 @@ void check_XTClock_isOk(void) {
         }
         MF_Clock_Init();
         FL_RCC_SetLSCLKClockSource(FL_RCC_LSCLK_CLK_SOURCE_XTLF);   // 切换时钟源, 外部时钟
-        char TimeStr[20] = {0};
-        getStrNowDataAndTimeByRTC(TimeStr);
+        char NowTime[20] = {0};
+        getStrUserTime(RTC_Date, NowTime);
         MF_RTC_1S_Init();
-        setRtcDate(NEW_NAME(TimeStr), false);
+        setRtcDate(NEW_NAME(NowTime), false);
         Config_Init_XTHF_And_XTLF();
         MIN_TASK.CloseTask(CheckPWMOfClock);
         return;

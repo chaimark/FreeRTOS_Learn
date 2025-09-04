@@ -80,3 +80,4 @@
 .\objects\\display_lcd_lib.o: ..\Src\../Interflow/AT24CXXDataLoader.h
 .\objects\\display_lcd_lib.o: ..\Src\../Interflow/NumberBaseLib.h
 .\objects\\display_lcd_lib.o: ..\Include\AT24C02.h
+.\objects\\display_lcd_lib.o: ..\Include\TaskEEprom.h

@@ -9,5 +9,8 @@
 .\objects\\port.o: ..\FreeRTOS\portable\RVDS\ARM_CM0\portmacro.h
 .\objects\\port.o: ..\FreeRTOS\include\mpu_wrappers.h
 .\objects\\port.o: ..\Include\PowerCtrl.h
+.\objects\\port.o: ..\Interflow\StrLib.h
+.\objects\\port.o: C:\Keil_v5\ARM\ARMCC\Bin\..\include\string.h
+.\objects\\port.o: C:\Keil_v5\ARM\ARMCC\Bin\..\include\stdbool.h
 .\objects\\port.o: ..\FreeRTOS\include\task.h
 .\objects\\port.o: ..\FreeRTOS\include\list.h

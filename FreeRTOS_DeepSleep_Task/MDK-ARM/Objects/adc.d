@@ -75,4 +75,8 @@
 .\objects\\adc.o: ..\Interflow\AT24CXXDataLoader.h
 .\objects\\adc.o: ..\Interflow\NumberBaseLib.h
 .\objects\\adc.o: ..\Include\AT24C02.h
+.\objects\\adc.o: ..\Include\TaskEEprom.h
+.\objects\\adc.o: ..\Include\MotorCtrlDev.h
 .\objects\\adc.o: ..\Include\PT1000.h
+.\objects\\adc.o: ..\Include\Task_Valve.h
+.\objects\\adc.o: ..\Include\GP21.h

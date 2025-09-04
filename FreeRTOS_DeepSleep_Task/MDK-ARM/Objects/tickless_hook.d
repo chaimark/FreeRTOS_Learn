@@ -10,6 +10,9 @@
 .\objects\\tickless_hook.o: ..\FreeRTOS\portable\RVDS\ARM_CM0\portmacro.h
 .\objects\\tickless_hook.o: ..\FreeRTOS\include\mpu_wrappers.h
 .\objects\\tickless_hook.o: ..\Include\PowerCtrl.h
+.\objects\\tickless_hook.o: ..\Interflow\StrLib.h
+.\objects\\tickless_hook.o: C:\Keil_v5\ARM\ARMCC\Bin\..\include\string.h
+.\objects\\tickless_hook.o: C:\Keil_v5\ARM\ARMCC\Bin\..\include\stdbool.h
 .\objects\\tickless_hook.o: ..\FreeRTOS\include\task.h
 .\objects\\tickless_hook.o: ..\FreeRTOS\include\list.h
 .\objects\\tickless_hook.o: ..\Include\Define.h
@@ -22,7 +25,6 @@
 .\objects\\tickless_hook.o: ..\Drivers\CMSIS\Device\FM\FM33xx\Include\system_fm33lc0xx.h
 .\objects\\tickless_hook.o: ..\Drivers\CMSIS\Device\FM\FM33xx\Include\fm33lc0xx.h
 .\objects\\tickless_hook.o: ..\Drivers\FM33LC0xx_FL_Driver\Inc\fm33_assert.h
-.\objects\\tickless_hook.o: C:\Keil_v5\ARM\ARMCC\Bin\..\include\stdbool.h
 .\objects\\tickless_hook.o: ..\Drivers\FM33LC0xx_FL_Driver\Inc\fm33lc0xx_fl_lpuart.h
 .\objects\\tickless_hook.o: ..\Drivers\FM33LC0xx_FL_Driver\Inc\fm33lc0xx_fl_gpio.h
 .\objects\\tickless_hook.o: ..\Drivers\FM33LC0xx_FL_Driver\Inc\fm33lc0xx_fl_uart.h
@@ -50,7 +52,6 @@
 .\objects\\tickless_hook.o: ..\Interflow\PublicLib_No_One.h
 .\objects\\tickless_hook.o: C:\Keil_v5\ARM\ARMCC\Bin\..\include\stdio.h
 .\objects\\tickless_hook.o: C:\Keil_v5\ARM\ARMCC\Bin\..\include\stdlib.h
-.\objects\\tickless_hook.o: C:\Keil_v5\ARM\ARMCC\Bin\..\include\string.h
 .\objects\\tickless_hook.o: C:\Keil_v5\ARM\ARMCC\Bin\..\include\time.h
 .\objects\\tickless_hook.o: ..\Drivers\FM33LC0xx_FL_Driver\Inc\fm33lc0xx_fl.h
 .\objects\\tickless_hook.o: ..\Drivers\FM33LC0xx_FL_Driver\Inc\fm33lc0xx_fl_conf.h
@@ -59,7 +60,6 @@
 .\objects\\tickless_hook.o: ..\Drivers\FM33LC0xx_FL_Driver\Inc\fm33lc0xx_fl_divas.h
 .\objects\\tickless_hook.o: ..\Drivers\FM33LC0xx_FL_Driver\Inc\fm33lc0xx_fl_exti.h
 .\objects\\tickless_hook.o: ..\Drivers\FM33LC0xx_FL_Driver\Inc\fm33lc0xx_fl_lptim32.h
-.\objects\\tickless_hook.o: ..\Interflow\StrLib.h
 .\objects\\tickless_hook.o: ..\Include\Define.h
 .\objects\\tickless_hook.o: ..\FreeRTOS\include\semphr.h
 .\objects\\tickless_hook.o: ..\FreeRTOS\include\queue.h

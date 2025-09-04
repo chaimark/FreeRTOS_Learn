@@ -13,26 +13,26 @@ ARM Macro Assembler    Page 1
     6 00000000         ;   <o> Stack Size (in Bytes) <0x0-0xFFFFFFFF:8>
     7 00000000         ; </h>
     8 00000000         
-    9 00000000 00001000 
+    9 00000000 00000400 
                        Stack_Size
-                               EQU              0x00001000
+                               EQU              0x00000400
    10 00000000         
    11 00000000                 AREA             STACK, NOINIT, READWRITE, ALIGN
 =3
    12 00000000         Stack_Mem
                                SPACE            Stack_Size
-   13 00001000         __initial_sp
-   14 00001000         
-   15 00001000         
-   16 00001000         ; <h> Heap Configuration
-   17 00001000         ;   <o>  Heap Size (in Bytes) <0x0-0xFFFFFFFF:8>
-   18 00001000         ; </h>
-   19 00001000         
-   20 00001000 00000400 
+   13 00000400         __initial_sp
+   14 00000400         
+   15 00000400         
+   16 00000400         ; <h> Heap Configuration
+   17 00000400         ;   <o>  Heap Size (in Bytes) <0x0-0xFFFFFFFF:8>
+   18 00000400         ; </h>
+   19 00000400         
+   20 00000400 00000400 
                        Heap_Size
                                EQU              0x00000400
-   21 00001000         
-   22 00001000                 AREA             HEAP, NOINIT, READWRITE, ALIGN=
+   21 00000400         
+   22 00000400                 AREA             HEAP, NOINIT, READWRITE, ALIGN=
 3
    23 00000000         __heap_base
    24 00000000         Heap_Mem
@@ -341,7 +341,7 @@ ARM Macro Assembler    Page 6
               00000000 
               00000000 
               00000000 
-              00001000 
+              00000400 
               00000400 
               00000000 
 Command Line: --debug --xref --diag_suppress=9931 --cpu=Cortex-M0 --apcs=interw
@@ -377,7 +377,7 @@ m/startup_fm33lc0xx.s
       At line 223 in file ../Drivers/CMSIS/Device/FM/FM33xx/Source/Templates/ar
 m/startup_fm33lc0xx.s
 
-__initial_sp 00001000
+__initial_sp 00000400
 
 Symbol: __initial_sp
    Definitions
@@ -1031,7 +1031,7 @@ Symbol: Heap_Size
       At line 222 in file ../Drivers/CMSIS/Device/FM/FM33xx/Source/Templates/ar
 m/startup_fm33lc0xx.s
 
-Stack_Size 00001000
+Stack_Size 00000400
 
 Symbol: Stack_Size
    Definitions

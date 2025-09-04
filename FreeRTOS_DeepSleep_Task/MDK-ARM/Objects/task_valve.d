@@ -10,6 +10,9 @@
 .\objects\\task_valve.o: ..\FreeRTOS\portable\RVDS\ARM_CM0\portmacro.h
 .\objects\\task_valve.o: ..\FreeRTOS\include\mpu_wrappers.h
 .\objects\\task_valve.o: ..\Include\PowerCtrl.h
+.\objects\\task_valve.o: ..\Interflow\StrLib.h
+.\objects\\task_valve.o: C:\Keil_v5\ARM\ARMCC\Bin\..\include\string.h
+.\objects\\task_valve.o: C:\Keil_v5\ARM\ARMCC\Bin\..\include\stdbool.h
 .\objects\\task_valve.o: ..\FreeRTOS\include\task.h
 .\objects\\task_valve.o: ..\FreeRTOS\include\list.h
 .\objects\\task_valve.o: ..\FreeRTOS\include\semphr.h
@@ -18,9 +21,7 @@
 .\objects\\task_valve.o: ..\Interflow\PublicLib_No_One.h
 .\objects\\task_valve.o: C:\Keil_v5\ARM\ARMCC\Bin\..\include\stdio.h
 .\objects\\task_valve.o: C:\Keil_v5\ARM\ARMCC\Bin\..\include\stdlib.h
-.\objects\\task_valve.o: C:\Keil_v5\ARM\ARMCC\Bin\..\include\string.h
 .\objects\\task_valve.o: C:\Keil_v5\ARM\ARMCC\Bin\..\include\time.h
-.\objects\\task_valve.o: C:\Keil_v5\ARM\ARMCC\Bin\..\include\stdbool.h
 .\objects\\task_valve.o: ..\Drivers\FM33LC0xx_FL_Driver\Inc\fm33lc0xx_fl.h
 .\objects\\task_valve.o: ..\Drivers\FM33LC0xx_FL_Driver\Inc\fm33lc0xx_fl_conf.h
 .\objects\\task_valve.o: ..\Drivers\FM33LC0xx_FL_Driver\Inc\fm33lc0xx_fl_adc.h
@@ -60,7 +61,6 @@
 .\objects\\task_valve.o: ..\Drivers\FM33LC0xx_FL_Driver\Inc\fm33lc0xx_fl_uart.h
 .\objects\\task_valve.o: ..\Drivers\FM33LC0xx_FL_Driver\Inc\fm33lc0xx_fl_vref.h
 .\objects\\task_valve.o: ..\Drivers\FM33LC0xx_FL_Driver\Inc\fm33lc0xx_fl_wwdt.h
-.\objects\\task_valve.o: ..\Interflow\StrLib.h
 .\objects\\task_valve.o: ..\Include\Define.h
 .\objects\\task_valve.o: ..\MF-config\mf_config.h
 .\objects\\task_valve.o: ..\Interflow\PublicLib_No_One.h
@@ -77,4 +77,6 @@
 .\objects\\task_valve.o: ..\Interflow\AT24CXXDataLoader.h
 .\objects\\task_valve.o: ..\Interflow\NumberBaseLib.h
 .\objects\\task_valve.o: ..\Include\AT24C02.h
+.\objects\\task_valve.o: ..\Include\TaskEEprom.h
 .\objects\\task_valve.o: ..\FreeRTOS\include\event_groups.h
+.\objects\\task_valve.o: ..\Include\LPUart_0_And_1_Lib.h

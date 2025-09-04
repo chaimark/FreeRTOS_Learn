@@ -26,7 +26,6 @@ extern FL_RTC_InitTypeDef RTCTimeAddSecToNewTime(FL_RTC_InitTypeDef NowTime, uin
 extern int getDayOfWeek(uint32_t iYear, uint32_t iMonth, uint32_t iDay);
 extern void setRtcDate(strnew SteStrRTCData, char isWriteEEPROM);
 extern void getStrUserTime(FL_RTC_InitTypeDef UserDate, char NowStrRTCData[]);
-extern void getStrNowDataAndTimeByRTC(char NowStrRTCData[]);
 
 // 外部
 extern unsigned char Check_Time_ByHEX(unsigned char H_hour, unsigned char H_min, unsigned char H_second);

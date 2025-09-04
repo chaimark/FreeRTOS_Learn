@@ -75,6 +75,9 @@
 .\objects\\rtc.o: ..\Include\main.h
 .\objects\\rtc.o: ..\Include\fm33_assert.h
 .\objects\\rtc.o: ..\Include\AT24C02.h
+.\objects\\rtc.o: ..\Include\TaskEEprom.h
 .\objects\\rtc.o: ..\Interflow\NumberBaseLib.h
 .\objects\\rtc.o: ..\Interflow\AT24CXXDataLoader.h
 .\objects\\rtc.o: ..\Interflow\NumberBaseLib.h
+.\objects\\rtc.o: ..\Include\LPUart_0_And_1_Lib.h
+.\objects\\rtc.o: ..\Include\NB_Mode_Lib.h

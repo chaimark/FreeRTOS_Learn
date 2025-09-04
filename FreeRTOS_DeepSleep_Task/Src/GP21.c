@@ -119,7 +119,7 @@ void Delay_GP21_DelayTime(unsigned int delayTime) {
 }
 
 void GP21_Goto_Realy(void) {
-    GP21_PWR_HIGH;
+    GP21_NTC_PWR_HIGH;
     IncludeDelayMs(20);
     GP21_Reset();
     GP21_Spi_Init(GP21_TEST_DELAY_TIME_uS);
@@ -128,8 +128,7 @@ void GP21_Goto_Realy(void) {
 
 void GP21_Goto_Low_Pwr(void) {
     GP21_NSS_H;
-    EN761_LOW;
-    GP21_PWR_LOW;
+    GP21_NTC_PWR_LOW;
     GP21_RST_L;
     GP21_NSS_L;
     GP21_SCLK_L;
@@ -143,40 +142,20 @@ unsigned int GP21_Read_Status(void) {
 }
 
 void GP21_GPIO_Init(void) {
-#warning "GP2 Config";
-// FL_GPIO_InitTypeDef gpioInitStruction = {0};
-// // PA8_GP2_SO
-// gpioInitStruction.pin = FL_GPIO_PIN_8;
-// gpioInitStruction.mode = FL_GPIO_MODE_INPUT;
-// gpioInitStruction.outputType = FL_GPIO_OUTPUT_PUSHPULL;
-// gpioInitStruction.pull = FL_DISABLE;
-// FL_GPIO_Init(GPIOA, &gpioInitStruction);
-// // PA9_GP2_RST    PA10_GP2_SI 
-// gpioInitStruction.pin = FL_GPIO_PIN_9 | FL_GPIO_PIN_10;
-// gpioInitStruction.mode = FL_GPIO_MODE_OUTPUT;
-// gpioInitStruction.outputType = FL_GPIO_OUTPUT_PUSHPULL;
-// gpioInitStruction.pull = FL_DISABLE;
-// FL_GPIO_Init(GPIOA, &gpioInitStruction);
-// GPIO_SET_L(GPIOA, FL_GPIO_PIN_9 | FL_GPIO_PIN_10);
-// // PB3_GP2_SCK    PB4_GP2_SSN
-// gpioInitStruction.pin = FL_GPIO_PIN_3 | FL_GPIO_PIN_4;
-// gpioInitStruction.mode = FL_GPIO_MODE_OUTPUT;
-// gpioInitStruction.outputType = FL_GPIO_OUTPUT_PUSHPULL;
-// gpioInitStruction.pull = FL_DISABLE;
-// FL_GPIO_Init(GPIOB, &gpioInitStruction);
-// GPIO_SET_L(GPIOB, FL_GPIO_PIN_3 | FL_GPIO_PIN_4);
-// // PB5_GP2_INT
-// gpioInitStruction.pin = FL_GPIO_PIN_5;
-// gpioInitStruction.mode = FL_GPIO_MODE_INPUT;
-// gpioInitStruction.outputType = FL_GPIO_OUTPUT_PUSHPULL;
-// gpioInitStruction.pull = FL_DISABLE;
-// FL_GPIO_Init(GPIOB, &gpioInitStruction);
-// //PB9_GP21_EN761    PB10_GP2_PWR    PB12_ACLK
-// gpioInitStruction.pin = FL_GPIO_PIN_9 | FL_GPIO_PIN_10 | FL_GPIO_PIN_12;
-// gpioInitStruction.mode = FL_GPIO_MODE_OUTPUT;
-// gpioInitStruction.outputType = FL_GPIO_OUTPUT_OPENDRAIN;
-// gpioInitStruction.pull = FL_DISABLE;
-// FL_GPIO_Init(GPIOB, &gpioInitStruction);
-// GPIO_SET_L(GPIOB, FL_GPIO_PIN_9 | FL_GPIO_PIN_10 | FL_GPIO_PIN_12);
+    FL_GPIO_InitTypeDef GPIO_InitStruct = {0};
+    // PC1_GP21_SO   PC9_GP21_INT
+    GPIO_InitStruct.pin = FL_GPIO_PIN_1 | FL_GPIO_PIN_9;
+    GPIO_InitStruct.mode = FL_GPIO_MODE_INPUT;
+    GPIO_InitStruct.outputType = FL_GPIO_OUTPUT_PUSHPULL;
+    GPIO_InitStruct.pull = FL_DISABLE;
+    FL_GPIO_Init(GPIOC, &GPIO_InitStruct);
+
+    // PC0_GP21_RST PC2_GP21_SI  PC7_GP21_SSN  PC8_GP21_SCK 
+    GPIO_InitStruct.pin = FL_GPIO_PIN_0 | FL_GPIO_PIN_2 | FL_GPIO_PIN_7 | FL_GPIO_PIN_8;
+    GPIO_InitStruct.mode = FL_GPIO_MODE_OUTPUT;
+    GPIO_InitStruct.outputType = FL_GPIO_OUTPUT_PUSHPULL;
+    GPIO_InitStruct.pull = FL_DISABLE;
+    FL_GPIO_Init(GPIOC, &GPIO_InitStruct);
+    GPIO_SET_L(GPIOC, FL_GPIO_PIN_0 | FL_GPIO_PIN_2 | FL_GPIO_PIN_7 | FL_GPIO_PIN_8);
 }
 

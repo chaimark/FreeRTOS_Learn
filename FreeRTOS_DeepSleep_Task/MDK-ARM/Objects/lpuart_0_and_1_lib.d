@@ -73,8 +73,6 @@
 .\objects\\lpuart_0_and_1_lib.o: ..\Interflow\MIN_SetTime.h
 .\objects\\lpuart_0_and_1_lib.o: ..\Include\LPUart_0_And_1_Lib.h
 .\objects\\lpuart_0_and_1_lib.o: ..\Include\TaskAllReceive.h
-.\objects\\lpuart_0_and_1_lib.o: ..\Include\SI522A_interface.h
-.\objects\\lpuart_0_and_1_lib.o: ..\Include\SI522A_App.h
-.\objects\\lpuart_0_and_1_lib.o: ..\Include\RF_CMT2300A_Tx.h
-.\objects\\lpuart_0_and_1_lib.o: ..\Include\RF_CMT2300A_Init.h
-.\objects\\lpuart_0_and_1_lib.o: ..\Include\RF_CMT2300A_Receive.h
+.\objects\\lpuart_0_and_1_lib.o: ..\Include\CI522_interface.h
+.\objects\\lpuart_0_and_1_lib.o: ..\Include\CI522_App.h
+.\objects\\lpuart_0_and_1_lib.o: ..\Include\NB_Mode_Lib.h

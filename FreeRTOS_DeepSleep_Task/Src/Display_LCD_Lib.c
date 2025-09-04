@@ -67,7 +67,7 @@ void LcdDisplayBIT(uint32_t x, uint32_t y, bool value) {
     LcdDisplayRefresh();
 }
 
-static uint8_t NumberAddrForBufAboutID[8] = {10,9,8,7,6,5,3,2};
+static uint8_t NumberAddrForBufAboutID[8] = {9,8,7,6,5,4,3,2};
 void LCD_Num_Data(uint8_t Show, uint8_t Num) {
     if ((Num < 1) || (Num >= 9)) {
         return;
@@ -85,35 +85,13 @@ void LCD_Num_Data(uint8_t Show, uint8_t Num) {
     LCD_BIT_SET(Display_Buffer[6], NumberAddrForBufAboutID[Num - 1], (Result & 0x08)); // D
 }
 
-void LCD_SetDotPx(uint8_t DotNum) {
+void LCD_SetDotPx(uint8_t DotNum, bool isShow) {
     if ((DotNum < 1) || (DotNum >= 8)) {
         return;
     }
     DotNum--;
     DotNum = 8 - DotNum;
-    switch ((8 - DotNum) + 1) {
-        case 1:
-            LCD_BIT_SET(Display_Buffer[7], NumberAddrForBufAboutID[DotNum - 2], true);
-            break;
-        case 2:
-            LCD_BIT_SET(Display_Buffer[6], NumberAddrForBufAboutID[DotNum - 2] - 1, true);
-            break;
-        case 3:
-            LCD_BIT_SET(Display_Buffer[7], NumberAddrForBufAboutID[DotNum - 2], true);
-            break;
-        case 4:
-            LCD_BIT_SET(Display_Buffer[7], NumberAddrForBufAboutID[DotNum - 2], true);
-            break;
-        case 5:
-            LCD_BIT_SET(Display_Buffer[7], NumberAddrForBufAboutID[DotNum - 2], true);
-            break;
-        case 6:
-            LCD_BIT_SET(Display_Buffer[7], NumberAddrForBufAboutID[DotNum - 2], true);
-            break;
-        case 7:
-            LCD_BIT_SET(Display_Buffer[7], NumberAddrForBufAboutID[DotNum - 2], true);
-            break;
-    }
+    LCD_BIT_SET(Display_Buffer[7], NumberAddrForBufAboutID[DotNum - 2], isShow);
 }
 
 /*******************end function***************************************************/
@@ -125,7 +103,7 @@ void LCD_SetDotPx(uint8_t DotNum) {
   */
 void MF_LCD_Init(void) {
 #define LCD_GPIOA_PINX FL_GPIO_PIN_0 | FL_GPIO_PIN_1 | FL_GPIO_PIN_2 | FL_GPIO_PIN_3 | FL_GPIO_PIN_4 | FL_GPIO_PIN_5 | FL_GPIO_PIN_6 | FL_GPIO_PIN_7 | FL_GPIO_PIN_8 | FL_GPIO_PIN_9 | FL_GPIO_PIN_10
-#define LCD_GPIOB_PINX FL_GPIO_PIN_4 | FL_GPIO_PIN_5 | FL_GPIO_PIN_6 | FL_GPIO_PIN_7 | FL_GPIO_PIN_8 | FL_GPIO_PIN_9 | FL_GPIO_PIN_10 | FL_GPIO_PIN_11
+#define LCD_GPIOB_PINX FL_GPIO_PIN_4 | FL_GPIO_PIN_5 | FL_GPIO_PIN_6 | FL_GPIO_PIN_7 | FL_GPIO_PIN_8 | FL_GPIO_PIN_9 | FL_GPIO_PIN_10
     FL_GPIO_InitTypeDef gpioInitStruction = {0};
     FL_LCD_InitTypeDef lcdInitStruction;
 
@@ -170,7 +148,6 @@ void MF_LCD_Init(void) {
     FL_LCD_EnableSEGEN0(LCD, FL_LCD_SEGEN0_SEG7);
     FL_LCD_EnableSEGEN0(LCD, FL_LCD_SEGEN0_SEG8);
     FL_LCD_EnableSEGEN0(LCD, FL_LCD_SEGEN0_SEG9);
-    FL_LCD_EnableSEGEN0(LCD, FL_LCD_SEGEN0_SEG10);
 
     FL_LCD_Enable(LCD);
     ClearDisplayAll();

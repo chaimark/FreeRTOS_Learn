@@ -77,3 +77,9 @@
 .\objects\\motorctrldev.o: ..\Include\Task_Valve.h
 .\objects\\motorctrldev.o: ..\Include\Display.h
 .\objects\\motorctrldev.o: ..\Include\Display_LCD_Lib.h
+.\objects\\motorctrldev.o: ..\Interflow\AT24CXXDataLoader.h
+.\objects\\motorctrldev.o: ..\Interflow\NumberBaseLib.h
+.\objects\\motorctrldev.o: ..\Include\AT24C02.h
+.\objects\\motorctrldev.o: ..\Include\TaskEEprom.h
+.\objects\\motorctrldev.o: ..\Interflow\NumberBaseLib.h
+.\objects\\motorctrldev.o: ..\Include\TaskAboutTimer.h

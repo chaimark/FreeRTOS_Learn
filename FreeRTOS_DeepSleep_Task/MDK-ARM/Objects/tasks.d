@@ -11,6 +11,8 @@
 .\objects\\tasks.o: ..\FreeRTOS\portable\RVDS\ARM_CM0\portmacro.h
 .\objects\\tasks.o: ..\FreeRTOS\include\mpu_wrappers.h
 .\objects\\tasks.o: ..\Include\PowerCtrl.h
+.\objects\\tasks.o: ..\Interflow\StrLib.h
+.\objects\\tasks.o: C:\Keil_v5\ARM\ARMCC\Bin\..\include\stdbool.h
 .\objects\\tasks.o: ..\FreeRTOS\include\task.h
 .\objects\\tasks.o: ..\FreeRTOS\include\list.h
 .\objects\\tasks.o: ..\FreeRTOS\include\timers.h

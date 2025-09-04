@@ -1,0 +1,4 @@
+--c99 -c --cpu Cortex-M0 -g -O0 --apcs=interwork --split_sections -I ..\FreeRTOS\portable\RVDS\ARM_CM0 -I ..\FreeRTOS\include -I ..\Drivers\CMSIS\Device\FM\FM33xx\Include -I ..\Drivers\FM33LC0xx_FL_Driver\Inc -I ..\MF-config -I ..\Tickless -I ..\Interflow\ -I ..\Include
+-IC:\Keil_v5\Arm\Packs\FMSH\FM33LC0XX_DFP\3.0.4\Device\Include
+-D__UVISION_VERSION="535" -DFM33LC0xx -DFM33LC0XX -DUSE_FULL_ASSERT
+-o .\objects\\system_fm33lc0xx.o --omf_browse .\objects\\system_fm33lc0xx.crf --depend .\objects\\system_fm33lc0xx.d "..\Drivers\CMSIS\Device\FM\FM33xx\Source\system_fm33lc0xx.c"

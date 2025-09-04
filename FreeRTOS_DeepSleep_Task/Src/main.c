@@ -1,4 +1,5 @@
 #include "PublicLib_No_One.h"
+#include "UpData.h"
 #include "Define.h"
 #include "ADC.h"
 #include "AT24CXXDataLoader.h"
@@ -10,6 +11,7 @@
 #include "TaskEEprom.h"
 #include "Task_Valve.h"
 #include "TaskGpioInit.h"
+#include "TaskNBAndWeb.h"
 #include "Display.h"
 
 // 空闲钩子函数, 任务执行一段时间后必须返回空闲任务
@@ -36,8 +38,22 @@ void vApplicationIdleHook(void) {
   *
   ****************************************************************************************************
   */
+// Sleep
+void Sleep(void) {
+    FL_RCC_RCMF_Disable();               //关闭RCMF
+    FL_RMU_PDR_Enable(RMU);              //打开PDR
+    FL_RMU_BORPowerDown_Disable(RMU);    //关闭BOR 2uA
+
+    /*使用ADC时ADCMonitor功能以及Vref需同时开始，同时关闭*/
+    FL_VREF_Disable(VREF);               //关闭VREF1p2
+    FL_SVD_DisableADCMonitor(SVD);       //关闭ADC电源检测
+    FL_ADC_Disable(ADC);                 //关闭ADC使能
+
+    FL_PMU_SetLowPowerMode(PMU, FL_PMU_POWER_MODE_SLEEP_OR_DEEPSLEEP);
+    __WFI();
+}
 int main(void) {
-    NVIC_SetVectorTable(0, 0x4000);
+    NVIC_SetVectorTable(0, UPDATA_MCU_OFFSET);
     /* Reset of all peripherals, Initializes the Flash interface and the Systick. */
     MF_GPIO_Init();
     /* SHOULD BE KEPT!!! */
@@ -49,35 +65,21 @@ int main(void) {
     /* SHOULD BE KEPT!!! */
     AT24CXXLoader_Init();	// 初始化参数
     MF_Config_Init();
-    ShowWait();
+    ShowWait(false);
     EEprom_AT24CXX_Parameter_Init(false);
+    setNetArgumentInit(NULL);
     StartOPenDevMode();
     CheckMeterNum();
-    setNetArgumentInit(NULL);
-    // // 关闭编程口
-    // FL_GPIO_InitTypeDef GPIO_InitStruct;
-    // /* PD7 SWD_SWCLK */
-    // GPIO_InitStruct.pin = FL_GPIO_PIN_7;
-    // GPIO_InitStruct.mode = FL_GPIO_MODE_DIGITAL;
-    // GPIO_InitStruct.outputType = FL_GPIO_OUTPUT_PUSHPULL;
-    // GPIO_InitStruct.pull = FL_DISABLE;
-    // GPIO_InitStruct.remapPin = FL_DISABLE;
-    // FL_GPIO_Init(GPIOD, &GPIO_InitStruct);
-    // /* PD8 SWD_SWDIO */
-    // GPIO_InitStruct.pin = FL_GPIO_PIN_8;
-    // GPIO_InitStruct.mode = FL_GPIO_MODE_DIGITAL;
-    // GPIO_InitStruct.outputType = FL_GPIO_OUTPUT_PUSHPULL;
-    // GPIO_InitStruct.pull = FL_DISABLE;
-    // GPIO_InitStruct.remapPin = FL_DISABLE;
-    // FL_GPIO_Init(GPIOD, &GPIO_InitStruct);
-    xTaskCreate(ReadEEprom, "ReadEEprom", configMINIMAL_STACK_SIZE, NULL, ReadEEprom_PRIORITY, &ReadEEpromHand); // 4
-    xTaskCreate(WriteEEprom, "WriteEEprom", configMINIMAL_STACK_SIZE, NULL, WriteEEprom_PRIORITY, &ReadEEpromHand); // 4
-    xTaskCreate(GpioTask, "GpioTask", configMINIMAL_STACK_SIZE, NULL, GpioTask_PRIORITY, &GpioTaskHand); // 2
-    xTaskCreate(TimeTask, "TestAll", configMINIMAL_STACK_SIZE, NULL, TimeTask_PRIORITY, &TimeTaskHand); // 2
-    xTaskCreate(AllReceive, "AllReceive", configMINIMAL_STACK_SIZE, NULL, AllReceive_PRIORITY, &AllReceive_Hand); // 1 -- x
-    xTaskCreate(ValveCtrlTask, "ValveCtrl", configMINIMAL_STACK_SIZE, NULL, ValveCtrl_PRIORITY, &ValveCtrlHand); // 1 -- x
+    xTaskCreate(WriteEEprom, "WriteEEprom", configMINIMAL_STACK_SIZE * 2, NULL, WriteEEprom_PRIORITY, &WriteEEpromHand); // 5 -- x
+    xTaskCreate(ValveCtrlTask, "ValveCtrl", configMINIMAL_STACK_SIZE * 2, NULL, ValveCtrl_PRIORITY, &ValveCtrlHand); // 5 -- x
+    xTaskCreate(GpioTask, "GpioTask", configMINIMAL_STACK_SIZE * 2, NULL, GpioTask_PRIORITY, &GpioTaskHand); // 4 -- x
+    xTaskCreate(AllReceive, "AllReceive", configMINIMAL_STACK_SIZE * 2, NULL, AllReceive_PRIORITY, &AllReceive_Hand); // 3 -- x
+    xTaskCreate(NBModeTask, "SendData", configMINIMAL_STACK_SIZE * 2, NULL, NBSend_PRIORITY, &NBModeHand); // 2 -- x
+    xTaskCreate(TimeTask, "TestAll", configMINIMAL_STACK_SIZE * 2, NULL, TimeTask_PRIORITY, &TimeTaskHand); // 2 -- x
+    xTaskCreate(ReadEEprom, "ReadEEprom", configMINIMAL_STACK_SIZE * 2, NULL, ReadEEprom_PRIORITY, &ReadEEpromHand); // 1 -- x
     vTaskStartScheduler();
-    while (1) { // 无任务运行，RTOS 自动进入睡眠
+    while (1) {
+        Sleep();
     }
 }
 
