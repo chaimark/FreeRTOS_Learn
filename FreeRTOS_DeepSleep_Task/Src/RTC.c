@@ -134,7 +134,7 @@ void RTC_IRQ_Second(void) {
     FL_NVIC_ConfigTypeDef    InterruptConfigStruct;
     FL_RCC_EnableGroup1BusClock(FL_RCC_GROUP1_BUSCLK_RTC);
     FL_RTC_EnableIT_Second(RTC);
-    InterruptConfigStruct.preemptPriority = 0x0002;
+    InterruptConfigStruct.preemptPriority = 0x000C;
     FL_NVIC_Init(&InterruptConfigStruct, RTC_IRQn);
 }
 void MF_RTC_1S_Init(void) {
@@ -239,7 +239,7 @@ void RTC_IRQHandler(void) {
             MinCountRTCTask();
 #endif
             if (NowMinute == 0x00) {
-                SaveDevData();
+                // SaveDevData();
                 NowWeek = getDayOfWeek(NowYear, NowMonth, NowDay); // 计算周 周不需要转换
                 if (NowHour == 0x00) {
                 }

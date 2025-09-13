@@ -46,8 +46,8 @@ typedef struct _USER_MIN_SET_TASK {
         uint64_t CountMaxNum;
         void (*TaskFunc)(void);
     } Task[MINTimeTaskMAX];
-    void (*InitSetTimeTask)(int TaskAddr, uint64_t SetCountMaxNum, void (*TaskFunc)(void));
-    void (*CloseTask)(int TaskAddr);
+    void (*InitSetTimeTask)(MINTaskName TaskAddr, uint64_t SetCountMaxNum, void (*TaskFunc)(void));
+    void (*CloseTask)(MINTaskName TaskAddr);
     int NumberOfTimeTask;
 }USER_MIN_SET_TASK;
 extern USER_MIN_SET_TASK MIN_TASK;
@@ -66,8 +66,8 @@ typedef struct _USER_Min_10_SET_TASK {
         uint64_t CountMaxNum;
         void (*TaskFunc)(void);
     } Task[Min_10_TimeTaskMAX];
-    void (*InitSetTimeTask)(int TaskAddr, uint64_t SetCountMaxNum, void (*TaskFunc)(void));
-    void (*CloseTask)(int TaskAddr);
+    void (*InitSetTimeTask)(Min_10_TaskName TaskAddr, uint64_t SetCountMaxNum, void (*TaskFunc)(void));
+    void (*CloseTask)(Min_10_TaskName TaskAddr);
     int NumberOfTimeTask;
 }USER_Min_10_SET_TASK;
 extern USER_Min_10_SET_TASK Min_10_TASK;
@@ -87,8 +87,8 @@ typedef struct _USER_Min_15_SET_TASK {
         uint64_t CountMaxNum;
         void (*TaskFunc)(void);
     } Task[Min_15_TimeTaskMAX];
-    void (*InitSetTimeTask)(int TaskAddr, uint64_t SetCountMaxNum, void (*TaskFunc)(void));
-    void (*CloseTask)(int TaskAddr);
+    void (*InitSetTimeTask)(Min_15_TaskName TaskAddr, uint64_t SetCountMaxNum, void (*TaskFunc)(void));
+    void (*CloseTask)(Min_15_TaskName TaskAddr);
     int NumberOfTimeTask;
 }USER_Min_15_SET_TASK;
 extern USER_Min_15_SET_TASK Min_15_TASK;

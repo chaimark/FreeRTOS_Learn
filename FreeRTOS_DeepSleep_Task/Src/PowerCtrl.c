@@ -14,16 +14,16 @@ bool _SetIsEnterLow_Power(bool SetBool, uint8_t UserCtrID) {
     static char Front_UserCtrID[6] = {0};
     if (SetBool == false) {
         if (strlen(Front_UserCtrID) < 6) {
-            catString(Front_UserCtrID, UserID, strlen(Front_UserCtrID), 1);
+            catString(Front_UserCtrID, UserID, 6, 1);
             IsEnterLow_Power = false;
         }
         return true;
     }
     char * Addr_A = strchr(Front_UserCtrID, UserID[0]);
-    char * Addr_B = Front_UserCtrID + strlen(Front_UserCtrID);
+    char * Addr_B = Front_UserCtrID + strlen(Front_UserCtrID) - 1;
     if (Addr_A != NULL) {
+        (*Addr_A) = '\0';
         swapChr(Addr_A, Addr_B);
-        Front_UserCtrID[strlen(Front_UserCtrID)] = '\0';
     }
     if (strlen(Front_UserCtrID) == 0) {
         IsEnterLow_Power = true;

@@ -9,7 +9,7 @@ extern bool _SetIsEnterLow_Power(bool SetBool, uint8_t UserCtrID);
 // 使用屏蔽低功耗机制时，不能关闭调度器
 #define SetIsEnterLow_Power(setbool, UserCtrID) \
 do { \
-    if (_SetIsEnterLow_Power(true, UserCtrID)) { \
+    if (_SetIsEnterLow_Power(setbool, UserCtrID)) { \
         break; \
     } \
 } while (1)

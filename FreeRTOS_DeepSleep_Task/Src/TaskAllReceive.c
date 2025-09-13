@@ -11,6 +11,7 @@
 #include "RTC.h"
 #include "TaskAboutTimer.h"
 #include "PowerCtrl.h"
+#include "UpData.h"
 #include "TaskNBAndWeb.h"
 #include "NetProt_Module.h"
 #include "HY_TXRX.h"
@@ -43,87 +44,106 @@ TaskHandle_t AllReceive_Hand = NULL;
 SemaphoreHandle_t LPUartxSemaphore = NULL;
 void LPUart0CheckBuff(void) {
     LPUart0DisableIRQ;
-    BaseType_t xHigherPriorityTaskWoken = pdFALSE;
-    xEventGroupSetBits(xEventGroup_Receive, LPUart0_Rec);
-    // 向 TimeTask 发出信号量, 准备继续运行
-    xSemaphoreGiveFromISR(LPUartxSemaphore, &xHigherPriorityTaskWoken);
-    // 恢复 Task 任务
-    if (xTaskResumeFromISR(AllReceive_Hand) == pdFALSE) {
-        // 如果需要切换上下文
-        portYIELD_FROM_ISR(xHigherPriorityTaskWoken);
+    BaseType_t xHPW_TaskWoken = pdFALSE;
+    // 设置任务组
+    xEventGroupSetBitsFromISR(xEventGroup_Receive, LPUart0_Rec, &xHPW_TaskWoken);
+    // 发出信号量, 准备继续运行
+    xSemaphoreGiveFromISR(LPUartxSemaphore, &xHPW_TaskWoken);
+    if (xTaskResumeFromISR(AllReceive_Hand) == pdTRUE) {
+        xHPW_TaskWoken = pdTRUE;
     }
+    portYIELD_FROM_ISR(xHPW_TaskWoken);
 }
+
 // void Uart1CheckBuff(void) {
-//     BaseType_t xHigherPriorityTaskWoken = pdFALSE;
-//     xEventGroupSetBits(xEventGroup_Receive, Uart1_Rec);
-//     // 向 TimeTask 发出信号量, 准备继续运行
-//     xSemaphoreGiveFromISR(LPUartxSemaphore, &xHigherPriorityTaskWoken);
-//     // 恢复 Task 任务
-//     if (xTaskResumeFromISR(AllReceive_Hand) == pdFALSE) {
-//         // 如果需要切换上下文
-//         portYIELD_FROM_ISR(xHigherPriorityTaskWoken);
+//     BaseType_t xHPW_TaskWoken = pdFALSE;
+//     // 设置任务组
+//     xEventGroupSetBitsFromISR(xEventGroup_Receive, Uart1_Rec, &xHPW_TaskWoken);
+//     // 发出信号量, 准备继续运行
+//     xSemaphoreGiveFromISR(LPUartxSemaphore, &xHPW_TaskWoken);
+//     if (xTaskResumeFromISR(AllReceive_Hand) == pdTRUE){
+//         xHPW_TaskWoken = pdTRUE;
 //     }
+//     portYIELD_FROM_ISR(xHPW_TaskWoken);
 // }
 ///////////////////////////////////////
 // Uart1 中间层
 void NBUartCheckBuff(void) {
     Uart1DisableIRQ;
-    // 在联网阶段，直接转存到 CmdTable
-    if (!System_RunData.Now_NetDevParameter.NowNetOnlineFlag) {
+    // *******************由模组驱动 api 判断是否是 AT 指令******************* //
+    ModeStrType NowStrType = System_RunData.Now_NetDevParameter.UartCmdType();
+    if (NowStrType == ModeATStr) {
         copyDataFormUART();
         Uart1EnableIRQ;
         return;
     }
-    // 已在线，监控到特殊字符串
-    if (System_RunData.Now_NetDevParameter.checkFlagStr != NULL) {
-        if (strstr(UART_DATABUFF, System_RunData.Now_NetDevParameter.checkFlagStr) != NULL) {
-            copyDataFormUART();
-            CheckStr_OK();
-            Uart1EnableIRQ;
-            return;
-        }
+    if ((NowStrType == CheckStr_Task) && (System_RunData.Now_NetDevParameter.checkFlagStr != NULL)) {
+        copyDataFormUART();
+        CheckStr_OK_FromISR();              // 触发 SpecialDoneFromTask 特殊处理
+        Uart1EnableIRQ;
+        return;
     }
-    // 包含指令的字符串
-    BaseType_t xHigherPriorityTaskWoken = pdFALSE;
-    xEventGroupSetBits(xEventGroup_Receive, NBUart_Virtual);
+    // *******************已在线，监控到特殊字符串 b******************* //
+    if (NowStrType == CheckStr_ISR_Now) {
+        SpecialDoneFromISR(System_RunData.Now_NetDevParameter.Special_ID);
+        Uart1EnableIRQ;
+        return;
+    }
+    // *******************包含指令的字符串******************* //
+    BaseType_t xHPW_TaskWoken = pdFALSE;
+    // 设置任务组
+    xEventGroupSetBitsFromISR(xEventGroup_Receive, NBUart_Virtual, &xHPW_TaskWoken);
     // 向 TimeTask 发出信号量, 准备继续运行
-    xSemaphoreGiveFromISR(LPUartxSemaphore, &xHigherPriorityTaskWoken);
-    // 恢复 Task 任务
-    if (xTaskResumeFromISR(AllReceive_Hand) == pdFALSE) {
-        // 如果需要切换上下文
-        portYIELD_FROM_ISR(xHigherPriorityTaskWoken);
+    xSemaphoreGiveFromISR(LPUartxSemaphore, &xHPW_TaskWoken);
+    if (xTaskResumeFromISR(AllReceive_Hand) == pdTRUE) {
+        xHPW_TaskWoken = pdTRUE;
     }
+    portYIELD_FROM_ISR(xHPW_TaskWoken);
 }
 ///////////////////////////////////////
-static uint8_t isReadCard = false;
+static bool isReadCard = false;
 void closeLightOrM1(void) {
-    RTC_TASK.InitSetTimeTask(CloseReadM1, 1, closeLightOrM1);
     static uint8_t CallCount = 0;
+    BaseType_t xHPW_TaskWoken = pdFALSE;            /* 全程唯一 yield 标记 */
+    if (System_RunData.isPowerModuleUseing == true) {
+        M1_POWER_OFF;
+        isReadCard = false;
+        RTC_TASK.CloseTask(CloseReadM1);   /* 若内部关中断/投队列→自己实现FromISR版 */
+        CloseLPUart0TTL();                 /* 同样保证不阻塞 */
+        CallCount = 0;
+        portYIELD_FROM_ISR(xHPW_TaskWoken);
+        return;
+    }
+    RTC_TASK.InitSetTimeTask(CloseReadM1, 1, closeLightOrM1);
     if (CallCount == 0) {
         if (readDataBit(AT24CXX_Manager_NET.ModeCode, EnableM1Card)) {
             isReadCard = true;
         }
     }
-    CallCount++;
-    if (CallCount == 30) {
-        CallCount = 0;
-        RTC_TASK.CloseTask(CloseReadM1);
-        CloseLPUart0TTL();      // 关闭 红外
-        M1_POWER_OFF;           // 关闭 M1
+    CallCount = (CallCount < 30 ? CallCount + 1 : 30);
+    if (CallCount >= 30) {
+        M1_POWER_OFF;
         isReadCard = false;
-    }
-
-    if ((isReadCard == true) && !(xEventGroupGetBits(xEventGroup_Receive) & SI522A_Rec)) {
-        BaseType_t xHigherPriorityTaskWoken = pdFALSE;
-        xEventGroupSetBits(xEventGroup_Receive, SI522A_Rec);
-        // 向 TimeTask 发出信号量, 准备继续运行
-        xSemaphoreGiveFromISR(LPUartxSemaphore, &xHigherPriorityTaskWoken);
-        // 恢复 Task 任务
-        if (xTaskResumeFromISR(AllReceive_Hand) == pdFALSE) {
-            // 如果需要切换上下文
-            portYIELD_FROM_ISR(xHigherPriorityTaskWoken);
+        if ((System_RunData.isUpCode != true) && ((unsigned char)UpdataData.Sign != 0xB2)) {
+            RTC_TASK.CloseTask(CloseReadM1);
+            CloseLPUart0TTL();
+            CallCount = 0;
         }
     }
+    if ((unsigned char)UpdataData.Sign == 0xB2) {
+        M1_POWER_OFF;
+        isReadCard = false;
+    }
+    if (isReadCard == true) {
+        // 设置任务组
+        xEventGroupSetBitsFromISR(xEventGroup_Receive, SI522A_Rec, &xHPW_TaskWoken);
+        // 发出信号量, 准备继续运行
+        xSemaphoreGiveFromISR(LPUartxSemaphore, &xHPW_TaskWoken);
+        if (xTaskResumeFromISR(AllReceive_Hand) == pdTRUE) {
+            xHPW_TaskWoken = pdTRUE;
+        }
+    }
+    portYIELD_FROM_ISR(xHPW_TaskWoken);
 }
 // 开关卡
 void OpenOrCloseValveCard(void) {
@@ -242,6 +262,7 @@ void AllReceive(void * pvParameters) {
     uint16_t * UartXLen = NULL;
     char * UartBuff = NULL;
     while (xSemaphoreTake(LPUartxSemaphore, portMAX_DELAY) == pdTRUE) {
+        // printf("%s left:%u\n", pcTaskGetName(NULL), uxTaskGetStackHighWaterMark(NULL));
         if (xEventGroupGetBits(xEventGroup_Receive) & NBUart_Virtual) {
             xEventGroupClearBits(xEventGroup_Receive, NBUart_Virtual);   // 清除事件标志位
             getHYCmdFormATStr(NEW_NAME(UART1Ddata.RxBuf), UART1Ddata.RxLen);
@@ -258,17 +279,12 @@ void AllReceive(void * pvParameters) {
         if (xEventGroupGetBits(xEventGroup_Receive) & Uart1_Rec) {
             xEventGroupClearBits(xEventGroup_Receive, Uart1_Rec);   // 清除事件标志位.
             UartX = 0xF2;
-            UartBuff = CmdTable.DataBuff_RX;
-            UartXLen = &CmdTable.NowRX_Len;
-            memset(CmdTable.DataBuff_TX, 0, CmdStrLenMax);
+            UartBuff = CmdTable.RxBuf;
+            UartXLen = &CmdTable.RxLen;
+            memset(CmdTable.TxBuf, 0, LONG_UARTMAX);
         }
         if (UartX == 0xF1 || UartX == 0xF2) {
             System_RunData.CtrlDev_Set_Degree_Part = 0xFFFF;
-            SetValve TempSetdata = {
-                .DoneId = VALVE_REASON_INFRARED_INTERFACE,
-                .MaxDelay_1000Tick = 1,
-                .Set_Degree_Part = System_RunData.CtrlDev_Set_Degree_Part,
-            };
             uint8_t RecCmdFlag = HY_USB_TTL_CheckBuff(UartBuff, (*UartXLen), UartX);
             if (RecCmdFlag == false) {
                 LPUart0EnableIRQ;
@@ -286,7 +302,7 @@ void AllReceive(void * pvParameters) {
                 if (UartX == 0xF1) {    // 红外
                     LPUART0_Send((unsigned char *)LPUART0Ddata.TxBuf, LPUART0Ddata.TxLen);
                 } else {
-                    PackHYDataToAtData(CmdTable.DataBuff_TX, CmdTable.NowTX_Len, NEW_NAME(UART1Ddata.TxBuf));
+                    UART1Ddata.TxLen = PackHYDataToAtData(CmdTable.TxBuf, CmdTable.TxLen, NEW_NAME(UART1Ddata.TxBuf));
                     sendDataByTTLProt(UART1Ddata.TxBuf, UART1Ddata.TxLen);
                     System_RunData.ReceiveFlag = true;
                 }
@@ -299,19 +315,25 @@ void AllReceive(void * pvParameters) {
                 EEprom_AT24CXX_Parameter_Init(true);
                 LCD_MenuPage_Change(0);
                 setIsWriteEEprom(false);
-            }
-            if (System_RunData.CtrlDev_Set_Degree_Part == 0xEEEE) {
-                StartValveAutoTest();
-                System_RunData.CtrlDev_Set_Degree_Part = 0xFFFF;
-            }
-            if (System_RunData.CtrlDev_Set_Degree_Part != 0xFFFF) {
-                if (UartX == 0xF1) {
-                    TempSetdata.DoneId = VALVE_REASON_INFRARED_INTERFACE;       // H 红外接口
-                } else {
-                    TempSetdata.DoneId = VALVE_REASON_NB_MQTT_ONENET_RESERVE;   // G NB MQTT OneNet
+                SetValve TempSetdata = {
+                    .DoneId = VALVE_REASON_INFRARED_INTERFACE,
+                    .MaxDelay_1000Tick = 1,
+                    .Set_Degree_Part = System_RunData.CtrlDev_Set_Degree_Part,
+                };
+                if (System_RunData.CtrlDev_Set_Degree_Part == 0xEEEE) {
+                    StartValveAutoTest();
+                    System_RunData.CtrlDev_Set_Degree_Part = 0xFFFF;
                 }
-                TempSetdata.Set_Degree_Part = System_RunData.CtrlDev_Set_Degree_Part;
-                ValveCtrlStart(TempSetdata);
+                if (System_RunData.CtrlDev_Set_Degree_Part != 0xFFFF) {
+                    if (UartX == 0xF1) {
+                        TempSetdata.DoneId = VALVE_REASON_INFRARED_INTERFACE;       // H 红外接口
+                    } else {
+                        TempSetdata.DoneId = VALVE_REASON_NB_MQTT_ONENET_RESERVE;   // G NB MQTT OneNet
+                    }
+                    TempSetdata.Set_Degree_Part = System_RunData.CtrlDev_Set_Degree_Part;
+                    ValveCtrlStart(TempSetdata);
+                    System_RunData.CtrlDev_Set_Degree_Part = 0xFFFF;
+                }
             }
             UartX = 0xFF;
         }
@@ -327,7 +349,9 @@ void AllReceive(void * pvParameters) {
 }
 /////////////////////////////////////////////
 void OpenUartOfLightOrM1(void) {
-    // 启动软件定时器
+    if (System_RunData.isPowerModuleUseing == true) {
+        return;
+    }
     if (RTC_TASK.Task[CloseReadM1].isTaskStart == true) {
         return; // 定时器已启动，无需重复启动
     }
@@ -343,3 +367,5 @@ void OpenUartOfLightOrM1(void) {
     MF_LPUART0_Interrupt_Init();
     Infrared_POWER_ON;
 }
+
+

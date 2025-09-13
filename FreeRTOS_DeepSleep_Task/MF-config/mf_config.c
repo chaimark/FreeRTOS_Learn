@@ -33,6 +33,7 @@ void MF_IWDT_Init(void) {
     IWDT_InitStruct.iwdtWindows = 0;
 
     FL_IWDT_Init(IWDT, &IWDT_InitStruct);
+    RTC_TASK.InitSetTimeTask(IWDTClS, MinToSec(8), NULL); // 8min 内定时器喂狗
 }
 
 void MF_PMU_Init(void) {

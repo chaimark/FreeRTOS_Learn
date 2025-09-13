@@ -194,7 +194,7 @@ int UpData_Receive_Hex(JsonObject BinCode) {
     newString(CodeStr, PAGE_SIZE * 2);
     int FlagCodeNum;    // 返回码
     uint8_t checkSum = 0;
-    if (UpdataData.Sign != 0xB2) {
+    if ((unsigned char)UpdataData.Sign != 0xB2) {
         if (BinCode.isJsonNull(&BinCode, "PackLen") < 0) {
             FlagCodeNum = 0;
             goto OverSub;

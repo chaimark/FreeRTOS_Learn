@@ -84,3 +84,6 @@
 .\objects\\display.o: ..\Include\TaskEEprom.h
 .\objects\\display.o: ..\Include\MotorCtrlDev.h
 .\objects\\display.o: ..\Include\Task_Valve.h
+.\objects\\display.o: ..\Interflow\UpData.h
+.\objects\\display.o: ..\Interflow\../Interflow/JsonDataAnalyzeLib.h
+.\objects\\display.o: ..\Interflow\../Interflow/NumberBaseLib.h

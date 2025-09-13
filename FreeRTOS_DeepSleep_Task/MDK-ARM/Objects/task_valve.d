@@ -80,3 +80,4 @@
 .\objects\\task_valve.o: ..\Include\TaskEEprom.h
 .\objects\\task_valve.o: ..\FreeRTOS\include\event_groups.h
 .\objects\\task_valve.o: ..\Include\LPUart_0_And_1_Lib.h
+.\objects\\task_valve.o: ..\Include\TaskAboutTimer.h

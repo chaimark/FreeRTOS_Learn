@@ -14,16 +14,7 @@
 
 // 内部定义
 #define IsShortLinkModeFlag             // 是否是短连接标记
-#define CmdListMax 1                    // 最大队列数
-#define CmdStrLenMax 1 //LONG_UARTMAX   // 最大字符串长度
-typedef struct _TableOfCmdTask {
-    char DataBuff_RX[CmdStrLenMax];
-    uint16_t NowRX_Len;
-    char DataBuff_TX[CmdStrLenMax];
-    uint16_t NowTX_Len;
-} TableOfCmdTask; // 最多缓存三条指令的指令任务表
-// 类方法
-extern TableOfCmdTask CmdTable;            // 已接收的任务表队列
+#define CmdTable LPUART0Ddata
 // 公共接口
 extern void Net_Task(void);
 extern void ClearNetDataBuff(void);
@@ -66,8 +57,11 @@ extern bool _FindStr_WaitTime(strnew FindStr, int MaxTimeMs, char ** OutNote);
 #define FindStr_WaitTime(...) GET_MACRO(__VA_ARGS__, _FindStr_WaitTime3, _FindStr_WaitTime2)(__VA_ARGS__)
 
 // 监控到某字符, 特殊处理, 不同模组处理不同, 独立实现 API.
-extern void _SpecialDone(void);
-#define SpecialDone _SpecialDone
+extern void _SpecialDoneFromTask(uint8_t Special_ID);
+#define SpecialDoneFromTask _SpecialDoneFromTask
+
+extern void _SpecialDoneFromISR(uint8_t Special_ID);
+#define SpecialDoneFromISR _SpecialDoneFromISR
 
 #endif
 

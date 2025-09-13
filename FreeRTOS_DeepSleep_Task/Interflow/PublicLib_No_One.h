@@ -1,8 +1,6 @@
 #ifndef __PUBLICLIB_NO_ONE_H
 #define __PUBLICLIB_NO_ONE_H
 
-// #define OPEN_AT_CMD_DEBUG
-// #define OPEN_LOWPWER_DEBUG
 #include <stdint.h>
 #include <stdio.h>
 #include <stdlib.h>

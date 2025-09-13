@@ -26,14 +26,17 @@ extern void sendDataBy_Module_Prot(char * txBuffer, int length);
 #define get_Module_DevCCLKFun 6     /* 校时机制 */
 #define get_Module_DevIMSIFun 7     /* 获取IMSI */
 #define get_Module_DevCESQFun 8     /* 获取扩展信号强度 */
+#define get_Module_IPLinkFun  9     /* 等待完全连网成功 */
 
 extern NetDevATCmd NetDevice_ATData__NB[ATCMD_MAXNUMBER];
 extern void DataInstallation__NB(strnew OutStr, struct _NetDevATCmdData This);
 extern bool DoingATCmdResData__NB(struct _NetDevATCmdData This);
 extern bool isMQTTLinkOnleng__NB(void);
 extern bool EnterATMode__NB(bool isResDev);
-extern void SpecialDone_NB(void);
+extern void Task_SpecialDone_NB(uint8_t Special_ID);
+extern void ISR_SpecialDone_NB(uint8_t Special_ID);
 /////////////////////////////////////
 extern void UserGetDownCmd(void);
 extern bool UserSendData(void);
+extern uint8_t UartCmdType(void);
 #endif

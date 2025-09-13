@@ -33,7 +33,7 @@ uint16_t CountValveDegree_Now(uint16_t NowCount, uint16_t MaxCount) {
 }
 
 #include "TaskAboutTimer.h"
-#define PrecisionNum 0.3
+#define PrecisionNum 0.6
 bool isCtrlOver(uint16_t Part_Di, uint16_t Set_Degree_Part) {
     if (Set_Degree_Part > System_RunData.Now_Degree_Part) { // 正转
         setLED_Or_CtrlLinght(false, true, true, 3);
@@ -54,6 +54,9 @@ bool isCtrlOver(uint16_t Part_Di, uint16_t Set_Degree_Part) {
         }
     }
     if (Part_Di <= DegreePartToUint(PrecisionNum)) {
+        // 小于 1% 刹车
+        BL113_IN1_HIGH;
+        BL113_IN2_HIGH;
         return true;
     }
     return false;

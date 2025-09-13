@@ -77,6 +77,7 @@ void setLED_Or_CtrlLinght(bool CloseLEDStart, bool OpenLEDStart, bool isSetLED, 
 }
 #include "TaskNBAndWeb.h"
 void startTimeTask(void) {
+    BaseType_t xHPW_TaskWoken = pdFALSE;
     static uint32_t CallCount = 0;
     RTC_TASK.InitSetTimeTask(TaskAllTime, 1, startTimeTask);
     if (TimeTaskSemaphore == NULL) { // 唤醒
@@ -84,60 +85,65 @@ void startTimeTask(void) {
     }
     ShowSignal();
     setLED_Or_CtrlLinght(0xFF, 0xFF, false, -1); // 刷新LED
-    if ((System_RunData.Now_NetDevParameter.isWriteEEprom != false) && (_Module_Start_Flage == 0)) {
-        if (_Module_Start_Flage == _Module_EEpromSend) {
-            Task_WriteAT24C0xxData();
-            RTC_TASK.InitSetTimeTask(SendIntervalTask, MinToSec(15), NULL);
-        } else if (_Module_Start_Flage == _Module_EEpromTime) {
-            Task_WriteNowRTCTime();
+    if (readDataBit(AT24CXX_Manager_NET.ModeCode, Enable_NBMode)) {
+        if ((_Module_Start_Flage == 0) && (System_RunData.isPowerModuleUseing == false)) {
+            if (System_RunData.Now_NetDevParameter.isWriteEEprom == true) {
+                StartWriteAT24C0xxDataFromISR(&xHPW_TaskWoken);
+            } else if (System_RunData.Now_NetDevParameter.isWriteEEprom == _Module_EEpromSend) {
+                StartWriteAT24C0xxDataFromISR(&xHPW_TaskWoken);
+                RTC_TASK.InitSetTimeTask(SendIntervalTask, MinToSec(15), NULL);
+            } else if (System_RunData.Now_NetDevParameter.isWriteEEprom == _Module_EEpromTime) {
+                StartWriteNowRTCTimeFromISR(&xHPW_TaskWoken);
+            } else if (System_RunData.CtrlDev_Set_Degree_Part != 0xFFFF) {
+                StartValveRunFromISR(&xHPW_TaskWoken);
+            }
+            setIsWriteEEprom(false);
         }
-    }
-    if (Min_15_TASK.Task[AgainSendData].TimeTask_Falge) {  // 是否重发
-        _Module_Start_Flage = _Module_AutoSend;
-        Min_15_TASK.CloseTask(AgainSendData);
-    }
-    if ((RTC_TASK.Task[SendIntervalTask].TimeTask_Falge) && (System_RunData.Now_NetDevParameter.isWriteEEprom == false)) {   // _Module_ 发送判断机制
-        _Module_Start_Flage = _Module_AutoSend;
-        RTC_TASK.InitSetTimeTask(SendIntervalTask, AT24CXX_Manager_NET.SendManageObj.SendIntervalDay, NULL);
-    }
-    if (_Module_Start_Flage >= _Module_UserSend) {
-        StartNBMode(true);
+
+        if (Min_15_TASK.Task[AgainSendData].TimeTask_Falge) {  // 是否重发
+            _Module_Start_Flage = _Module_AutoSend;
+            Min_15_TASK.CloseTask(AgainSendData);
+        }
+        if ((RTC_TASK.Task[SendIntervalTask].TimeTask_Falge) && (System_RunData.Now_NetDevParameter.isWriteEEprom == false)) {   // _Module_ 发送判断机制
+            _Module_Start_Flage = _Module_AutoSend;
+            RTC_TASK.InitSetTimeTask(SendIntervalTask, AT24CXX_Manager_NET.SendManageObj.SendIntervalDay, NULL);
+        }
+        if ((_Module_Start_Flage >= _Module_UserSend) && (System_RunData.Now_NetDevParameter.NowNetOnlineFlag == false)) {
+            StartNBModeFromISR(&xHPW_TaskWoken);
+        }
     }
     if (CallCount % (5 * 60) == 0) { // 5 * 60 sec
-        xEventGroupSetBits(xEventGroup_TimeTask, xEvent_TestBatV); // 设置标志位, 测电压
+        xEventGroupSetBitsFromISR(xEventGroup_TimeTask, xEvent_TestBatV, &xHPW_TaskWoken);      // 设置标志位, 测电压
     }
     if (CallCount % 30 == 0) { // 30 sec
-        xEventGroupSetBits(xEventGroup_TimeTask, xEvent_TestTempe);    // 设置标志位, 测温度
+        xEventGroupSetBitsFromISR(xEventGroup_TimeTask, xEvent_TestTempe, &xHPW_TaskWoken);     // 设置标志位, 测温度
     }
     if (CallCount % (1 * 60) == 0) { // 1 * 60 sec
-        xEventGroupSetBits(xEventGroup_TimeTask, xEvent_TestValve);    // 设置标志位, 测阀门
+        xEventGroupSetBitsFromISR(xEventGroup_TimeTask, xEvent_TestValve, &xHPW_TaskWoken);     // 设置标志位, 测阀门
     }
     if ((CallCount % (30 * 60) == 0) && (CallCount != 0)) {
-        if (readDataBit(AT24CXX_Manager_NET.ModeCode, EnableTimeLimit)) {           // 设置标志位，截止时间 
-            xEventGroupSetBits(xEventGroup_TimeTask, xEvent_checkTimeLimit);
+        if (readDataBit(AT24CXX_Manager_NET.ModeCode, EnableTimeLimit)) {                       // 设置标志位，截止时间 
+            xEventGroupSetBitsFromISR(xEventGroup_TimeTask, xEvent_checkTimeLimit, &xHPW_TaskWoken);
         }
     }
-    if ((CallCount % (15 * 24 * 60 * 60) == 0) && (CallCount != 0)) {               // 设置标志位，自检
+    if ((CallCount % (15 * 24 * 60 * 60) == 0) && (CallCount != 0)) {                           // 设置标志位，自检
         if (readDataBit(AT24CXX_Manager_NET.ModeCode, ValveAutoTest)) {
-            xEventGroupSetBits(xEventGroup_TimeTask, xEvent_ValveAutoTest);
+            xEventGroupSetBitsFromISR(xEventGroup_TimeTask, xEvent_ValveAutoTest, &xHPW_TaskWoken);
         }
     }
     if (CallCount % 5 == 0) {
-        xEventGroupSetBits(xEventGroup_TimeTask, xEvent_TestAlarm); // 设置标志位, 检测是否存在报警信息
-    }
-    // 任意一个事件发生则释放信号量
-    EventBits_t uxBits = xEventGroupGetBits(xEventGroup_TimeTask);
-    if ((uxBits & AllxEvent_Timer) != 0) {
-        BaseType_t xHigherPriorityTaskWoken = pdFALSE;
-        // 向 TimeTask 发出信号量, 准备继续运行
-        xSemaphoreGiveFromISR(TimeTaskSemaphore, &xHigherPriorityTaskWoken);
-        // 恢复 Task 任务
-        if (xTaskResumeFromISR(TimeTaskHand) == pdFALSE) {
-            // 如果需要切换上下文
-            portYIELD_FROM_ISR(xHigherPriorityTaskWoken);
-        }
+        xEventGroupSetBitsFromISR(xEventGroup_TimeTask, xEvent_TestAlarm, &xHPW_TaskWoken);     // 设置标志位, 检测是否存在报警信息
     }
     CallCount++;
+    // 任意一个事件发生则释放信号量
+    if ((System_RunData.isPowerModuleUseing != true) && (xEventGroupGetBitsFromISR(xEventGroup_TimeTask) & AllxEvent_Timer) != 0) {
+        // 发出信号量, 准备继续运行
+        xSemaphoreGiveFromISR(TimeTaskSemaphore, &xHPW_TaskWoken);
+        if (xTaskResumeFromISR(TimeTaskHand) == pdTRUE) {
+            xHPW_TaskWoken = pdTRUE;                 /* 标记需要切换 */
+        }
+    }
+    portYIELD_FROM_ISR(xHPW_TaskWoken);          /* 统一在函数末尾切换 */
 }
 void TestValveAutoSub(void) {
     static uint16_t TempSave_Degree_Part = 0;
@@ -187,18 +193,15 @@ void TestSystemAlarm(void) {
     }
 }
 void startRunTask(TimerHandle_t xTimer) {
-    xTimerStop(xTimer, pdMS_TO_TICKS(5));
     Test_ValueDegree(0, true); // 测试阀门度数, 单次测量
     System_RunData.FrontValveDegree_Part = System_RunData.Now_Degree_Part;
     if (System_RunData.Now_Degree_Part == DegreePartToUint(0) || System_RunData.Now_Degree_Part == DegreePartToUint(100)) {
         AT24CXX_Manager_NET.UserSet_DegreePart = System_RunData.Now_Degree_Part;
     }
+    // 创建硬件定时器
     RTC_TASK.InitSetTimeTask(HomePageRefresh, 0, ShowHomePage);
     RTC_TASK.InitSetTimeTask(TaskAllTime, 1, startTimeTask);
-
     Min_15_TASK.InitSetTimeTask(DayOverCclkTask, HourToMin_15(AT24CXX_Manager_NET.DaysNumberOfCCLK * 24), NULL);
-    // 创建硬件定时器
-    xTimerDelete(xTimer, pdMS_TO_TICKS(5)); // 删除定时器
     InitSendModeAndTimeTask();  // 复位时, 重新计算当天的发送模式和时间任务
     SetIsEnterLow_Power(true, 0); // 低功耗
 }
@@ -212,6 +215,8 @@ void TimeTask(void * pvParameters) {
         startRunTask            // 回调函数
     );
     xTimerStart(StartSend433Timer, pdMS_TO_TICKS(5)); // 开启 433 首发计时器
+    IncludeDelayMs(1000);
+    xTimerDelete(StartSend433Timer, pdMS_TO_TICKS(5));
     TimeTaskSemaphore = xSemaphoreCreateBinary(); // 初始化信号量
     // 创建事件组
     xEventGroup_TimeTask = xEventGroupCreate();
@@ -219,6 +224,7 @@ void TimeTask(void * pvParameters) {
         Reboot.EC20_ReBoot_In_RTC_By_1Second(&Reboot, 10);
     }
     do {
+        // printf("%s left:%u\n", pcTaskGetName(NULL), uxTaskGetStackHighWaterMark(NULL));
         ////////////////////////////////***测量***////////////////////////////////
         if (xEventGroupGetBits(xEventGroup_TimeTask) & xEvent_TestBatV) {
             xEventGroupClearBits(xEventGroup_TimeTask, xEvent_TestBatV);       // 清除事件标志位

@@ -1,7 +1,7 @@
 #include "RTC_SetTime.h"
 
-static void _RTCCloseTask(int TaskAddr);
-static void _InitRTCTask(int TaskAddr, uint64_t SetCountMaxNum, void (*TaskFunc)(void));
+static void _RTCCloseTask(RTCTaskName TaskAddr);
+static void _InitRTCTask(RTCTaskName TaskAddr, uint64_t SetCountMaxNum, void (*TaskFunc)(void));
 
 USER_SET_TASK RTC_TASK = {
     .Task = {0},
@@ -10,8 +10,8 @@ USER_SET_TASK RTC_TASK = {
     .NumberOfTimeTask = RTCTimeTaskMAX, // 定时任务数量
 };
 
-static void _RTCCloseTask(int TaskAddr) {
-    if ((TaskAddr < 0) || (TaskAddr >= RTCTimeTaskMAX)) {
+static void _RTCCloseTask(RTCTaskName TaskAddr) {
+    if (TaskAddr >= RTCTimeTaskMAX) {
         return;
     }
     RTC_TASK.Task[TaskAddr].isTaskStart = false; // 初始化标记
@@ -19,8 +19,8 @@ static void _RTCCloseTask(int TaskAddr) {
     RTC_TASK.Task[TaskAddr].CountNum = 0; // 复位初始
     RTC_TASK.Task[TaskAddr].TaskFunc = NULL;
 }
-static void _InitRTCTask(int TaskAddr, uint64_t SetCountMaxNum, void (*TaskFunc)(void)) {
-    if ((TaskAddr < 0) || (TaskAddr >= RTCTimeTaskMAX)) {
+static void _InitRTCTask(RTCTaskName TaskAddr, uint64_t SetCountMaxNum, void (*TaskFunc)(void)) {
+    if (TaskAddr >= RTCTimeTaskMAX) {
         return;
     }
     RTC_TASK.Task[TaskAddr].TimeTask_Falge = (SetCountMaxNum == 0 ? true : false); // 初始化标记

@@ -17,6 +17,9 @@ AT24CXX_MANAGER_T AT24CXX_Manager = {
     .OpenVOL = 2600,
     .CloseVOL = 1000,
     .UserSet_DegreePart = 0,
+    .NET_Remote_Url = {"221.229.214.202"},
+    .NET_Remote_Port = 5683,
+    .DaysNumberOfCCLK = 7,
     .SendManageObj = {
         .SendIntervalDay = 0x00,
         .SendStartHour = 6,
@@ -39,13 +42,13 @@ AT24CXX_MANAGER_T AT24CXX_Manager = {
     },
     .Time_Data = {0},
 };
-void SaveDevData(void) {
-    unsigned int HourInt = 0;
-    HourInt = (NowHour / 0x10) * 10 + (NowHour % 0x10);
-    if (HourInt < 24) {
-        Meter_Manager.EnterQueue(&Meter_Manager, System_RunData.Now_Temper_T1);        // 当前温度为正值
-    }
-}
+// void SaveDevData(void) {
+//     unsigned int HourInt = 0;
+//     HourInt = (NowHour / 0x10) * 10 + (NowHour % 0x10);
+//     if (HourInt < 24) {
+//         Meter_Manager.EnterQueue(&Meter_Manager, System_RunData.Now_Temper_T1);        // 当前温度为正值
+//     }
+// }
 #define TRUE        1
 #define FALSE       0
 #define AckError    0x55

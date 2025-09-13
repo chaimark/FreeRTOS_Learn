@@ -29,8 +29,8 @@ typedef struct _BSTIM_USER_SET_TASK {
         uint64_t CountMaxNum;
         void (*TaskFunc)(void);
     } Task[BSTIM_OPEN_AND_TASK_NUM];
-    void (*InitSetTimeTask)(int TaskAddr, uint64_t SetMax10MsNum, void (*TaskFunc)(void));
-    void (*CloseTask)(int TaskAddr);
+    void (*InitSetTimeTask)(TimeTaskName TaskAddr, uint64_t SetMax10MsNum, void (*TaskFunc)(void));
+    void (*CloseTask)(TimeTaskName TaskAddr);
     int NumberOfTimeTask;
 }BSTIM_USER_SET_TASK;
 extern BSTIM_USER_SET_TASK SetTime;
@@ -52,8 +52,8 @@ typedef struct _LPTIM_USER_SET_TASK {
         uint64_t CountMaxNum;
         void (*TaskFunc)(void);
     } Task[LPTIM_OPEN_AND_TASK_NUM];
-    void (*LPInitSetTimeTask)(int TaskAddr, uint64_t SetMax250MsNum, void (*TaskFunc)(void));
-    void (*CloseTask)(int TaskAddr);
+    void (*LPInitSetTimeTask)(LPTimeTaskName TaskAddr, uint64_t SetMax250MsNum, void (*TaskFunc)(void));
+    void (*CloseTask)(LPTimeTaskName TaskAddr);
     int NumberOfTimeTask;
 }LPTIM_USER_SET_TASK;
 extern LPTIM_USER_SET_TASK SetLPTime;

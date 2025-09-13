@@ -9,7 +9,7 @@
 #include "CI522_App.h"
 
 extern TaskHandle_t AllReceive_Hand;
-#define AllReceive_PRIORITY (tskIDLE_PRIORITY + 4)
+#define AllReceive_PRIORITY (tskIDLE_PRIORITY + 3)
 extern void LPUart0CheckBuff(void);
 // extern void Uart1CheckBuff(void);
 extern void NBUartCheckBuff(void);

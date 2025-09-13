@@ -17,7 +17,7 @@ uint16_t _Module_TXD_6844_GetTx(void) {
 
     int SendDataLen = 0;
     _Module_TXD_6844_TxBuf[SendDataLen++] = 0x68;
-    _Module_TXD_6844_TxBuf[SendDataLen++] = 0x44;
+    _Module_TXD_6844_TxBuf[SendDataLen++] = 0x54;
     _Module_TXD_6844_TxBuf[SendDataLen++] = EEprom_METERID[0];
     _Module_TXD_6844_TxBuf[SendDataLen++] = EEprom_METERID[1];
     _Module_TXD_6844_TxBuf[SendDataLen++] = EEprom_METERID[2];
@@ -31,19 +31,17 @@ uint16_t _Module_TXD_6844_GetTx(void) {
     _Module_TXD_6844_TxBuf[SendDataLen++] = ((CMD_CODE_WRITE >> 0x08) & 0x00FF); // DI0
     _Module_TXD_6844_TxBuf[SendDataLen++] = ((CMD_CODE_WRITE >> 0x00) & 0x00FF); // DI1
 
-    if (Meter_Manager.DataCount > 0) {
-        SendDataLen = Add_HY_DataClass(NEW_NAME(_Module_TXD_6844_TxBuf), SendDataLen, RoomTemperArray_TAG, 0x01); // 添加汇云数据结构 室温数组
-    }
-    SendDataLen = Add_HY_DataClass(NEW_NAME(_Module_TXD_6844_TxBuf), SendDataLen, NowTemper, 0x01); // 添加汇云数据结构 
-    SendDataLen = Add_HY_DataClass(NEW_NAME(_Module_TXD_6844_TxBuf), SendDataLen, Moved_TAG, 0x01); // 添加汇云数据结构 
-    SendDataLen = Add_HY_DataClass(NEW_NAME(_Module_TXD_6844_TxBuf), SendDataLen, SOFT_VERSION_TAG, 0x01); // 添加汇云数据结构 
-    SendDataLen = Add_HY_DataClass(NEW_NAME(_Module_TXD_6844_TxBuf), SendDataLen, nowTime_TAG, 0x03); // 添加汇云数据结构 
-    SendDataLen = Add_HY_DataClass(NEW_NAME(_Module_TXD_6844_TxBuf), SendDataLen, voltage_TAG, 0x01); // 添加汇云数据结构 
-    SendDataLen = Add_HY_DataClass(NEW_NAME(_Module_TXD_6844_TxBuf), SendDataLen, CCID_TAG, 0x01); // 添加汇云数据结构 
-    SendDataLen = Add_HY_DataClass(NEW_NAME(_Module_TXD_6844_TxBuf), SendDataLen, IMEI_TAG, 0x01); // 添加汇云数据结构
-    SendDataLen = Add_HY_DataClass(NEW_NAME(_Module_TXD_6844_TxBuf), SendDataLen, CSQ_TAG, 0x01); // 添加汇云数据结构
-    SendDataLen = Add_HY_DataClass(NEW_NAME(_Module_TXD_6844_TxBuf), SendDataLen, RSRP_TAG, 0x01); // 添加汇云数据结构
-    SendDataLen = Add_HY_DataClass(NEW_NAME(_Module_TXD_6844_TxBuf), SendDataLen, RSRQ_TAG, 0x01); // 添加汇云数据结构
+    // if (Meter_Manager.DataCount > 0) {
+    //     SendDataLen = Add_HY_DataClass(NEW_NAME(_Module_TXD_6844_TxBuf), SendDataLen, RoomTemperArray_TAG, 0x01); // 添加汇云数据结构 室温数组
+    // }
+    SendDataLen = Add_HY_DataClass(NEW_NAME(_Module_TXD_6844_TxBuf), SendDataLen, ValveSturt, 0x01); // 添加汇云数据结构 
+    // SendDataLen = Add_HY_DataClass(NEW_NAME(_Module_TXD_6844_TxBuf), SendDataLen, nowTime_TAG, 0x03); // 添加汇云数据结构 
+    // SendDataLen = Add_HY_DataClass(NEW_NAME(_Module_TXD_6844_TxBuf), SendDataLen, voltage_TAG, 0x01); // 添加汇云数据结构 
+    // SendDataLen = Add_HY_DataClass(NEW_NAME(_Module_TXD_6844_TxBuf), SendDataLen, CCID_TAG, 0x01); // 添加汇云数据结构 
+    // SendDataLen = Add_HY_DataClass(NEW_NAME(_Module_TXD_6844_TxBuf), SendDataLen, IMEI_TAG, 0x01); // 添加汇云数据结构
+    // SendDataLen = Add_HY_DataClass(NEW_NAME(_Module_TXD_6844_TxBuf), SendDataLen, CSQ_TAG, 0x01); // 添加汇云数据结构
+    // SendDataLen = Add_HY_DataClass(NEW_NAME(_Module_TXD_6844_TxBuf), SendDataLen, RSRP_TAG, 0x01); // 添加汇云数据结构
+    // SendDataLen = Add_HY_DataClass(NEW_NAME(_Module_TXD_6844_TxBuf), SendDataLen, RSRQ_TAG, 0x01); // 添加汇云数据结构
 
     if ((SendManageObj_Count == 0) || (_Module_Start_Flage == _Module_UserSend) || (_Module_Start_Flage == _Module_EEpromSend)) {
         SendManageObj_Count = MaxSendCount_ManageObj;
@@ -67,17 +65,17 @@ void _getHYCmdFormATStr(strnew Mather6844tr, uint16_t DataLen) {
     if ((Start = strstr(Mather6844tr.Name._char, "AT+NMGR\r\n") + strlen("AT+NMGR\r\n")) == NULL) {
         return;
     }
-    if ((Start = strstr(Start, ",6844")) == NULL) {
+    if ((Start = strstr(Start, ",6854")) == NULL) {
         return;
     }
     Start++;
     Mather6844tr.MaxLen = DataLen - (Start - Mather6844tr.Name._char);
     Mather6844tr.Name._char = Start;
-    CmdTable.NowRX_Len = ASCIIToHEX2(Mather6844tr.Name._char, Mather6844tr.MaxLen, CmdTable.DataBuff_RX, CmdStrLenMax);
+    CmdTable.RxLen = ASCIIToHEX2(Mather6844tr.Name._char, Mather6844tr.MaxLen, CmdTable.RxBuf, LONG_UARTMAX);
 }
 // 将协议数据打包成 AT 格式 （接口由 RTOS_Task 层直接调用,再推向模组）
 uint16_t PackHYDataToAtData(char * Databuf, uint16_t SendDataLen, strnew OutBuf) {
-    strnew TempBuff = NEW_NAME(CmdTable.DataBuff_RX);
+    strnew TempBuff = NEW_NAME(CmdTable.RxBuf);
     memset(TempBuff.Name._char, 0, TempBuff.MaxLen);
     HEX2ToASCII(Databuf, SendDataLen, TempBuff.Name._char, TempBuff.MaxLen);
     if (OutBuf.MaxLen < (SendDataLen * 2)) {

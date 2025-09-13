@@ -202,6 +202,12 @@ typedef enum _CodeErr {
 } CodeErr;
 extern void SetErrerCode(CodeErr ErrId, bool UserSet);
 
+typedef enum _ModeStrType {
+    ModeATStr,
+    DownCmdStr,
+    CheckStr_Task,
+    CheckStr_ISR_Now,
+}ModeStrType;
 typedef struct {
     uint16_t CtrlDev_Set_Degree_Part;   // 预期阀门状态
     unsigned int Now_DEV_Volt;          // 当前电压
@@ -214,32 +220,35 @@ typedef struct {
     uint16_t StytemErrorCode;           // 系统错误码
     bool ReceiveFlag;                   // 上次通信是否接收到标记
     bool isUpCode;                      // 是否升级
+    bool isPowerModuleUseing;           // 是否有模组在使用电源
     struct {
         bool isSendOk;                      // 是否发送成功
         uint8_t isWriteEEprom;              // 是否写eeprom
-        bool NowNetOnlineFlag;              // 网络在线标记
+        int8_t NowNetOnlineFlag;            // 网络在线标记
         unsigned char isGetDownCmd;         // 是否定时主动获取指令
         char * checkFlagStr;                // 主动获取指令时模组主动推出的提示字符串
         void (*GetDownCmd)(void);           // 获取下行指令
         bool (*SendData)(void);             // 发送数据
+        ModeStrType(*UartCmdType)(void);
+        uint16_t Special_ID;                // 特殊处理的 ID
     }Now_NetDevParameter;
 } NetDevParameter;
 extern NetDevParameter System_RunData;    // 网络状态标记与下行指令表
 
 #include "../Interflow/StrLib.h"
-typedef struct _MeterData {
-    char DataStartHour;         // 数据的开始点
-    char DataCount;             // 数据的个数
-    struct _MeterTemperature {
-        double RoomTemperature;     // 室内温度 Clock_InsideTH & Clock_InsideTL
-        char CollectionTime[20];    // 采集时间 (yyyy-MM-dd HH:mm:ss)
-    }MeterTemperature[24];          // 24小时温度数据
-    void (*EnterQueue)(struct _MeterData This, double Temperature);     // 入队函数
-    double (*DeleteQueue)(struct _MeterData This);   // 出队函数
-}MeterData;
-extern void _EnterQueue(struct _MeterData This, double Temperature);
-extern double _DeleteQueue(struct _MeterData This);
-extern MeterData Meter_Manager;
+// typedef struct _MeterData {
+//     char DataStartHour;         // 数据的开始点
+//     char DataCount;             // 数据的个数
+//     struct _MeterTemperature {
+//         double RoomTemperature;     // 室内温度 Clock_InsideTH & Clock_InsideTL
+//         char CollectionTime[20];    // 采集时间 (yyyy-MM-dd HH:mm:ss)
+//     }MeterTemperature[24];          // 24小时温度数据
+//     void (*EnterQueue)(struct _MeterData This, double Temperature);     // 入队函数
+//     double (*DeleteQueue)(struct _MeterData This);   // 出队函数
+// }MeterData;
+// extern void _EnterQueue(struct _MeterData This, double Temperature);
+// extern double _DeleteQueue(struct _MeterData This);
+// extern MeterData Meter_Manager;
 
 #define METERID AT24CXX_Manager_NET.MeterID         // 表号
 extern void NVIC_SetVectorTable(uint32_t NVIC_VectTab, uint32_t Offset);

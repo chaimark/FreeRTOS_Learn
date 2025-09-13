@@ -13,7 +13,7 @@ void MF_BSTIM32_Init(void) {
     FL_BSTIM32_Init(BSTIM32, &bstim32);                         // 初始化BSTIM32定时器, 使用上面配置的结构体变量
     FL_BSTIM32_ClearFlag_Update(BSTIM32);                       // 清除BSTIM32定时器的更新标志位
     FL_BSTIM32_EnableIT_Update(BSTIM32);                        // 启用BSTIM32定时器的更新中断
-    InterruptConfigStruct.preemptPriority = 0x0002;             // 设置NVIC的中断优先级为2
+    InterruptConfigStruct.preemptPriority = 0x000C;             // 设置NVIC的中断优先级为2
     FL_NVIC_Init(&InterruptConfigStruct, BSTIM_IRQn);           // 初始化NVIC, 使用上面配置的结构体变量
     FL_BSTIM32_Enable(BSTIM32);                                 // 启用BSTIM32定时器
 }

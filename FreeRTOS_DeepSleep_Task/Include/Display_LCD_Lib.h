@@ -10,30 +10,35 @@ const uint8_t FONT_CODE_TABLE[] = {
     0x5c, 0x50, 0x01, 0x40, 0x08, 0x41, 0x09, 0x48, 0x49,0x00,0x54,0x76,0x47,0x40,0x76,//xiao_o,xiao_r,LINE1,LINE2,LINE3,LINE12,LINE13,LINE23,LINE123,SPACE,xiao_n,da_h,fan_f,mid_line,xiao_h
 };
 */
-#define   da_I    1
-#define   da_A    10
-#define   da_B    11
-#define   da_C    12
-#define   da_D    13
-#define   da_E    14
-#define   da_F    15
-#define   SPACE   16
-#define   da_G    17 
-#define   da_L    18 
-#define   da_N    19 
-#define   da_O    20
-#define   da_P    21 
-#define   da_U    22
-#define   da_S    23
-#define   xiao_o  24 
-#define   xiao_r  25
-#define   LINE1   26
-#define   LINE2   27
-#define   LINE3   28
-#define   LINE12  29
-#define   LINE13  30
-#define   LINE23  31
-#define   LINE123 32
+#define   da_I      1
+#define   da_A      10
+#define   da_B      11
+#define   da_C      12
+#define   da_D      13
+#define   da_E      14
+#define   da_F      15
+#define   SPACE     16
+#define   da_G      17 
+#define   da_L      18 
+#define   da_N      19 
+#define   da_O      20
+#define   da_P      21 
+#define   da_U      22
+#define   da_S      23
+#define   xiao_o    24 
+#define   xiao_r    25
+#define   LINE1     26
+#define   LINE2     27
+#define   LINE3     28
+#define   LINE12    29
+#define   LINE13    30
+#define   LINE23    31
+#define   LINE123   32
+#define   xiao_n    34
+#define   da_H      35
+#define   fan_f     36
+#define   mid_line  37
+#define   xiao_h    38
 
 //BIT MAP======================================================
 #define BIT0            0x00000001

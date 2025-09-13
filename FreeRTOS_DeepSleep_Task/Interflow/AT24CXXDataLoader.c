@@ -2,6 +2,7 @@
 #include "stddef.h"
 #include "StrLib.h"
 #include "Display.h"
+#include "RTC_SetTime.h"
 
 struct AT24CXX_MANAGER_S * _AT24CXX_Manager_NET = NULL;
 #ifndef __AT24C0XXX_H
@@ -17,6 +18,7 @@ void AT24CXXLoader_Init(void) {
     AT24CXX_Manager_NET.Time_Data.second = 0x59;
     AT24CXX_Manager_NET.Time_Data.week = getDayOfWeek(0x2020, 0x01, 0x01);
     AT24CXX_Manager_NET.ModeCode = 0xFFF;
+    RTC_TASK.InitSetTimeTask(IWDTClS, 0, NULL); // 未初始化 IWDT 暂停喂狗
 }
 bool checkTimeFrom(FL_RTC_InitTypeDef InputTimeData) {
     if (!Check_Time_ByHEX(InputTimeData.hour, InputTimeData.minute, InputTimeData.second)) {
@@ -81,10 +83,11 @@ void setNetArgumentInit(void (*UserShowdownNowDev)(void)) {
     AT24CXX_Manager_NET.ModeCode = setDataBit(AT24CXX_Manager_NET.ModeCode, EnableADCTestTemper, true);
     // AT24CXX_Manager_NET.ModeCode = setDataBit(AT24CXX_Manager_NET.ModeCode, EnableGP2TestTemper, true);
     AT24CXX_Manager_NET.ModeCode = setDataBit(AT24CXX_Manager_NET.ModeCode, EnableADCTestValve, true);
-    // AT24CXX_Manager_NET.ModeCode = setDataBit(AT24CXX_Manager_NET.ModeCode, SaveRunTimeForOpenValve, true);
+    AT24CXX_Manager_NET.ModeCode = setDataBit(AT24CXX_Manager_NET.ModeCode, SaveRunTimeForOpenValve, true);
     AT24CXX_Manager_NET.ModeCode = setDataBit(AT24CXX_Manager_NET.ModeCode, EnableM1Card, true);
-    // AT24CXX_Manager_NET.ModeCode = setDataBit(AT24CXX_Manager_NET.ModeCode, EnableTimeLimit, true);
-    // AT24CXX_Manager_NET.ModeCode = setDataBit(AT24CXX_Manager_NET.ModeCode, ValveAutoTest, true);
+    AT24CXX_Manager_NET.ModeCode = setDataBit(AT24CXX_Manager_NET.ModeCode, EnableTimeLimit, true);
+    AT24CXX_Manager_NET.ModeCode = setDataBit(AT24CXX_Manager_NET.ModeCode, ValveAutoTest, true);
+    AT24CXX_Manager_NET.ModeCode = setDataBit(AT24CXX_Manager_NET.ModeCode, Enable_NBMode, true);
     return;
 }
 

@@ -78,3 +78,5 @@
 .\objects\\nb_mode_lib.o: ..\Include\AT24C02.h
 .\objects\\nb_mode_lib.o: ..\Include\TaskEEprom.h
 .\objects\\nb_mode_lib.o: ..\Include\LPUart_0_And_1_Lib.h
+.\objects\\nb_mode_lib.o: ..\Interflow\_Module_ATCmd_FunctionSum.h
+.\objects\\nb_mode_lib.o: ..\Interflow\NetProt_Module.h

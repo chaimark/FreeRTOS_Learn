@@ -22,7 +22,7 @@ void MF_CI522_Init(void) {
     GPIO_InitStruct.pull = FL_DISABLE;
     GPIO_InitStruct.remapPin = FL_DISABLE;
     FL_GPIO_Init(CI522_SDA_GPIO_X, &GPIO_InitStruct);
-    //CI522_SDA_HIGH;
+    // CI522_SDA_HIGH;
     // PD1 CI522_SCL
     GPIO_InitStruct.pin = FL_GPIO_PIN_1;
     GPIO_InitStruct.mode = FL_GPIO_MODE_OUTPUT;
@@ -30,7 +30,7 @@ void MF_CI522_Init(void) {
     GPIO_InitStruct.pull = FL_DISABLE;
     GPIO_InitStruct.remapPin = FL_DISABLE;
     FL_GPIO_Init(GPIOD, &GPIO_InitStruct);
-    //CI522_SCL_HIGH;
+    // CI522_SCL_HIGH;
 }
 
 

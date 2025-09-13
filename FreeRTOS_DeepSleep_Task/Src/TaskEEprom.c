@@ -27,14 +27,20 @@ void init_EEprom_RunFlag(void) {
 //////////////////////////////////////////////////////////////
 TaskHandle_t ReadEEpromHand = NULL;
 SemaphoreHandle_t ReadEEpromSemaphore = NULL;
-void ReadEEpromTimerCallback(void) {
-    MIN_TASK.InitSetTimeTask(TaskReadEEprom, HourToMin(1), ReadEEpromTimerCallback);
-    xSemaphoreGive(ReadEEpromSemaphore);
+void ReadEEpromTimerFromISR(void) {
+    BaseType_t xHPW_TaskWoken = pdFALSE;
+    MIN_TASK.InitSetTimeTask(TaskReadEEprom, HourToMin(1), ReadEEpromTimerFromISR);
+    // 发出信号量, 准备继续运行
+    xSemaphoreGiveFromISR(ReadEEpromSemaphore, &xHPW_TaskWoken);
+    if (xTaskResumeFromISR(ReadEEpromHand) == pdTRUE) {
+        xHPW_TaskWoken = pdTRUE;
+    }
+    portYIELD_FROM_ISR(xHPW_TaskWoken);
 }
 void ReadEEprom(void * pvParameters) {
-    MIN_TASK.InitSetTimeTask(TaskReadEEprom, HourToMin(1), ReadEEpromTimerCallback);
     ReadEEpromSemaphore = xSemaphoreCreateBinary(); // 初始化信号量
     init_EEprom_RunFlag();
+    MIN_TASK.InitSetTimeTask(TaskReadEEprom, HourToMin(1), ReadEEpromTimerFromISR);
     while (1) {
         // 等待信号量阻塞任务, 转为运行其他任务
         if (xSemaphoreTake(ReadEEpromSemaphore, portMAX_DELAY) == pdTRUE) {
@@ -66,67 +72,77 @@ EventGroupHandle_t xEventGroup_EEprom = NULL;
 #define AllxEvent_EEprom (WriteNowRTCTime | WriteValveRunTime | WriteAT24C0xxData)
 
 TaskHandle_t WriteEEpromHand = NULL;
-SemaphoreHandle_t WriteEEpromSemaphore = NULL;
-void WriteEEpromTimerCallback(void) {
-    MIN_TASK.InitSetTimeTask(TaskWriteEEpromTimer, 5, WriteEEpromTimerCallback);
+void WriteEEpromTimerFromISR(void) {
     static uint16_t CallCount = 0;
+    BaseType_t xHPW_TaskWoken = pdFALSE;
+    if (System_RunData.isPowerModuleUseing == true) {
+        portYIELD_FROM_ISR(xHPW_TaskWoken);
+        return;
+    }
+    MIN_TASK.InitSetTimeTask(TaskWriteEEpromTimer, 5, WriteEEpromTimerFromISR);
     CallCount++;
     if (CallCount % 3 == 0) {
-        Task_WriteNowRTCTime();
+        xEventGroupSetBitsFromISR(xEventGroup_EEprom, WriteNowRTCTime, &xHPW_TaskWoken);
     }
-    Task_WriteValveRunTime();
-    // 任意一个事件发生则释放信号量
-    EventBits_t uxBits = xEventGroupGetBits(xEventGroup_EEprom);
-    if ((uxBits & AllxEvent_EEprom) != 0) {
-        xSemaphoreGive(WriteEEpromSemaphore);
+    if (readDataBit(AT24CXX_Manager_NET.ModeCode, SaveRunTimeForOpenValve)) {
+        xEventGroupSetBitsFromISR(xEventGroup_EEprom, WriteValveRunTime, &xHPW_TaskWoken);
     }
+    portYIELD_FROM_ISR(xHPW_TaskWoken);
 }
+
 void WriteEEprom(void * pvParameters) {
-    MIN_TASK.InitSetTimeTask(TaskWriteEEpromTimer, 5, WriteEEpromTimerCallback);
     // 创建事件组
     xEventGroup_EEprom = xEventGroupCreate();
     if (xEventGroup_EEprom == NULL) {
         Reboot.EC20_ReBoot_In_RTC_By_1Second(&Reboot, 10);
     }
-    WriteEEpromSemaphore = xSemaphoreCreateBinary(); // 初始化信号量
     init_EEprom_RunFlag();
-    // 等待信号量阻塞任务, 转为运行其他任务
-    while (xSemaphoreTake(WriteEEpromSemaphore, portMAX_DELAY) == pdTRUE) {
-        isRunEEprom();
-        if (xEventGroupGetBits(xEventGroup_EEprom) & WriteNowRTCTime) {
+    MIN_TASK.InitSetTimeTask(TaskWriteEEpromTimer, 5, WriteEEpromTimerFromISR);
+    while (1) {
+        // printf("%s left:%u\n", pcTaskGetName(NULL), uxTaskGetStackHighWaterMark(NULL));
+        /* 永久阻塞，直到任意一个事件位被置位 */
+        EventBits_t uxBits = xEventGroupWaitBits(
+            xEventGroup_EEprom,
+            AllxEvent_EEprom,
+            pdTRUE,     /* 退出前自动清除对应位 */
+            pdFALSE,    /* 任意一位即可唤醒 */
+            portMAX_DELAY
+        );
+        if (uxBits & WriteNowRTCTime) {
+            RTC_TASK.CloseTask(HomePageRefresh);
             ShowWait(true);
-            xEventGroupClearBits(xEventGroup_EEprom, WriteNowRTCTime); // 清除事件标志位
+            isRunEEprom();
             EEprom_AT24C0XXData_Write(&AT24CXX_Manager_NET.Time_Data, sizeof(FL_RTC_InitTypeDef));
             EEprom_AT24C0XXData_Write(&AT24CXX_Manager_NET.UserSet_DegreePart, sizeof(AT24CXX_Manager_NET.UserSet_DegreePart));
+            clearEEpromFlag;
             RTC_TASK.InitSetTimeTask(HomePageRefresh, 0, ShowHomePage);
         }
-        if (xEventGroupGetBits(xEventGroup_EEprom) & WriteValveRunTime) {
-            xEventGroupClearBits(xEventGroup_EEprom, WriteValveRunTime); // 清除事件标志位
+        if (uxBits & WriteValveRunTime) {
+            isRunEEprom();
             WriteRunTime(AT24CXX_Manager_NET.RunTimeBack_AddrNum);
+            clearEEpromFlag;
         }
-        if (xEventGroupGetBits(xEventGroup_EEprom) & WriteAT24C0xxData) {
+        if (uxBits & WriteAT24C0xxData) {
+            RTC_TASK.CloseTask(HomePageRefresh);
             ShowWait(true);
-            xEventGroupClearBits(xEventGroup_EEprom, WriteAT24C0xxData); // 清除事件标志位
+            isRunEEprom();
             EEprom_AT24CXX_Parameter_Init(true);
+            clearEEpromFlag;
             InitSendModeAndTimeTask();  // 指令跟新 计算当天的发送模式和时间任务
             RTC_TASK.InitSetTimeTask(HomePageRefresh, 0, ShowHomePage);
         }
-        clearEEpromFlag;
+
+        System_RunData.isPowerModuleUseing = false;
     }
 }
-void Task_WriteNowRTCTime(void) {
-    // 某个事件发生时设置对应位
-    xEventGroupSetBits(xEventGroup_EEprom, WriteNowRTCTime);
-}
-void Task_WriteValveRunTime(void) {
-    if (!readDataBit(AT24CXX_Manager_NET.ModeCode, SaveRunTimeForOpenValve)) {
-        return; // 未使能;
-    }
-    // 某个事件发生时设置对应位
-    xEventGroupSetBits(xEventGroup_EEprom, WriteValveRunTime);
-}
-void Task_WriteAT24C0xxData(void) {
-    xEventGroupSetBits(xEventGroup_EEprom, WriteAT24C0xxData);
+
+/*---------- 两个中断安全包装 ----------*/
+void StartWriteNowRTCTimeFromISR(BaseType_t * xHPW_TaskWoken) {
+    System_RunData.isPowerModuleUseing = true;
+    xEventGroupSetBitsFromISR(xEventGroup_EEprom, WriteNowRTCTime, xHPW_TaskWoken);
 }
 
-
+void StartWriteAT24C0xxDataFromISR(BaseType_t * xHPW_TaskWoken) {
+    System_RunData.isPowerModuleUseing = true;
+    xEventGroupSetBitsFromISR(xEventGroup_EEprom, WriteAT24C0xxData, xHPW_TaskWoken);
+}

@@ -75,36 +75,36 @@ unsigned int UART_BAND = 115200;
 LongUART LPUART0Ddata, UART1Ddata;
 // ShortUART LPUART1Ddata;
 
-void _EnterQueue(struct _MeterData This, double Temperature);
-double _DeleteQueue(struct _MeterData This);
-MeterData Meter_Manager = {
-    .DataCount = 0,
-    .DataStartHour = 0,
-    .MeterTemperature = {0},
-    .EnterQueue = _EnterQueue,
-    .DeleteQueue = _DeleteQueue,
-};
-// 入队
-void _EnterQueue(struct _MeterData This, double Temperature) {
-    if (Meter_Manager.DataCount == 24) {   // 队列满
-        This.DeleteQueue(&This);    // 出队一个元素
-    }
-    char TempAddr = (Meter_Manager.DataCount + Meter_Manager.DataStartHour) % 24;
-    getStrUserTime(RTC_Date, Meter_Manager.MeterTemperature[TempAddr].CollectionTime);
-    Meter_Manager.MeterTemperature[TempAddr].RoomTemperature = Temperature;
-    Meter_Manager.DataCount = ((Meter_Manager.DataCount < 24) ? Meter_Manager.DataCount + 1 : 24);
-    return;
-}
-// 出队
-double _DeleteQueue(struct _MeterData This) {
-    if (Meter_Manager.DataCount == 0) {   // 队列空
-        return 0;
-    }
-    double Temperature = Meter_Manager.MeterTemperature[Meter_Manager.DataStartHour].RoomTemperature;
-    Meter_Manager.DataStartHour = (Meter_Manager.DataStartHour + 1) % 24;// 队首指针后移
-    Meter_Manager.DataCount--; // 队列长度减一
-    return Temperature;
-}
+// void _EnterQueue(struct _MeterData This, double Temperature);
+// double _DeleteQueue(struct _MeterData This);
+// MeterData Meter_Manager = {
+//     .DataCount = 0,
+//     .DataStartHour = 0,
+//     .MeterTemperature = {0},
+//     .EnterQueue = _EnterQueue,
+//     .DeleteQueue = _DeleteQueue,
+// };
+// // 入队
+// void _EnterQueue(struct _MeterData This, double Temperature) {
+//     if (Meter_Manager.DataCount == 24) {   // 队列满
+//         This.DeleteQueue(&This);    // 出队一个元素
+//     }
+//     char TempAddr = (Meter_Manager.DataCount + Meter_Manager.DataStartHour) % 24;
+//     getStrUserTime(RTC_Date, Meter_Manager.MeterTemperature[TempAddr].CollectionTime);
+//     Meter_Manager.MeterTemperature[TempAddr].RoomTemperature = Temperature;
+//     Meter_Manager.DataCount = ((Meter_Manager.DataCount < 24) ? Meter_Manager.DataCount + 1 : 24);
+//     return;
+// }
+// // 出队
+// double _DeleteQueue(struct _MeterData This) {
+//     if (Meter_Manager.DataCount == 0) {   // 队列空
+//         return 0;
+//     }
+//     double Temperature = Meter_Manager.MeterTemperature[Meter_Manager.DataStartHour].RoomTemperature;
+//     Meter_Manager.DataStartHour = (Meter_Manager.DataStartHour + 1) % 24;// 队首指针后移
+//     Meter_Manager.DataCount--; // 队列长度减一
+//     return Temperature;
+// }
 
 // 校验计算
 unsigned char Cault_CS(void * Buffer, unsigned char start_num, unsigned int stop_num) {
@@ -334,7 +334,7 @@ int Add_HY_DataClass(strnew OutPutBuff, int startAddr, unsigned char DataTAG, un
             // 权限
             OutPutBuff.Name._char[startAddr++] = ((AT24CXX_Manager_NET.ModeCode >> 8) & 0x00FF);
             OutPutBuff.Name._char[startAddr++] = ((AT24CXX_Manager_NET.ModeCode >> 0) & 0x00FF);
-            OutPutBuff.Name._char[startAddr++] = System_RunData.FronValveDoneCode;  // 动作由来
+            OutPutBuff.Name._char[startAddr++] = System_RunData.FronValveDoneCode; // 动作由来
             OutPutBuff.Name._char[startAddr++] = (System_RunData.Now_DEV_Volt >> 8) & 0x00FF;  // 电池电压
             OutPutBuff.Name._char[startAddr++] = (System_RunData.Now_DEV_Volt >> 0) & 0x00FF;  // 电池电压
             OutPutBuff.Name._char[startAddr++] = (InputData < DegreePartToUint(100) ? 0x99 : 0x55);  // 阀门状态
@@ -576,7 +576,7 @@ uint8_t HY_USB_TTL_CheckBuff(char * RxBuf, int RxLen, uint8_t Now_LPUartx) {
     if (CsAddr < 0 || CsAddr > RXDatabuff.MaxLen) {
         return false;
     }
-    if ((RXDatabuff.Name._char[0] != 0x68) || ((RXDatabuff.Name._char[1] != 0x53))) {
+    if ((RXDatabuff.Name._char[0] != 0x68) || ((RXDatabuff.Name._char[1] != 0x54))) {
         return false;
     }
     if (!(((uint8_t)RXDatabuff.Name._char[2] == 0xFF && (uint8_t)RXDatabuff.Name._char[3] == 0xFF && (uint8_t)RXDatabuff.Name._char[4] == 0xFF && (uint8_t)RXDatabuff.Name._char[5] == 0xFF)
@@ -596,10 +596,10 @@ uint8_t HY_USB_TTL_CheckBuff(char * RxBuf, int RxLen, uint8_t Now_LPUartx) {
         return false;
     }
     newstrobj(SendBuf, 1);
-    SendBuf = (Now_LPUartx == 0xF1 ? NEW_NAME(LPUART0Ddata.TxBuf) : NEW_NAME(CmdTable.DataBuff_TX));
+    SendBuf = (Now_LPUartx == 0xF1 ? NEW_NAME(LPUART0Ddata.TxBuf) : NEW_NAME(CmdTable.TxBuf));
     memset(SendBuf.Name._char, 0, SendBuf.MaxLen);
     SendBuf.Name._char[SendDataLen++] = 0x68;
-    SendBuf.Name._char[SendDataLen++] = 0x53;
+    SendBuf.Name._char[SendDataLen++] = 0x54;
     SendBuf.Name._char[SendDataLen++] = AT24CXX_Manager_NET.MeterID[0];
     SendBuf.Name._char[SendDataLen++] = AT24CXX_Manager_NET.MeterID[1];
     SendBuf.Name._char[SendDataLen++] = AT24CXX_Manager_NET.MeterID[2];
@@ -704,7 +704,7 @@ uint8_t HY_USB_TTL_CheckBuff(char * RxBuf, int RxLen, uint8_t Now_LPUartx) {
         LPUART0Ddata.TxLen = ++SendDataLen;
     } else {
 #include "NetProt_Module.h"
-        CmdTable.NowTX_Len = ++SendDataLen;
+        CmdTable.TxLen = ++SendDataLen;
     }
     if (isWirteEEprom == true) {
         return 0xFF;
@@ -814,17 +814,18 @@ void SetErrerCode(CodeErr ErrId, bool UserSet) {
 }
 
 NetDevParameter System_RunData = {
-    .CtrlDev_Set_Degree_Part = 0,   // 预期阀门状态
-    .Now_DEV_Volt = 3600,           // 当前电压
-    .Now_Temper_T1 = 0,             // 当前 T1
-    .Now_Temper_T2 = 0,             // 当前 T2
-    .Now_Degree_Part = 0,           // 0 关 1000 开
-    .TempRunTimeForValve = 0,       // 当前阀门大于 40% 的状态下的运行时间
-    .FronValveDoneCode = 0,         // 上一次阀门动作的 ID
-    .FrontValveDegree_Part = 0,     // 上一次阀门动作的角度
-    .StytemErrorCode = 0,           // 系统错误码
-    .ReceiveFlag = false,           // 上次通信是否接收到标记
-    .isUpCode = false,              // 是否升级
+    .CtrlDev_Set_Degree_Part = 0xFFFF,  // 预期阀门状态
+    .Now_DEV_Volt = 3600,               // 当前电压
+    .Now_Temper_T1 = 0,                 // 当前 T1
+    .Now_Temper_T2 = 0,                 // 当前 T2
+    .Now_Degree_Part = 0,               // 0 关 1000 开
+    .TempRunTimeForValve = 0,           // 当前阀门大于 40% 的状态下的运行时间
+    .FronValveDoneCode = 0,             // 上一次阀门动作的 ID
+    .FrontValveDegree_Part = 0,         // 上一次阀门动作的角度
+    .StytemErrorCode = 0,               // 系统错误码
+    .ReceiveFlag = false,               // 上次通信是否接收到标记
+    .isUpCode = false,                  // 是否升级
+    .isPowerModuleUseing = false,
     .Now_NetDevParameter = {
         .isSendOk = false,
         .isWriteEEprom = false,

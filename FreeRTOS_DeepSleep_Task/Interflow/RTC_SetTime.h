@@ -28,8 +28,8 @@ typedef struct _USER_SET_TASK {
         uint64_t CountMaxNum;
         void (*TaskFunc)(void);
     } Task[RTCTimeTaskMAX];
-    void (*InitSetTimeTask)(int TaskAddr, uint64_t SetCountMaxNum, void (*TaskFunc)(void));
-    void (*CloseTask)(int TaskAddr);
+    void (*InitSetTimeTask)(RTCTaskName TaskAddr, uint64_t SetCountMaxNum, void (*TaskFunc)(void));
+    void (*CloseTask)(RTCTaskName TaskAddr);
     int NumberOfTimeTask;
 }USER_SET_TASK;
 extern USER_SET_TASK RTC_TASK;

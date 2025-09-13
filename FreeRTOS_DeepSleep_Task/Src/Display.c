@@ -10,6 +10,7 @@
 #include "MotorCtrlDev.h"
 #include "Task_Valve.h"
 #include "StrLib.h"
+#include "UpData.h"
 
 /*********************Menu***************************************************************/
 #define MaxMenuNum 20
@@ -93,7 +94,7 @@ void ShowNowLimitTime(void) {
     LCD_Num_Data((RTC_Date_SET.month % 100) / 10, 4);
     LCD_Num_Data((RTC_Date_SET.month % 100) % 10, 3);
 #warning "LCD_第六个数码管缺少小数点";
-    // LCD_SetDotPx(2,true);
+    // LCD_SetDotPx(2, true);
     LCD_Num_Data((RTC_Date_SET.day % 100) / 10, 2);
     LCD_Num_Data((RTC_Date_SET.day % 100) % 10, 1);
     NO_LCD_ChineseOpen_VALVE;
@@ -115,7 +116,7 @@ void ShowRTCDate_Now(void) {
     LCD_Num_Data((RTC_Date_SET.month % 100) / 10, 4);
     LCD_Num_Data((RTC_Date_SET.month % 100) % 10, 3);
 #warning "LCD_第六个数码管缺少小数点";
-    // LCD_SetDotPx(2,true);
+    // LCD_SetDotPx(2, true);
     LCD_Num_Data((RTC_Date_SET.day % 100) / 10, 2);
     LCD_Num_Data((RTC_Date_SET.day % 100) % 10, 1);
     NO_LCD_ChineseOpen_VALVE;
@@ -197,7 +198,7 @@ void ShowBatV(void) {
             LCD_Num_Data(CountBuf[i], (InputData - i));
         }
 #warning "LCD_第六个数码管缺少小数点";
-        // LCD_SetDotPx(2,true);
+        // LCD_SetDotPx(2, true);
         if (InputData < 3) {
             LCD_Num_Data(0, 3);
         }
@@ -293,27 +294,137 @@ void ShowIMEI(void) {
         StringSlice(TempStr, Mother, 13, 14);
         a8 = (uint8_t)TempStr.Name._char[0] & 0x0F;
     }
-    LCD_Num_Data(da_E, 1);
-    LCD_Num_Data(a2, 2);
-    LCD_Num_Data(a3, 3);
-    LCD_Num_Data(a4, 4);
-    LCD_Num_Data(a5, 5);
-    LCD_Num_Data(a6, 6);
-    LCD_Num_Data(a7, 7);
-    LCD_Num_Data(a8, 8);
+    LCD_Num_Data(da_E, 8);
+    LCD_Num_Data(a2, 7);
+    LCD_Num_Data(a3, 6);
+    LCD_Num_Data(a4, 5);
+    LCD_Num_Data(a5, 4);
+    LCD_Num_Data(a6, 3);
+    LCD_Num_Data(a7, 2);
+    LCD_Num_Data(a8, 1);
     LcdDisplayRefresh();
 }
 void ShowIP(void) {
-#warning "IP";
+    unsigned char a1, a2, a3, a4, a5, a6, a7, a8;
+    ClearDisplayAll();
+    unsigned char EEprom_IP[4] = {0};
+    IPstrToHexArray(NEW_NAME(EEprom_IP), AT24CXX_Manager_NET.NET_Remote_Url);
+    a1 = EEprom_IP[0] / 0x10;
+    a2 = EEprom_IP[0] % 0x10;
+    a3 = EEprom_IP[1] / 0x10;
+    a4 = EEprom_IP[1] % 0x10;
+    a5 = EEprom_IP[2] / 0x10;
+    a6 = EEprom_IP[2] % 0x10;
+    a7 = EEprom_IP[3] / 0x10;
+    a8 = EEprom_IP[3] % 0x10;
+
+    LCD_Num_Data(a1, 8);
+    LCD_Num_Data(a2, 7);
+    LCD_Num_Data(a3, 6);
+    LCD_Num_Data(a4, 5);
+    LCD_Num_Data(a5, 4);
+    LCD_Num_Data(a6, 3);
+    LCD_Num_Data(a7, 2);
+    LCD_Num_Data(a8, 1);
+    LcdDisplayRefresh();
 }
 void ShowPort(void) {
-#warning "Port";
+    unsigned char a3, a4, a5, a6, a7;
+    ClearDisplayAll();
+    unsigned int Port = AT24CXX_Manager_NET.NET_Remote_Port;
+    a3 = Port / 10000;
+    a4 = (Port % 10000) / 1000;
+    a5 = (Port % 1000) / 100;
+    a6 = (Port % 100) / 10;
+    a7 = Port % 10;
+
+    LCD_Num_Data(da_P, 8);
+    LCD_Num_Data(xiao_o, 7);
+    LCD_Num_Data(xiao_r, 6);
+    if (a3 != 0) {
+        LCD_Num_Data(a3, 5);
+    }
+    LCD_Num_Data(a4, 4);
+    LCD_Num_Data(a5, 3);
+    LCD_Num_Data(a6, 2);
+    LCD_Num_Data(a7, 1);
+    LcdDisplayRefresh();
 }
 void Show_RSRP_RSRQ(void) {
-#warning "RSRP_RSRQ";
+
+    unsigned int RSP = AT24CXX_Manager_NET.Get_Module_Data._Module_DEV_RSRP;
+    unsigned int RSQ = AT24CXX_Manager_NET.Get_Module_Data._Module_DEV_RSRQ;
+    unsigned char a1, a2, a3, a5, a6, a7;
+    ClearDisplayAll();
+    a1 = (RSP % 1000) / 100;
+    a2 = (RSP % 100) / 10;
+    a3 = RSP % 10;
+
+    a5 = (RSQ % 1000) / 100;
+    a6 = (RSQ % 100) / 10;
+    a7 = RSQ % 10;
+    if (a1 != 0x00)LCD_Num_Data(a1, 8);
+    if (a2 != 0x00)LCD_Num_Data(a2, 7);
+    LCD_Num_Data(a3, 6);
+    LCD_Num_Data(LINE2, 5);
+    if (a5 != 0x00)LCD_Num_Data(a5, 4);
+    if (a6 != 0x00)LCD_Num_Data(a6, 3);
+    LCD_Num_Data(a7, 2);
+    LCD_SINGAL;
+    LcdDisplayRefresh();
 }
 void ShowCCID(void) {
-#warning "CCID";
+    unsigned char EEprom_CCID[10] = {0};
+    strnew CCIDStr = NEW_NAME(AT24CXX_Manager_NET.Get_Module_Data._Module_SIM_ICCID);
+    unsigned char a1, a2, a3, a4, a5, a6, a7;
+    ClearDisplayAll();
+    if (MENU_ID == 17) {
+        a3 = EEprom_CCID[0] / 0x10;
+        a4 = EEprom_CCID[0] % 0x10;
+        a5 = EEprom_CCID[1] / 0x10;
+        a6 = EEprom_CCID[1] % 0x10;
+        a7 = EEprom_CCID[2] / 0x10;
+        LCD_Num_Data(da_C, 7);
+        LCD_Num_Data(da_D, 6);
+        LCD_Num_Data(a3, 5);
+        LCD_Num_Data(a4, 4);
+        LCD_Num_Data(a5, 3);
+        LCD_Num_Data(a6, 2);
+        LCD_Num_Data(a7, 1);
+    }
+    if (MENU_ID == 18) {
+        a1 = EEprom_CCID[2] % 0x10;
+        a2 = EEprom_CCID[3] / 0x10;
+        a3 = EEprom_CCID[3] % 0x10;
+        a4 = EEprom_CCID[4] / 0x10;
+        a5 = EEprom_CCID[4] % 0x10;
+        a6 = EEprom_CCID[5] / 0x10;
+        a7 = EEprom_CCID[5] % 0x10;
+        LCD_Num_Data(a1, 7);
+        LCD_Num_Data(a2, 6);
+        LCD_Num_Data(a3, 5);
+        LCD_Num_Data(a4, 4);
+        LCD_Num_Data(a5, 3);
+        LCD_Num_Data(a6, 2);
+        LCD_Num_Data(a7, 1);
+    }
+    if (MENU_ID == 19) {
+        a1 = EEprom_CCID[6] / 0x10;
+        a2 = EEprom_CCID[6] % 0x10;
+        a3 = EEprom_CCID[7] / 0x10;
+        a4 = EEprom_CCID[7] % 0x10;
+        a5 = EEprom_CCID[8] / 0x10;
+        a6 = EEprom_CCID[8] % 0x10;
+        a7 = EEprom_CCID[9] / 0x10;
+        LCD_Num_Data(a1, 7);
+        LCD_Num_Data(a2, 6);
+        LCD_Num_Data(a3, 5);
+        LCD_Num_Data(a4, 4);
+        LCD_Num_Data(a5, 3);
+        LCD_Num_Data(a6, 2);
+        LCD_Num_Data(a7, 1);
+    }
+    LcdDisplayRefresh();
 }
 void background(void) {
     if (System_RunData.Now_NetDevParameter.isSendOk) {
@@ -342,6 +453,11 @@ void background(void) {
     }
     if (readDataBit(AT24CXX_Manager_NET.ModeCode, EnableTimeLimit)) {
 #warning "LCD_PleasePay";
+    }
+    if (((unsigned char)UpdataData.Sign == 0xB2) && (System_RunData.isUpCode == false)) {
+        UpdataData.Sign = 0;
+        UpdataData.NowPageNum = 0;
+        UpdataData.NowLen_Page8Buff = 0;
     }
     if (System_RunData.isUpCode == true) {
         System_RunData.isUpCode = false;
@@ -441,13 +557,12 @@ void ShowSignal(void) {
 void ShowWait(bool isWriteEeprom) {
     ClearDisplayAll();
     if (isWriteEeprom) {
-        LCD_Num_Data(da_E, 1);
-    } else {
-        LCD_Num_Data(LINE2, 3);
+        LCD_Num_Data(da_E, 8);
     }
-    LCD_Num_Data(LINE2, 4);
-    LCD_Num_Data(LINE2, 5);
     LCD_Num_Data(LINE2, 6);
+    LCD_Num_Data(LINE2, 5);
+    LCD_Num_Data(LINE2, 4);
+    LCD_Num_Data(LINE2, 3);
     LcdDisplayRefresh();
     return;
 }
@@ -528,44 +643,41 @@ void TesTLCD(void) {
                 // LCD_Time;
                 break;
         }
-        LCD_Num_Data(i, 1);
-        LCD_Num_Data(i, 2);
-        LCD_Num_Data(i, 3);
-        LCD_Num_Data(i, 4);
-        LCD_Num_Data(i, 5);
-        LCD_Num_Data(i, 6);
-        LCD_Num_Data(i, 7);
         LCD_Num_Data(i, 8);
+        LCD_Num_Data(i, 7);
+        LCD_Num_Data(i, 6);
+        LCD_Num_Data(i, 5);
+        LCD_Num_Data(i, 4);
+        LCD_Num_Data(i, 3);
+        LCD_Num_Data(i, 2);
+        LCD_Num_Data(i, 1);
         LcdDisplayRefresh();
         IncludeDelayMs(300);
     }
 }
 void Display__Module_Steep(unsigned char steep, unsigned char status) {
-#warning "chai 显示上传步骤";
-    // ClearDisplayAll();
-    // DisplayInsideT(Now_Temper);
-    // DisplayStatus(Now_NetDevParameter.Now_NetDevParameter.isSendOk, Now_DEV_Volt);
-    // LCD_Num_Data(0x07, 1);
-    // LCD_Num_Data(xiao_o, 2);
-    // LCD_Num_Data(LINE2, 3);
-    // if (steep != 255) {
-    //     LCD_Num_Data(steep / 10, 4);
-    //     LCD_Num_Data(steep % 10, 5);
-    // } else {
-    //     LCD_Num_Data(da_N, 4);
-    //     LCD_Num_Data(da_E, 5);
-    // }
+    ClearDisplayAll();
+    LCD_Num_Data(0x07, 8);
+    LCD_Num_Data(xiao_o, 7);
+    LCD_Num_Data(LINE2, 6);
+    if (steep != 255) {
+        LCD_Num_Data(steep / 10, 5);
+        LCD_Num_Data(steep % 10, 4);
+    } else {
+        LCD_Num_Data(da_N, 5);
+        LCD_Num_Data(da_E, 4);
+    }
 
-    // LCD_Num_Data(LINE2, 6);
-    // if (status == 0) {
-    //     LCD_Num_Data(xiao_n, 7);
-    //     LCD_Num_Data(xiao_o, 8);
-    // } else {
-    //     LCD_Num_Data(xiao_o, 7);
-    //     LCD_Num_Data(xiao_h, 8);
-    // }
-    // if (Now_NetDevParameter.isCmdResFlag != 0)
-    //     LCD_InsideTSet_Point;
-    // LcdDisplayRefresh();
+    LCD_Num_Data(LINE2, 3);
+    if (status == 0) {
+        LCD_Num_Data(da_N, 2);
+        LCD_Num_Data(xiao_o, 1);
+    } else {
+        LCD_Num_Data(xiao_o, 2);
+        LCD_Num_Data(da_H, 1);
+    }
+    ShowSignal();
+    LcdDisplayRefresh();
 }
+
 

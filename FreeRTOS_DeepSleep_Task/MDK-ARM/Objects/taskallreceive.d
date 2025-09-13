@@ -85,6 +85,9 @@
 .\objects\\taskallreceive.o: ..\Include\Task_Valve.h
 .\objects\\taskallreceive.o: ..\Include\MotorCtrlDev.h
 .\objects\\taskallreceive.o: ..\Include\TaskAboutTimer.h
+.\objects\\taskallreceive.o: ..\Interflow\UpData.h
+.\objects\\taskallreceive.o: ..\Interflow\../Interflow/JsonDataAnalyzeLib.h
+.\objects\\taskallreceive.o: ..\Interflow\../Interflow/NumberBaseLib.h
 .\objects\\taskallreceive.o: ..\Include\TaskNBAndWeb.h
 .\objects\\taskallreceive.o: ..\Interflow\NetProt_Module.h
 .\objects\\taskallreceive.o: ..\Interflow\HY_TXRX.h

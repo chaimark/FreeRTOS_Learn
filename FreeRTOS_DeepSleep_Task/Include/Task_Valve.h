@@ -19,6 +19,7 @@ typedef struct _SetValve {
 extern SetValve SetData_Input;
 extern bool isRunningForValve(uint16_t MaxDelay_100Tick);
 extern bool ValveCtrlStart(SetValve SetData);
+extern void StartValveRunFromISR(BaseType_t * xHPW_TaskWoken);
 //////////////////////////////////
 #endif
 

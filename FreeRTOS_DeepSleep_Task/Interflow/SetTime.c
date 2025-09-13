@@ -1,8 +1,8 @@
 #include "SetTime.h"
 #ifdef BSTIM_OPEN_AND_TASK_NUM
 
-static void _SetCloseTask(int TaskAddr);
-static void _InitSetTimeTask(int TaskAddr, uint64_t SetMax10MsNum, void (*TaskFunc)(void));
+static void _SetCloseTask(TimeTaskName TaskAddr);
+static void _InitSetTimeTask(TimeTaskName TaskAddr, uint64_t SetMax10MsNum, void (*TaskFunc)(void));
 
 // 可自定义的定时任务
 BSTIM_USER_SET_TASK SetTime = {
@@ -12,8 +12,8 @@ BSTIM_USER_SET_TASK SetTime = {
     .NumberOfTimeTask = BSTIM_OPEN_AND_TASK_NUM, // 定时任务数量
 };
 
-static void _SetCloseTask(int TaskAddr) {
-    if ((TaskAddr < 0) || (TaskAddr >= BSTIM_OPEN_AND_TASK_NUM)) {
+static void _SetCloseTask(TimeTaskName TaskAddr) {
+    if (TaskAddr >= BSTIM_OPEN_AND_TASK_NUM) {
         return;
     }
     SetTime.Task[TaskAddr].isTaskStart = false; // 初始化标记
@@ -21,8 +21,8 @@ static void _SetCloseTask(int TaskAddr) {
     SetTime.Task[TaskAddr].CountNum = 0; // 复位初始
     SetTime.Task[TaskAddr].TaskFunc = NULL;
 }
-static void _InitSetTimeTask(int TaskAddr, uint64_t SetMax10MsNum, void (*TaskFunc)(void)) {
-    if ((TaskAddr < 0) || (TaskAddr >= BSTIM_OPEN_AND_TASK_NUM)) {
+static void _InitSetTimeTask(TimeTaskName TaskAddr, uint64_t SetMax10MsNum, void (*TaskFunc)(void)) {
+    if (TaskAddr >= BSTIM_OPEN_AND_TASK_NUM) {
         return;
     }
     SetTime.Task[TaskAddr].TimeTask_Falge = (SetMax10MsNum == 0 ? true : false); // 初始化标记
@@ -62,8 +62,8 @@ void CountSetTimeTask(void) {
 ////////////////////////////////////////////////////
 #ifdef LPTIM_OPEN_AND_TASK_NUM
 
-static void _LPSetCloseTask(int TaskAddr);
-static void _LPInitSetTimeTask(int TaskAddr, uint64_t SetMax250MsNum, void (*TaskFunc)(void));
+static void _LPSetCloseTask(LPTimeTaskName TaskAddr);
+static void _LPInitSetTimeTask(LPTimeTaskName TaskAddr, uint64_t SetMax250MsNum, void (*TaskFunc)(void));
 
 // 可自定义的定时任务
 LPTIM_USER_SET_TASK SetLPTime = {
@@ -73,8 +73,8 @@ LPTIM_USER_SET_TASK SetLPTime = {
     .NumberOfTimeTask = LPTIM_OPEN_AND_TASK_NUM, // 定时任务数量
 };
 
-static void _LPSetCloseTask(int TaskAddr) {
-    if ((TaskAddr < 0) || (TaskAddr >= LPTIM_OPEN_AND_TASK_NUM)) {
+static void _LPSetCloseTask(LPTimeTaskName TaskAddr) {
+    if (TaskAddr >= LPTIM_OPEN_AND_TASK_NUM) {
         return;
     }
     SetLPTime.Task[TaskAddr].isTaskStart = false; // 初始化标记
@@ -82,7 +82,7 @@ static void _LPSetCloseTask(int TaskAddr) {
     SetLPTime.Task[TaskAddr].CountNum = 0; // 复位初始
     SetLPTime.Task[TaskAddr].TaskFunc = NULL;
 }
-static void _LPInitSetTimeTask(int TaskAddr, uint64_t SetMax250MsNum, void (*TaskFunc)(void)) {
+static void _LPInitSetTimeTask(LPTimeTaskName TaskAddr, uint64_t SetMax250MsNum, void (*TaskFunc)(void)) {
     if ((TaskAddr < 0) || (TaskAddr >= LPTIM_OPEN_AND_TASK_NUM)) {
         return;
     }

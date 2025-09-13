@@ -12,7 +12,7 @@ SemaphoreHandle_t ADCTest_RunFlag = NULL;
 #define clearADCTestFlag xSemaphoreGive(ADCTest_RunFlag);\
 IncludeDelayMs(1);
 bool isRunADCTest(uint8_t DelayS_TimeOut) {
-    uint8_t NowCount = 0;
+    uint16_t NowCount = 0;
     // 获取互斥量，防止读写冲突
     while (!(xSemaphoreTake(ADCTest_RunFlag, 100) == pdTRUE)) {
         NowCount++;
@@ -35,11 +35,8 @@ void init_ADCTest_RunFlag(void) {
 #define ADC_VREF        (*((uint16_t *)(0x1FFFFB08)))  //30℃  Vref1.22
 #define ADC_TS          (*((uint16_t *)(0x1FFFFa92)))  //30℃ PTAT采样值
 
-const unsigned int Temper_NTC_TABLE[] = {
-    384903,	358864,	334827,	312615,	292068,	273045,	255416,	239065,	223888,	209787, // -40 ~ -31
-    196679,	184484,	173130,	162552,	152692,	143494,	134910,	126894,	119405,	112403, // -30 ~ -21
-    105854,	99726,	93989,	88615,	83579,	78859,	74431,	70277,	66379,	62717,  // -20 ~ -11
-    59278,	56047,	53009,	50152,	47465,	44936,	42556,	40314,	38203,	36213,  // -10 ~ -1
+#define MinVau 0
+const uint16_t Temper_NTC_TABLE[] = {
     34338,	32569,	30902,	29328,	27843,	26441,	25118,	23867,	22686,	21569,  // 0 ~ 9
     20514,	19515,	18571,	17678,	16832,	16031,	15273,	14555,	13874,	13229,  // 10 ~ 19
     12617,	12038,	11488,	10966,	10470,	10000,	9554,	9129,	8727,	8344,   // 20 ~ 29
@@ -49,7 +46,6 @@ const unsigned int Temper_NTC_TABLE[] = {
     2354,	2268,	2186,	2108,	2032,	1960,	1890,	1824,	1760,	1699,   // 60 ~ 69
     1640,	1583,	1529,	1477,	1427,	1379,	1332,	1288,	1245,	1204,   // 70 ~ 79
     1164,	1126,	1090,	1054,	1020,	988,	956,	926,	897,	869,    // 80 ~ 89
-    842,	815,	790,	766,	742,	720,	698,	677,	657,	637     // 90 ~ 99
 };
 
 static uint32_t GetAVREFSample_POLL(uint32_t * ADCRdresult) {
@@ -199,18 +195,18 @@ float GetTemper_NTC(uint8_t TemperX) {
     float Temp_di = 0.0;        // 单位摄氏度的等份数
     float Temp_Temper = 0.0;    // 当前温度
     unsigned int AD_Vaule = Get_Temper_value(TemperX);
-    if (AD_Vaule > 384903) {
+    if (AD_Vaule > 34338) {
         return 0.0;
     }
-    if (AD_Vaule < 637) {
+    if (AD_Vaule < 869) {
         return 0.0;
     }
     if (Temper_NTC_TABLE[0] == AD_Vaule) {
-        return -40.0;
+        return 0.0;
     }
-    for (int i = 1; i < 140; i++) {
+    for (int i = 1; i < ARR_SIZE(Temper_NTC_TABLE); i++) {
         if (Temper_NTC_TABLE[i] < AD_Vaule) {
-            Temp_Temper = (float)(i - 40); // 当前温度的整数部分
+            Temp_Temper = (float)(i - MinVau); // 当前温度的整数部分
             Temp_di = (float)(Temper_NTC_TABLE[i - 1] - Temper_NTC_TABLE[i]);
             Temp_Temper -= ((AD_Vaule - Temper_NTC_TABLE[i]) / Temp_di);
             break;
@@ -227,8 +223,8 @@ unsigned int GetTempDegree(int8_t isSaveR_10K) {
         if (CloseVOL == 0xFFFF) {
             CloseVOL = OpenVOL;
         }
-        isRunEEprom();
         AT24CXX_Manager_NET.OpenVOL = OpenVOL;
+        isRunEEprom();
         EEprom_AT24C0XXData_Write(&AT24CXX_Manager_NET.OpenVOL, sizeof(AT24CXX_Manager_NET.OpenVOL));
         clearEEpromFlag;
     } else if (isSaveR_10K == -1) {
@@ -236,8 +232,8 @@ unsigned int GetTempDegree(int8_t isSaveR_10K) {
         if (OpenVOL == 0xFFFF) {
             OpenVOL = CloseVOL;
         }
-        isRunEEprom();
         AT24CXX_Manager_NET.CloseVOL = CloseVOL;
+        isRunEEprom();
         EEprom_AT24C0XXData_Write(&AT24CXX_Manager_NET.CloseVOL, sizeof(AT24CXX_Manager_NET.CloseVOL));
         clearEEpromFlag;
     }
@@ -260,7 +256,6 @@ void Test_BatVoltge(void) {
 }
 
 void Test_Temperature(void) {
-    Check_Temper_Battery_Init();
     if (readDataBit(AT24CXX_Manager_NET.ModeCode, EnableADCTestTemper)) {
         System_RunData.Now_Temper_T1 = GetTemper_NTC(1);
         if (0 < System_RunData.Now_Temper_T1 && System_RunData.Now_Temper_T1 <= 70) {
@@ -294,8 +289,8 @@ void Test_ValueDegree(int8_t isSaveR_10K, bool isSetEquTest) {
     if (readDataBit(AT24CXX_Manager_NET.ModeCode, EnableADCTestValve)) {
         System_RunData.Now_Degree_Part = GetTempDegree(isSaveR_10K);
         if (isSetEquTest) {
-            if ((System_RunData.Now_Degree_Part >= ((AT24CXX_Manager_NET.UserSet_DegreePart < DegreePartToUint(1) ? 0 : AT24CXX_Manager_NET.UserSet_DegreePart - DegreePartToUint(1)))) &&
-                (System_RunData.Now_Degree_Part <= (AT24CXX_Manager_NET.UserSet_DegreePart + DegreePartToUint(1)))) {
+            if ((System_RunData.Now_Degree_Part >= ((AT24CXX_Manager_NET.UserSet_DegreePart < DegreePartToUint(5) ? 0 : AT24CXX_Manager_NET.UserSet_DegreePart - DegreePartToUint(5)))) &&
+                (System_RunData.Now_Degree_Part <= (AT24CXX_Manager_NET.UserSet_DegreePart + DegreePartToUint(5)))) {
                 // 如果当前度数在设置度数的正负 1% 以内, 则直接替换
                 System_RunData.Now_Degree_Part = AT24CXX_Manager_NET.UserSet_DegreePart;
             }

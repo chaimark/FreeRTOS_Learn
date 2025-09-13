@@ -18,8 +18,7 @@ extern void isRunEEprom(void);
 #define clearEEpromFlag xSemaphoreGive(EEprom_RunFlag);\
 IncludeDelayMs(1)
 
-extern void Task_WriteNowRTCTime(void);
-extern void Task_WriteValveRunTime(void);
-extern void Task_WriteAT24C0xxData(void);
+extern void StartWriteNowRTCTimeFromISR(BaseType_t * xHPW_TaskWoken);
+extern void StartWriteAT24C0xxDataFromISR(BaseType_t * xHPW_TaskWoken);
 #endif
 

@@ -14,6 +14,12 @@
 #include "TaskNBAndWeb.h"
 #include "Display.h"
 
+// TCB 踩踏钩子
+void vApplicationStackOverflowHook(TaskHandle_t xTask, char * pcTaskName) {
+    /* 断点这里看是谁踩了栈 */
+    __asm("bkpt 0");
+    for (;;);
+}
 // 空闲钩子函数, 任务执行一段时间后必须返回空闲任务
 void vApplicationIdleHook(void) {
     RTC_TASK.InitSetTimeTask(IWDTClS, MinToSec(8), NULL); // 8min 内定时器喂狗
@@ -73,8 +79,8 @@ int main(void) {
     xTaskCreate(WriteEEprom, "WriteEEprom", configMINIMAL_STACK_SIZE * 2, NULL, WriteEEprom_PRIORITY, &WriteEEpromHand); // 5 -- x
     xTaskCreate(ValveCtrlTask, "ValveCtrl", configMINIMAL_STACK_SIZE * 2, NULL, ValveCtrl_PRIORITY, &ValveCtrlHand); // 5 -- x
     xTaskCreate(GpioTask, "GpioTask", configMINIMAL_STACK_SIZE * 2, NULL, GpioTask_PRIORITY, &GpioTaskHand); // 4 -- x
-    xTaskCreate(AllReceive, "AllReceive", configMINIMAL_STACK_SIZE * 2, NULL, AllReceive_PRIORITY, &AllReceive_Hand); // 3 -- x
-    xTaskCreate(NBModeTask, "SendData", configMINIMAL_STACK_SIZE * 2, NULL, NBSend_PRIORITY, &NBModeHand); // 2 -- x
+    xTaskCreate(AllReceive, "AllReceive", configMINIMAL_STACK_SIZE * 3, NULL, AllReceive_PRIORITY, &AllReceive_Hand); // 3 -- x
+    xTaskCreate(NBModeTask, "NBSendData", configMINIMAL_STACK_SIZE * 3, NULL, NBSend_PRIORITY, &NBModeHand); // 2 -- x
     xTaskCreate(TimeTask, "TestAll", configMINIMAL_STACK_SIZE * 2, NULL, TimeTask_PRIORITY, &TimeTaskHand); // 2 -- x
     xTaskCreate(ReadEEprom, "ReadEEprom", configMINIMAL_STACK_SIZE * 2, NULL, ReadEEprom_PRIORITY, &ReadEEpromHand); // 1 -- x
     vTaskStartScheduler();

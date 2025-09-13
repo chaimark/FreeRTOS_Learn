@@ -2,6 +2,7 @@
 #include "NB_Mode_Lib.h"
 #include "AT24CXXDataLoader.h"
 #include "LPUart_0_And_1_Lib.h"
+#include "_Module_ATCmd_FunctionSum.h"
 
 void NB_Mode_Init(void) {
     FL_GPIO_InitTypeDef GPIO_InitStruct;
@@ -14,7 +15,7 @@ void NB_Mode_Init(void) {
     NB_PWR_LOW;
     MF_UART1_Init();
     MF_UART1_Interrupt_Init();
-    CloseUart1TTL();
+    Shutdown_Module_();
     return;
 }
 
@@ -145,10 +146,10 @@ uint32_t InitSendModeAndTimeTask(void) {
         DayNum = AT24CXX_Manager_NET.SendManageObj.SendFlagMode[NowSendFlagMode].SendInterval - DayNum;
         if (Now_TimeToSec >= ((AT24CXX_Manager_NET.SendManageObj.SendStartHour * 3600) + TempMeterIdToSec - AT24CXX_Manager_NET.SendManageObj.SendIntervalDay)) {
             // 当前时间小于起始点
-            RTC_TASK.CloseTask(SendIntervalTask); // 当天的任务强制关闭 
+            RTC_TASK.CloseTask(SendIntervalTask); // 当天的任务强制关闭
             TempSendStartHourToSec = (DayNum * 86400) + TempSendStartHourToSec;
         } else {
-            if (DayNum + 1 == AT24CXX_Manager_NET.SendManageObj.SendFlagMode[NowSendFlagMode].SendInterval) { // 如果昨天刚传 
+            if (DayNum + 1 == AT24CXX_Manager_NET.SendManageObj.SendFlagMode[NowSendFlagMode].SendInterval) { // 如果昨天刚传
                 RTC_TASK.InitSetTimeTask(SendIntervalTask, TempSendStartHourToSec, NULL); // 没到计算点，需要启动定时器
             }
         }

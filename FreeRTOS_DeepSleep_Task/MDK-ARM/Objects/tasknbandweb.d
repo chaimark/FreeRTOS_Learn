@@ -84,4 +84,5 @@
 .\objects\\tasknbandweb.o: ..\Interflow\UpData.h
 .\objects\\tasknbandweb.o: ..\Interflow\../Interflow/JsonDataAnalyzeLib.h
 .\objects\\tasknbandweb.o: ..\Interflow\../Interflow/NumberBaseLib.h
+.\objects\\tasknbandweb.o: ..\Interflow\_Module_ATCmd_FunctionSum.h
 .\objects\\tasknbandweb.o: ..\Interflow\NetProt_Module.h
