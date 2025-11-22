@@ -297,7 +297,15 @@ void Obj_getString(struct _JsonObject This, char Key[], strnew OutStr) {
         while ((*KeyP) == ' ') {
             KeyP++;
         }
-        char * EndP = strstr((++KeyP), "\"");
+        char * EndP = ++KeyP;
+        while (EndP - This.JsonString.Name._char < This.JsonString.MaxLen) {
+            EndP = strchr(EndP, '"');
+            if (*(EndP - 1) != '\\') {
+                break;
+            } else {
+                EndP++;
+            }
+        }
         char Temp = *EndP;
         *EndP = '\0';
         memset(OutStr.Name._char, 0, OutStr.MaxLen);
