@@ -1,33 +1,32 @@
-#include "Tickless_Hook.h" 
-#include "FreeRTOS.h"
-#include "task.h"
+#include "Tickless_Hook.h"
 #include "Define.h"
+#include "FreeRTOS.h"
 #include "MIN_SetTime.h"
+#include "task.h"
 
-#define   ulGetExternalTime()    FL_LPTIM32_ReadCounter(LPTIM32)
+#define ulGetExternalTime() FL_LPTIM32_ReadCounter(LPTIM32)
 
-#if( configUSE_TICKLESS_IDLE != 0 )
+#if (configUSE_TICKLESS_IDLE != 0)
 void sleepConfig(void) {
-
     /*IO CONFIG*/
-    FL_PMU_SleepInitTypeDef    defaultInitStruct;
+    FL_PMU_SleepInitTypeDef defaultInitStruct;
 
-    defaultInitStruct.deepSleep = FL_PMU_SLEEP_MODE_DEEP;
-    defaultInitStruct.LDOLowPowerMode = FL_PMU_LDO_LPM_DISABLE;
-    defaultInitStruct.wakeupFrequency = FL_PMU_RCHF_WAKEUP_FREQ_8MHZ;
-    defaultInitStruct.wakeupDelay = FL_PMU_WAKEUP_DELAY_2US;
+    defaultInitStruct.deepSleep          = FL_PMU_SLEEP_MODE_DEEP;
+    defaultInitStruct.LDOLowPowerMode    = FL_PMU_LDO_LPM_DISABLE;
+    defaultInitStruct.wakeupFrequency    = FL_PMU_RCHF_WAKEUP_FREQ_8MHZ;
+    defaultInitStruct.wakeupDelay        = FL_PMU_WAKEUP_DELAY_2US;
     defaultInitStruct.coreVoltageScaling = FL_DISABLE;
 
     FL_PMU_Sleep_Init(PMU, &defaultInitStruct);
 
-    FL_RCC_RCMF_Disable();               //关闭RCMF
-    FL_RMU_PDR_Enable(RMU);  			 //打开PDR
-    FL_RMU_BORPowerDown_Disable(RMU);  	 //关闭BOR 2uA
+    FL_RCC_RCMF_Disable();            //关闭RCMF
+    FL_RMU_PDR_Enable(RMU);           //打开PDR
+    FL_RMU_BORPowerDown_Disable(RMU); //关闭BOR 2uA
 
     /*使用ADC时ADCMonitor功能以及Vref需同时开始，同时关闭*/
-    FL_VREF_Disable(VREF);               //关闭VREF1p2
-    FL_SVD_DisableADCMonitor(SVD);       //关闭ADC电源检测
-    FL_ADC_Disable(ADC);                 //关闭ADC使能
+    FL_VREF_Disable(VREF);         //关闭VREF1p2
+    FL_SVD_DisableADCMonitor(SVD); //关闭ADC电源检测
+    FL_ADC_Disable(ADC);           //关闭ADC使能
 
     FL_PMU_SetLowPowerMode(PMU, FL_PMU_POWER_MODE_SLEEP_OR_DEEPSLEEP);
     __WFI();
@@ -39,9 +38,9 @@ void prvStopTickInterruptTimer(void) {
 }
 
 void disable_interrupts(void) {
-    __asm volatile ("cpsid i");
-    __asm volatile ("dsb");
-    __asm volatile ("isb");
+    __asm volatile("cpsid i");
+    __asm volatile("dsb");
+    __asm volatile("isb");
 }
 
 void prvStartTickInterruptTimer(void) {
@@ -50,7 +49,7 @@ void prvStartTickInterruptTimer(void) {
 }
 
 void enable_interrupts(void) {
-    __asm volatile ("cpsie i");
+    __asm volatile("cpsie i");
 }
 
 void prvSleep(void) {
@@ -64,9 +63,9 @@ void vSetWakeTimeInterrupt(TickType_t xExpectedIdleTime) {
 }
 
 void vApplicationSleep(TickType_t xExpectedIdleTime) {
-    unsigned long ulLowPowerTimeBeforeSleep, ulLowPowerTimeAfterSleep;
+    unsigned long    ulLowPowerTimeBeforeSleep, ulLowPowerTimeAfterSleep;
     eSleepModeStatus eSleepStatus;
-     // 进入低功耗模式前的处理
+    // 进入低功耗模式前的处理
     if (configPRE_SLEEP_PROCESSING(NULL) == false) {
         // 暂时不进入低功耗
         return;
@@ -86,9 +85,9 @@ void vApplicationSleep(TickType_t xExpectedIdleTime) {
     eSleepStatus = eTaskConfirmSleepModeStatus();
 
     if (eSleepStatus == eAbortSleep) {
-      /* A task has been moved out of the Blocked state since this macro was
-      executed, or a context siwth is being held pending.  Do not enter a
-      sleep state.  Restart the tick and exit the critical section. */
+        /* A task has been moved out of the Blocked state since this macro was
+        executed, or a context siwth is being held pending.  Do not enter a
+        sleep state.  Restart the tick and exit the critical section. */
         prvStartTickInterruptTimer();
         enable_interrupts();
     } else {
@@ -110,7 +109,8 @@ void vApplicationSleep(TickType_t xExpectedIdleTime) {
 #ifdef OPEN_LOWPWER_DEBUG
             /* 需要模拟唤醒时,启动低功耗调试任务，即可退出等待
             需要模拟睡眠时，关闭低功耗调试任务，即可开启等待*/
-            while (!RTC_TASK.Task[LowPwerDebug].isTaskStart);
+            while (!RTC_TASK.Task[LowPwerDebug].isTaskStart)
+                ;
 #else
             prvSleep();
 #endif
@@ -132,7 +132,7 @@ void vApplicationSleep(TickType_t xExpectedIdleTime) {
         }
         /* Restart the timer that is generating the tick interrupt. */
         prvStartTickInterruptTimer();
-        configPOST_SLEEP_PROCESSING(NULL);  // 退出低功耗模式后的处理
+        configPOST_SLEEP_PROCESSING(NULL); // 退出低功耗模式后的处理
     }
 }
 #endif

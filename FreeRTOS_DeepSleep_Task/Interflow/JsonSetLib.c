@@ -1,12 +1,12 @@
-#include "JsonDataAnalyzeLib.h"
 #include "JsonSetLib.h"
+#include "JsonDataAnalyzeLib.h"
 #include <stdarg.h>
 #include <stdio.h>
 
 #define IsOpenFloatHelp_Ability
 
 #ifdef IsOpenFloatHelp_Ability
-char getNowType(const char * NowAddr, char * UserFromNow) {
+char getNowType(const char* NowAddr, char* UserFromNow) {
     if ((*NowAddr != '%') && (NowAddr + 1 != NULL)) {
         return 0;
     }
@@ -14,32 +14,32 @@ char getNowType(const char * NowAddr, char * UserFromNow) {
     while (((NowAddr + 1) != NULL) && (*(NowAddr + 1) != '%')) {
         UserFromNow[Len++] = *(NowAddr++);
         switch (*NowAddr) {
-            case 'l':
-                UserFromNow[Len++] = *(NowAddr + 0);
-                UserFromNow[Len++] = *(NowAddr + 1);
-                NowAddr++;
-                return ((*(NowAddr) == 'f' ? 'F' : 'D'));
-            case 'd':
-                UserFromNow[Len++] = *(NowAddr++);
-                return 'd';
-            case 'o':
-                UserFromNow[Len++] = *(NowAddr++);
-                return 'o';
-            case 'x':
-                UserFromNow[Len++] = *(NowAddr++);
-                return 'x';
-            case 'u':
-                UserFromNow[Len++] = *(NowAddr++);
-                return 'u';
-            case 'f':
-                UserFromNow[Len++] = *(NowAddr++);
-                return 'f';
-            case 'c':
-                UserFromNow[Len++] = *(NowAddr++);
-                return 'c';
-            case 's':
-                UserFromNow[Len++] = *(NowAddr++);
-                return 's';
+        case 'l':
+            UserFromNow[Len++] = *(NowAddr + 0);
+            UserFromNow[Len++] = *(NowAddr + 1);
+            NowAddr++;
+            return ((*(NowAddr) == 'f' ? 'F' : 'D'));
+        case 'd':
+            UserFromNow[Len++] = *(NowAddr++);
+            return 'd';
+        case 'o':
+            UserFromNow[Len++] = *(NowAddr++);
+            return 'o';
+        case 'x':
+            UserFromNow[Len++] = *(NowAddr++);
+            return 'x';
+        case 'u':
+            UserFromNow[Len++] = *(NowAddr++);
+            return 'u';
+        case 'f':
+            UserFromNow[Len++] = *(NowAddr++);
+            return 'f';
+        case 'c':
+            UserFromNow[Len++] = *(NowAddr++);
+            return 'c';
+        case 's':
+            UserFromNow[Len++] = *(NowAddr++);
+            return 's';
         }
     }
     return 0;
@@ -50,13 +50,13 @@ bool getFromTypeCheckDoubleOrFloat(strnew FromStr) {
     if (strchr(FromStr.Name._char, '%') == NULL) {
         return false;
     }
-    const char * NowAddr = FromStr.Name._char;
+    const char* NowAddr = FromStr.Name._char;
     do {
         if (strchr(NowAddr, '%') == NULL) {
             break;
         }
         while (((*NowAddr) != '%') && ((NowAddr + 1) != NULL)) {
-            NowAddr++; // 不是 % 
+            NowAddr++; // 不是 %
             continue;
         }
         if ((*(NowAddr + 1) == '%') && ((NowAddr + 1) != NULL)) { // 是否是 %%
@@ -74,11 +74,11 @@ bool getFromTypeCheckDoubleOrFloat(strnew FromStr) {
 }
 #endif
 
-void AddJsonItemData(strnew JsonStringSpace, const char * FromStr, ...) {
+void AddJsonItemData(strnew JsonStringSpace, const char* FromStr, ...) {
     char KeyName[200] = {0};
     // 查找 :
-    char * Addr_OverName = strchr(FromStr, ':');
-    const char * Addr_Start = strchr(FromStr, ',');
+    char*       Addr_OverName = strchr(FromStr, ':');
+    const char* Addr_Start    = strchr(FromStr, ',');
     if ((Addr_Start != NULL) && (Addr_Start < Addr_OverName)) {
         Addr_Start++;
         catString(KeyName, FromStr, 100, (Addr_Start - FromStr));
@@ -107,8 +107,8 @@ void AddJsonItemData(strnew JsonStringSpace, const char * FromStr, ...) {
     if (getFromTypeCheckDoubleOrFloat(NEW_NAME(KeyName)) || getFromTypeCheckDoubleOrFloat(NEW_NAME(KeyName))) {
         int NowStrLen = Addr_Over;
         while (!((JsonStringSpace.Name._char[NowStrLen] == '\0') &&
-            (JsonStringSpace.Name._char[NowStrLen + 1] == '\0') &&
-            (JsonStringSpace.Name._char[NowStrLen + 2] == '\0'))) {
+                 (JsonStringSpace.Name._char[NowStrLen + 1] == '\0') &&
+                 (JsonStringSpace.Name._char[NowStrLen + 2] == '\0'))) {
             NowStrLen++;
         }
         while (Addr_Over < NowStrLen) {
@@ -120,5 +120,3 @@ void AddJsonItemData(strnew JsonStringSpace, const char * FromStr, ...) {
     }
 #endif
 }
-
-

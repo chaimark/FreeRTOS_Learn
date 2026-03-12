@@ -5,9 +5,9 @@ static void _MinRTCCloseTask(MINTaskName TaskAddr);
 static void _MinInitRTCTask(MINTaskName TaskAddr, uint64_t SetCountMaxNum, void (*TaskFunc)(void));
 
 USER_MIN_SET_TASK MIN_TASK = {
-    .Task = {0},
-    .InitSetTimeTask = _MinInitRTCTask,
-    .CloseTask = _MinRTCCloseTask,
+    .Task             = {0},
+    .InitSetTimeTask  = _MinInitRTCTask,
+    .CloseTask        = _MinRTCCloseTask,
     .NumberOfTimeTask = MINTimeTaskMAX, // 定时任务数量
 };
 
@@ -15,20 +15,20 @@ static void _MinRTCCloseTask(MINTaskName TaskAddr) {
     if (TaskAddr >= MINTimeTaskMAX) {
         return;
     }
-    MIN_TASK.Task[TaskAddr].isTaskStart = false; // 初始化标记
+    MIN_TASK.Task[TaskAddr].isTaskStart    = false; // 初始化标记
     MIN_TASK.Task[TaskAddr].TimeTask_Falge = false;
-    MIN_TASK.Task[TaskAddr].CountNum = 0; // 复位初始
-    MIN_TASK.Task[TaskAddr].TaskFunc = NULL;
+    MIN_TASK.Task[TaskAddr].CountNum       = 0; // 复位初始
+    MIN_TASK.Task[TaskAddr].TaskFunc       = NULL;
 }
 static void _MinInitRTCTask(MINTaskName TaskAddr, uint64_t SetMaxCountNum, void (*TaskFunc)(void)) {
     if (TaskAddr >= MINTimeTaskMAX) {
         return;
     }
     MIN_TASK.Task[TaskAddr].TimeTask_Falge = (SetMaxCountNum == 0 ? true : false); // 初始化标记
-    MIN_TASK.Task[TaskAddr].isTaskStart = true;     // 开启
-    MIN_TASK.Task[TaskAddr].CountMaxNum = SetMaxCountNum; // 定时任务点
-    MIN_TASK.Task[TaskAddr].CountNum = 0; // 复位初始
-    MIN_TASK.Task[TaskAddr].TaskFunc = TaskFunc;
+    MIN_TASK.Task[TaskAddr].isTaskStart    = true;                                 // 开启
+    MIN_TASK.Task[TaskAddr].CountMaxNum    = SetMaxCountNum;                       // 定时任务点
+    MIN_TASK.Task[TaskAddr].CountNum       = 0;                                    // 复位初始
+    MIN_TASK.Task[TaskAddr].TaskFunc       = TaskFunc;
     if (MIN_TASK.Task[TaskAddr].TimeTask_Falge == true) {
         if (MIN_TASK.Task[TaskAddr].TaskFunc != NULL) {
             MIN_TASK.Task[TaskAddr].TaskFunc(); // 注意:该函数, 执行时不要太长, 也不要启动同一个定时器的其他任务
@@ -63,9 +63,9 @@ static void _Min_10_RTCCloseTask(Min_10_TaskName TaskAddr);
 static void _Min_10_InitRTCTask(Min_10_TaskName TaskAddr, uint64_t SetCountMaxNum, void (*TaskFunc)(void));
 
 USER_Min_10_SET_TASK Min_10_TASK = {
-    .Task = {0},
-    .InitSetTimeTask = _Min_10_InitRTCTask,
-    .CloseTask = _Min_10_RTCCloseTask,
+    .Task             = {0},
+    .InitSetTimeTask  = _Min_10_InitRTCTask,
+    .CloseTask        = _Min_10_RTCCloseTask,
     .NumberOfTimeTask = Min_10_TimeTaskMAX, // 定时任务数量
 };
 
@@ -73,20 +73,20 @@ static void _Min_10_RTCCloseTask(Min_10_TaskName TaskAddr) {
     if (TaskAddr >= Min_10_TimeTaskMAX) {
         return;
     }
-    Min_10_TASK.Task[TaskAddr].isTaskStart = false; // 初始化标记
+    Min_10_TASK.Task[TaskAddr].isTaskStart    = false; // 初始化标记
     Min_10_TASK.Task[TaskAddr].TimeTask_Falge = false;
-    Min_10_TASK.Task[TaskAddr].CountNum = 0; // 复位初始
-    Min_10_TASK.Task[TaskAddr].TaskFunc = NULL;
+    Min_10_TASK.Task[TaskAddr].CountNum       = 0; // 复位初始
+    Min_10_TASK.Task[TaskAddr].TaskFunc       = NULL;
 }
 static void _Min_10_InitRTCTask(Min_10_TaskName TaskAddr, uint64_t SetCountMaxNum, void (*TaskFunc)(void)) {
     if (TaskAddr >= Min_10_TimeTaskMAX) {
         return;
     }
     Min_10_TASK.Task[TaskAddr].TimeTask_Falge = (SetCountMaxNum == 0 ? true : false); // 初始化标记
-    Min_10_TASK.Task[TaskAddr].isTaskStart = true;     // 开启
-    Min_10_TASK.Task[TaskAddr].CountMaxNum = SetCountMaxNum; // 定时任务点
-    Min_10_TASK.Task[TaskAddr].CountNum = 0; // 复位初始
-    Min_10_TASK.Task[TaskAddr].TaskFunc = TaskFunc;
+    Min_10_TASK.Task[TaskAddr].isTaskStart    = true;                                 // 开启
+    Min_10_TASK.Task[TaskAddr].CountMaxNum    = SetCountMaxNum;                       // 定时任务点
+    Min_10_TASK.Task[TaskAddr].CountNum       = 0;                                    // 复位初始
+    Min_10_TASK.Task[TaskAddr].TaskFunc       = TaskFunc;
     if (Min_10_TASK.Task[TaskAddr].TimeTask_Falge == true) {
         if (Min_10_TASK.Task[TaskAddr].TaskFunc != NULL) {
             Min_10_TASK.Task[TaskAddr].TaskFunc(); // 注意:该函数, 执行时不要太长, 也不要启动同一个定时器的其他任务
@@ -121,9 +121,9 @@ static void _Min_15_RTCCloseTask(Min_15_TaskName TaskAddr);
 static void _Min_15_InitRTCTask(Min_15_TaskName TaskAddr, uint64_t SetCountMaxNum, void (*TaskFunc)(void));
 
 USER_Min_15_SET_TASK Min_15_TASK = {
-    .Task = {0},
-    .InitSetTimeTask = _Min_15_InitRTCTask,
-    .CloseTask = _Min_15_RTCCloseTask,
+    .Task             = {0},
+    .InitSetTimeTask  = _Min_15_InitRTCTask,
+    .CloseTask        = _Min_15_RTCCloseTask,
     .NumberOfTimeTask = Min_15_TimeTaskMAX, // 定时任务数量
 };
 
@@ -131,20 +131,20 @@ static void _Min_15_RTCCloseTask(Min_15_TaskName TaskAddr) {
     if (TaskAddr >= Min_15_TimeTaskMAX) {
         return;
     }
-    Min_15_TASK.Task[TaskAddr].isTaskStart = false; // 初始化标记
+    Min_15_TASK.Task[TaskAddr].isTaskStart    = false; // 初始化标记
     Min_15_TASK.Task[TaskAddr].TimeTask_Falge = false;
-    Min_15_TASK.Task[TaskAddr].CountNum = 0; // 复位初始
-    Min_15_TASK.Task[TaskAddr].TaskFunc = NULL;
+    Min_15_TASK.Task[TaskAddr].CountNum       = 0; // 复位初始
+    Min_15_TASK.Task[TaskAddr].TaskFunc       = NULL;
 }
 static void _Min_15_InitRTCTask(Min_15_TaskName TaskAddr, uint64_t SetCountMaxNum, void (*TaskFunc)(void)) {
     if (TaskAddr >= Min_15_TimeTaskMAX) {
         return;
     }
     Min_15_TASK.Task[TaskAddr].TimeTask_Falge = (SetCountMaxNum == 0 ? true : false); // 初始化标记
-    Min_15_TASK.Task[TaskAddr].isTaskStart = true;     // 开启
-    Min_15_TASK.Task[TaskAddr].CountMaxNum = SetCountMaxNum; // 定时任务点
-    Min_15_TASK.Task[TaskAddr].CountNum = 0; // 复位初始
-    Min_15_TASK.Task[TaskAddr].TaskFunc = TaskFunc;
+    Min_15_TASK.Task[TaskAddr].isTaskStart    = true;                                 // 开启
+    Min_15_TASK.Task[TaskAddr].CountMaxNum    = SetCountMaxNum;                       // 定时任务点
+    Min_15_TASK.Task[TaskAddr].CountNum       = 0;                                    // 复位初始
+    Min_15_TASK.Task[TaskAddr].TaskFunc       = TaskFunc;
     if (Min_15_TASK.Task[TaskAddr].TimeTask_Falge == true) {
         if (Min_15_TASK.Task[TaskAddr].TaskFunc != NULL) {
             Min_15_TASK.Task[TaskAddr].TaskFunc(); // 注意:该函数, 执行时不要太长, 也不要启动同一个定时器的其他任务
@@ -174,5 +174,3 @@ void Min_15_CountRTCTask(void) {
 }
 #endif
 //////////////////////////////////////////////////////////////
-
-

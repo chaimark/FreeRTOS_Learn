@@ -9,9 +9,9 @@ xxxxx_xxxx <==> typedef(数据类型)
 #ifndef NUMBERBASELIC_H
 #define NUMBERBASELIC_H
 
-#include <stdint.h>
 #include "StrLib.h"
-// 将 uint8_t 数组 转换成 Double Or Float 
+#include <stdint.h>
+// 将 uint8_t 数组 转换成 Double Or Float
 extern double BuffToFloatOrDouble(strnew OutBuff, bool IsDouble);
 
 // 将 Double Or Float 存到 char 数组 中
@@ -26,8 +26,10 @@ extern void strArrayToNumberArray(char NumberArray[], char StrArray[], int Array
 // 任意进制互转
 extern uint64_t anyBaseToAnyBase(uint64_t Number, int IntputBase, int OutputBase);
 
-// 任意进制数 转 任意进制数组 返回长度 Dex(56) ==> 0x05 0x06 （注意：OutArray 的长度需要大于 Number 的长度, 不支持原地转换）
-extern int anyBaseNumberToAnyBaseArray(uint64_t Number, int IntputBase, int OutputBase, char OutArray[], int ArrayMaxLen);
+// 任意进制数 转 任意进制数组 返回长度 Dex(56) ==> 0x05 0x06 （注意：OutArray 的长度需要大于 Number 的长度,
+// 不支持原地转换）
+extern int anyBaseNumberToAnyBaseArray(uint64_t Number, int IntputBase, int OutputBase, char OutArray[],
+                                       int ArrayMaxLen);
 
 // 任意进制数组 转 任意进制数 string:12345600 ==> 12345600
 extern int64_t anyBaseArrayToAnyBaseNumber(char IntArray[], int NumStrNowLen, int IntputBase, int OutputBase);
@@ -57,16 +59,16 @@ extern bool readDataBit(uint64_t InputNumber, int8_t BitNumber);
 extern uint64_t setDataBit(uint64_t InputNumber, int8_t BitNumber, bool Value);
 
 // 外部接口
-extern int HEX2ToASCII(char * hex, int hex_len, char * asc, int asc_len);
-extern int ASCIIToHEX2(char * asc, int asc_len, char * hex, int hex_len);
+extern int HEX2ToASCII(char* hex, int hex_len, char* asc, int asc_len);
+extern int ASCIIToHEX2(char* asc, int asc_len, char* hex, int hex_len);
 
 extern uint16_t U8_Connect_U8(uint8_t H_Part, uint8_t L_Part);
 
 // 该宏可以恢复原数组, 如果不需要可直接调用原函数： ASCIIToHEX2
-#define AsciiToHex(asc, asc_len, hex, hex_len) ASCIIToHEX2(asc, asc_len, hex, hex_len);\
+#define AsciiToHex(asc, asc_len, hex, hex_len)                                                                         \
+    ASCIIToHEX2(asc, asc_len, hex, hex_len);                                                                           \
     numberArrayToStrArray(asc, asc, asc_len)
 #endif
 
 // 获取某个值在某段区间类所在点的百分比
 extern float getPartOfSetPointOnRing(uint32_t SetPoint, uint32_t Min_Ring, uint32_t Max_Ring);
-

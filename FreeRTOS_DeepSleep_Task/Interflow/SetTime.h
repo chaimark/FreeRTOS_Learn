@@ -14,17 +14,17 @@
 
 #ifdef BSTIM_OPEN_AND_TASK_NUM
 /********************BSTIM********************/
-typedef enum _TimeTaskName {	// 发送AT指令时调用什么函数发送, 对应的函数名
-    RecTimeLPUART0,     // 用于判断 LPuart0 串口是否接收结束
-    RecTimeUART1,     // 用于判断 LPuart1 串口是否接收结束
+typedef enum _TimeTaskName { // 发送AT指令时调用什么函数发送, 对应的函数名
+    RecTimeLPUART0,          // 用于判断 LPuart0 串口是否接收结束
+    RecTimeUART1,            // 用于判断 LPuart1 串口是否接收结束
     //------------------------//
     TempReadCrad,
 } TimeTaskName;
 
 typedef struct _BSTIM_USER_SET_TASK {
     struct {
-        bool TimeTask_Falge;    // 当前计时任务是否完成
-        bool isTaskStart;       // 当前计时任务是否开启
+        bool     TimeTask_Falge; // 当前计时任务是否完成
+        bool     isTaskStart;    // 当前计时任务是否开启
         uint64_t CountNum;
         uint64_t CountMaxNum;
         void (*TaskFunc)(void);
@@ -32,22 +32,22 @@ typedef struct _BSTIM_USER_SET_TASK {
     void (*InitSetTimeTask)(TimeTaskName TaskAddr, uint64_t SetMax10MsNum, void (*TaskFunc)(void));
     void (*CloseTask)(TimeTaskName TaskAddr);
     int NumberOfTimeTask;
-}BSTIM_USER_SET_TASK;
+} BSTIM_USER_SET_TASK;
 extern BSTIM_USER_SET_TASK SetTime;
-extern void CountSetTimeTask(void);
+extern void                CountSetTimeTask(void);
 #endif
 
 #ifdef LPTIM_OPEN_AND_TASK_NUM
 /********************LPTIM********************/
 typedef enum _LPTimeTaskName {
 
-}LPTimeTaskName;
+} LPTimeTaskName;
 
 #define SecTo250Ms(sec) (uint64_t)((sec * 4 == 0) ? 1 : (sec * 4))
 typedef struct _LPTIM_USER_SET_TASK {
     struct {
-        bool TimeTask_Falge;    // 当前计时任务是否完成
-        bool isTaskStart;       // 当前计时任务是否开启
+        bool     TimeTask_Falge; // 当前计时任务是否完成
+        bool     isTaskStart;    // 当前计时任务是否开启
         uint64_t CountNum;
         uint64_t CountMaxNum;
         void (*TaskFunc)(void);
@@ -55,9 +55,8 @@ typedef struct _LPTIM_USER_SET_TASK {
     void (*LPInitSetTimeTask)(LPTimeTaskName TaskAddr, uint64_t SetMax250MsNum, void (*TaskFunc)(void));
     void (*CloseTask)(LPTimeTaskName TaskAddr);
     int NumberOfTimeTask;
-}LPTIM_USER_SET_TASK;
+} LPTIM_USER_SET_TASK;
 extern LPTIM_USER_SET_TASK SetLPTime;
-extern void LPCountSetTimeTask(void);
-#endif 
+extern void                LPCountSetTimeTask(void);
 #endif
-
+#endif

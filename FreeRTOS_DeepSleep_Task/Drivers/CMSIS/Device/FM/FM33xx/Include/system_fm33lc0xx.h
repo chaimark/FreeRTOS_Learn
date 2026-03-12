@@ -1,13 +1,14 @@
-/**************************************************************************//**
- * @file     system_fm33lc0xx.h
- * @brief    CMSIS Cortex-M0 Device Peripheral Access Layer Header File for
- *           Device FM33LC0XX
- * @version  V2.0.0
- * @date     15. Mar 2021
- *
- * @note
- *
- ******************************************************************************/
+/**************************************************************************/ /**
+                                                                              * @file     system_fm33lc0xx.h
+                                                                              * @brief    CMSIS Cortex-M0 Device
+                                                                              *Peripheral Access Layer Header File for
+                                                                              *           Device FM33LC0XX
+                                                                              * @version  V2.0.0
+                                                                              * @date     15. Mar 2021
+                                                                              *
+                                                                              * @note
+                                                                              *
+                                                                              ******************************************************************************/
 /* Copyright (c) 2012 ARM LIMITED
 
    All rights reserved.
@@ -43,18 +44,17 @@ extern "C" {
 #endif
 
 /**
-  * @brief CMSIS Device version number
-  */
-#define __FM33LC0xx_CMSIS_VERSION_MAIN      (0x02) /*!< [31:24] main version */
-#define __FM33LC0xx_CMSIS_VERSION_SUB1      (0x03) /*!< [23:16] sub1 version */
-#define __FM33LC0xx_CMSIS_VERSION_SUB2      (0x01) /*!< [15:0]  sub2 version */
-#define __FM33LC0xx_CMSIS_VERSION           ((__FM33LC0xx_CMSIS_VERSION_MAIN  << 24)\
-                                             |(__FM33LC0xx_CMSIS_VERSION_SUB1 << 16)\
-                                             |(__FM33LC0xx_CMSIS_VERSION_SUB2))
+ * @brief CMSIS Device version number
+ */
+#define __FM33LC0xx_CMSIS_VERSION_MAIN (0x02) /*!< [31:24] main version */
+#define __FM33LC0xx_CMSIS_VERSION_SUB1 (0x03) /*!< [23:16] sub1 version */
+#define __FM33LC0xx_CMSIS_VERSION_SUB2 (0x01) /*!< [15:0]  sub2 version */
+#define __FM33LC0xx_CMSIS_VERSION                                                                                      \
+    ((__FM33LC0xx_CMSIS_VERSION_MAIN << 24) | (__FM33LC0xx_CMSIS_VERSION_SUB1 << 16) | (__FM33LC0xx_CMSIS_VERSION_SUB2))
 
 /* Configurations ------------------------------------------------------------*/
 /**
- *  @brief LSCLK source 
+ *  @brief LSCLK source
  *  @note  Comment the following line to use only LPOSC as LSCLK source, and also
  *         disable LSCLK auto switch function.
  */
@@ -63,16 +63,16 @@ extern "C" {
 #ifdef USE_LSCLK_CLOCK_SRC_XTLF
 
 /**
- *  @brief LSCLK source 
+ *  @brief LSCLK source
  *  @note  Comment the following line to disable LSCLK auto switch function.
  */
 #define USE_LSCLK_AUTO_SWITCH
 
-#endif  /* USE_LSCLK_CLOCK_SRC_XTLF */
+#endif /* USE_LSCLK_CLOCK_SRC_XTLF */
 
 /**
  *  @brief Open IWDT on program startup
- *  @note  Uncomment the following line to use IWDT on startup. User can modify  
+ *  @note  Uncomment the following line to use IWDT on startup. User can modify
  *         the IWDT_OVERFLOW_PERIOD to change the IDWT overflow period.
  */
 /* #define USE_IWDT_ON_STARTUP */
@@ -89,7 +89,7 @@ extern "C" {
     - 0x6: 8s
     - 0x7: 16s
  */
-#define IWDT_OVERFLOW_PERIOD  0x7
+#define IWDT_OVERFLOW_PERIOD 0x7
 #endif
 
 /* Includes ------------------------------------------------------------------*/
@@ -100,49 +100,48 @@ extern "C" {
 
 /* Trim Values ---------------------------------------------------------------*/
 /* Validate Function */
-#define LDT_CHECK(_N_VALUE_, _T_VALUE_)                         \
-                            ((((_N_VALUE_ >> 16) & 0xFFFFU) ==   \
-                            (~(_N_VALUE_) & 0xFFFFU)) ? (_N_VALUE_) : (_T_VALUE_))
+#define LDT_CHECK(_N_VALUE_, _T_VALUE_)                                                                                \
+    ((((_N_VALUE_ >> 16) & 0xFFFFU) == (~(_N_VALUE_)&0xFFFFU)) ? (_N_VALUE_) : (_T_VALUE_))
 
 /* Trim Values Address */
-#define LPOSC_LDT_TRIM      (*(uint32_t *)0x1FFFFB20U)   /* LPOSC trim value */
-#define RCHF8M_LDT_TRIM     (*(uint32_t *)0x1FFFFB40U)   /* RC8M  trim value */
-#define RCHF16M_LDT_TRIM    (*(uint32_t *)0x1FFFFB3CU)   /* RC16M trim value */
-#define RCHF24M_LDT_TRIM    (*(uint32_t *)0x1FFFFB38U)   /* RC24M trim value */
-#define RCMF4M_LDT_TRIM     (*(uint32_t *)0x1FFFFB44U)   /* RCMF  trim value */
+#define LPOSC_LDT_TRIM (*(uint32_t*)0x1FFFFB20U)   /* LPOSC trim value */
+#define RCHF8M_LDT_TRIM (*(uint32_t*)0x1FFFFB40U)  /* RC8M  trim value */
+#define RCHF16M_LDT_TRIM (*(uint32_t*)0x1FFFFB3CU) /* RC16M trim value */
+#define RCHF24M_LDT_TRIM (*(uint32_t*)0x1FFFFB38U) /* RC24M trim value */
+#define RCMF4M_LDT_TRIM (*(uint32_t*)0x1FFFFB44U)  /* RCMF  trim value */
 
 /* Trim Values */
-#define LPOSC_TRIM          (LDT_CHECK(LPOSC_LDT_TRIM,   0x80) & 0xFFU)
-#define RCMF4M_TRIM         (LDT_CHECK(RCMF4M_LDT_TRIM,  0x40) & 0x7FU)
-#define RCHF8M_TRIM         (LDT_CHECK(RCHF8M_LDT_TRIM,  0x40) & 0x7FU)
-#define RCHF16M_TRIM        (LDT_CHECK(RCHF16M_LDT_TRIM, 0x40) & 0x7FU)
-#define RCHF24M_TRIM        (LDT_CHECK(RCHF24M_LDT_TRIM, 0x40) & 0x7FU)
-    
+#define LPOSC_TRIM (LDT_CHECK(LPOSC_LDT_TRIM, 0x80) & 0xFFU)
+#define RCMF4M_TRIM (LDT_CHECK(RCMF4M_LDT_TRIM, 0x40) & 0x7FU)
+#define RCHF8M_TRIM (LDT_CHECK(RCHF8M_LDT_TRIM, 0x40) & 0x7FU)
+#define RCHF16M_TRIM (LDT_CHECK(RCHF16M_LDT_TRIM, 0x40) & 0x7FU)
+#define RCHF24M_TRIM (LDT_CHECK(RCHF24M_LDT_TRIM, 0x40) & 0x7FU)
+
 /* Default Clock Frequency Values --------------------------------------------*/
 
-#define XTHF_DEFAULT_VALUE    ((uint32_t)8000000U)  /*!< Default value of XTHF in Hz */
-#define XTLF_DEFAULT_VALUE    ((uint32_t)32768U)    /*!< Default value of XTLF in Hz */
+#define XTHF_DEFAULT_VALUE ((uint32_t)8000000U) /*!< Default value of XTHF in Hz */
+#define XTLF_DEFAULT_VALUE ((uint32_t)32768U)   /*!< Default value of XTLF in Hz */
 
 /* Default system core clock value */
-#define HCLK_DEFAULT_VALUE    ((uint32_t)8000000U)
+#define HCLK_DEFAULT_VALUE ((uint32_t)8000000U)
 
 /* Exported Clock Frequency Variables --------------------------------------- */
 /*
     - [SystemCoreClock] holds the value of CPU operation clock freqency, and is initialized
         to HCLK_DEFAULT_VALUE;
-    - [XTLFClock] holds the value of external low-frequency oscillator(XTLF), 
+    - [XTLFClock] holds the value of external low-frequency oscillator(XTLF),
         and is initialized to XTLF_DEFAULT_VALUE;
     - [XTHFClock] holds the value of external high_frequency oscillator(XTHF),
         and is initialized to XTHF_DEFAULT_VALUE;
-    
-    NOTE: If users are using these two external oscillators, they should modify the 
+
+    NOTE: If users are using these two external oscillators, they should modify the
     value of XTLFClock and XTHFClock to the correct value, and call the SystemCoreClockUpdate()
-    to update the SystemCoreClock variable, otherwise those codes which rely on 
+    to update the SystemCoreClock variable, otherwise those codes which rely on
     the SystemCoreClock variable will fail to run.
- */ 
-extern uint32_t XTLFClock;        /*!< External Low-freq Osc Clock Frequency (XTLF) */
-extern uint32_t XTHFClock;        /*!< External High-freq Osc Clock Frequency (XTHF) */
-extern uint32_t SystemCoreClock;  /*!< System Clock Frequency (Core Clock) */
+ */
+extern uint32_t XTLFClock;       /*!< External Low-freq Osc Clock Frequency (XTLF) */
+extern uint32_t XTHFClock;       /*!< External High-freq Osc Clock Frequency (XTHF) */
+extern uint32_t SystemCoreClock; /*!< System Clock Frequency (Core Clock) */
 
 /**
  * @brief  Setup the microcontroller system.

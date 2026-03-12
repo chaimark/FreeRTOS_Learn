@@ -12,9 +12,10 @@ void _sys_exit(int x) {
     x = x;
 }
 
-int fputc(int ch, FILE * f) {
+int fputc(int ch, FILE* f) {
     CONSOLE_UART->TXBUF = ch;
-    while (!(CONSOLE_UART->ISR & 0x01));
+    while (!(CONSOLE_UART->ISR & 0x01))
+        ;
 
     return (ch);
 }
@@ -22,4 +23,3 @@ int fputc(int ch, FILE * f) {
 void console_init(void) {
     printf("\r\n/** bootloader begin **/\r\n");
 }
-

@@ -15,11 +15,11 @@ void AddCsToJsonAndPushJsonStr(JsonObject InputJsonStrObj) {
     return;
 }
 bool checkOfCsJsonStrIsRight(strnew JsonInputStr, strnew JsonOutputStr) {
-    JsonObject JsonObj = newJsonObjectByString(JsonInputStr);
-    int NowCheckNum = JsonObj.getInt(&JsonObj, "NowCheckNum");
-    char * PEnd = strstr(JsonObj.JsonString.Name._char, ",\"NowCheckNum\"");
-    (*(PEnd++)) = '}';
-    (*PEnd) = '\0';
+    JsonObject JsonObj     = newJsonObjectByString(JsonInputStr);
+    int        NowCheckNum = JsonObj.getInt(&JsonObj, "NowCheckNum");
+    char*      PEnd        = strstr(JsonObj.JsonString.Name._char, ",\"NowCheckNum\"");
+    (*(PEnd++))            = '}';
+    (*PEnd)                = '\0';
     // 计算 cs 或其他检验算法
     int CheckNum = 0;
     for (unsigned int i = 0; i < strlen(JsonInputStr.Name._char); i++) {

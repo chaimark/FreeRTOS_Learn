@@ -1,10 +1,10 @@
 #include "NumberBaseLib.h"
-#include <stdlib.h>
 #include <stdio.h>
+#include <stdlib.h>
 double BuffToFloatOrDouble(strnew OutBuff, bool IsDouble) {
     union {
-        double TempDouble;
-        float TempFloat;
+        double  TempDouble;
+        float   TempFloat;
         uint8_t Buff[8];
     } converter;
     if ((OutBuff.MaxLen > 4) && (!IsDouble)) {
@@ -26,8 +26,8 @@ double BuffToFloatOrDouble(strnew OutBuff, bool IsDouble) {
 void DoubleOrFloatToBuff(strnew OutBuff, double Number, bool IsDouble) {
     uint8_t BuffLen = 0;
     union {
-        double TempDouble;
-        float TempFloat;
+        double   TempDouble;
+        float    TempFloat;
         uint64_t Buff8;
     } converter;
     if (IsDouble) {
@@ -35,13 +35,13 @@ void DoubleOrFloatToBuff(strnew OutBuff, double Number, bool IsDouble) {
             return;
         }
         converter.TempDouble = Number;
-        BuffLen = 8;
+        BuffLen              = 8;
     } else {
         if (OutBuff.MaxLen < 4) {
             return;
         }
         converter.TempFloat = Number;
-        BuffLen = 4;
+        BuffLen             = 4;
     }
     for (int i = 0; i < BuffLen; i++) {
         OutBuff.Name._char[i] = (uint8_t)(converter.Buff8 >> (i * 8) & 0xFF);
@@ -83,8 +83,8 @@ void strArrayToNumberArray(char NumberArray[], char StrArray[], int ArrayMinLen)
 }
 // 任意进制互转
 uint64_t anyBaseToAnyBase(uint64_t Number, int IntputBase, int OutputBase) {
-    uint64_t ResNumber = Number;
-    uint8_t TempArray[16] = {0}; // uint64_t也只有16位数 0x0000000000000001
+    uint64_t ResNumber     = Number;
+    uint8_t  TempArray[16] = {0}; // uint64_t也只有16位数 0x0000000000000001
 
     // ============================先转到16进制============================ //
     memset(TempArray, 0, 16); // 清空数组
@@ -94,7 +94,7 @@ uint64_t anyBaseToAnyBase(uint64_t Number, int IntputBase, int OutputBase) {
         // 先将数据转为数组串
         for (int Add_i = 0; Add_i < 16; Add_i++) {
             TempArray[Add_i] = Number & 0x000000000000000F; // 先存低位
-            Number = Number >> 4;
+            Number           = Number >> 4;
         }
         // 根据数组串和该数原来的进制 转换为16进制 如：Dex(0x31)==>Hex(0x1f)
         for (int Add_i = 0; Add_i < 16; Add_i++) {
@@ -122,7 +122,7 @@ uint64_t anyBaseToAnyBase(uint64_t Number, int IntputBase, int OutputBase) {
         // 如：hex(0x125) ==> dec(125)
         for (int Add_i = 15; Add_i >= 0; Add_i--) {
             ResNumber = ResNumber << 4;
-            Number = TempArray[Add_i] & 0x0F; // 0b:00001111
+            Number    = TempArray[Add_i] & 0x0F; // 0b:00001111
             ResNumber = ResNumber | Number;
         }
         Number = ResNumber; // 再转到任意进制
@@ -131,32 +131,32 @@ uint64_t anyBaseToAnyBase(uint64_t Number, int IntputBase, int OutputBase) {
     return ResNumber;
 }
 // 任意进制数 转 对应进制数组 返回长度
-uint64_t anyBaseNumberToSameArray(uint8_t * Output, int StrSize, uint64_t InputNumber) {
-    int8_t Add_i = 0;
-    uint8_t TempArray[16] = {0}; // uint64_t也只有16位数 0x0000000000000001
-    uint64_t OutLen = 0;
+uint64_t anyBaseNumberToSameArray(uint8_t* Output, int StrSize, uint64_t InputNumber) {
+    int8_t   Add_i         = 0;
+    uint8_t  TempArray[16] = {0}; // uint64_t也只有16位数 0x0000000000000001
+    uint64_t OutLen        = 0;
 
     // 将数据转为字符串
     for (Add_i = 0; (Add_i < 16) && (Add_i < StrSize); Add_i++) {
         TempArray[Add_i] = InputNumber & 0x000000000000000F; // 先存低位
-        InputNumber = InputNumber >> 4;
+        InputNumber      = InputNumber >> 4;
     }
     // 计算长度
     OutLen = ((StrSize > 16) ? 16 : StrSize);
-    Add_i = ((StrSize > 16) ? 16 : StrSize);
+    Add_i  = ((StrSize > 16) ? 16 : StrSize);
     while ((TempArray[--Add_i] == 0) && (Add_i >= 0)) {
         OutLen--;
     }
-    swapStr((char *)TempArray, OutLen);
+    swapStr((char*)TempArray, OutLen);
     for (Add_i = 0; (Add_i < 16) && (Add_i < OutLen); Add_i++) {
         Output[Add_i] = TempArray[Add_i];
     }
     return OutLen;
 }
 // 任意进制数组 转 对应进制数 返回数 12345600 ==> 654321
-uint64_t anyArrayToSameBaseNumber(int NumberBase, uint8_t * InputStr, int StrSize) {
-    uint8_t TempArray[16] = {0}; // uint64_t也只有16位数 0x0000000000000001
-    uint64_t ResNumber = 0;
+uint64_t anyArrayToSameBaseNumber(int NumberBase, uint8_t* InputStr, int StrSize) {
+    uint8_t  TempArray[16] = {0}; // uint64_t也只有16位数 0x0000000000000001
+    uint64_t ResNumber     = 0;
     // 输入的数组长度大于16直接返回
     StrSize = (StrSize > 16 ? 16 : StrSize);
     // copy 输入的数据
@@ -166,18 +166,18 @@ uint64_t anyArrayToSameBaseNumber(int NumberBase, uint8_t * InputStr, int StrSiz
     // 将数组串组装成直接表示的数
     // 如：hex(0x125) ==> dec(125)
     for (int Add_i = 15; Add_i >= 0; Add_i--) {
-        ResNumber = ResNumber << 4;
+        ResNumber       = ResNumber << 4;
         uint64_t Number = TempArray[Add_i] & 0x0F; // 0b:00001111
-        ResNumber = ResNumber | Number;
+        ResNumber       = ResNumber | Number;
     }
     return ResNumber;
 }
 #include <string.h>
 // 任意进制数 转 任意进制数组
 int anyBaseNumberToAnyBaseArray(uint64_t Number, int IntputBase, int OutputBase, char OutArray[], int ArrayMaxLen) {
-    uint64_t TempNum = anyBaseToAnyBase(Number, IntputBase, OutputBase);
-    char TempArray[16] = {0};
-    int ArrayLen = anyBaseNumberToSameArray((uint8_t *)TempArray, 16, TempNum);
+    uint64_t TempNum       = anyBaseToAnyBase(Number, IntputBase, OutputBase);
+    char     TempArray[16] = {0};
+    int      ArrayLen      = anyBaseNumberToSameArray((uint8_t*)TempArray, 16, TempNum);
     memcpy(OutArray, TempArray, ArrayLen);
     return ArrayLen;
 }
@@ -185,22 +185,22 @@ int anyBaseNumberToAnyBaseArray(uint64_t Number, int IntputBase, int OutputBase,
 // 任意进制数组 转 任意进制数 Array:12345600 ==> 12345600
 int64_t anyBaseArrayToAnyBaseNumber(char IntArray[], int NumStrNowLen, int IntputBase, int OutputBase) {
     swapStr(IntArray, NumStrNowLen); // 先将数组从从大端模式改为小端
-    int64_t TempNum = anyArrayToSameBaseNumber(IntputBase, (uint8_t *)IntArray, NumStrNowLen);
-    TempNum = anyBaseToAnyBase(TempNum, IntputBase, OutputBase);
+    int64_t TempNum = anyArrayToSameBaseNumber(IntputBase, (uint8_t*)IntArray, NumStrNowLen);
+    TempNum         = anyBaseToAnyBase(TempNum, IntputBase, OutputBase);
     return TempNum;
 }
 
 // 单字节数组 转 双字节数组 0x23 --> 0x02 0x03 （原地转换会出现覆盖, 所以不支持原地, 且需要两个 strnew）
 int shortChStrToDoubleChStr(strnew inputArray, strnew OutputArray) {
     if (&(inputArray.Name._char) != &(OutputArray.Name._char)) {
-        int ResLen = 0;
+        int  ResLen      = 0;
         char TempChar[2] = {0};
         if (OutputArray.MaxLen < (inputArray.MaxLen * 2)) {
             return 0;
         }
         for (int i = 0; i < inputArray.MaxLen; i++) {
             memset(TempChar, 0, 2);
-            if (anyBaseNumberToSameArray((uint8_t *)TempChar, 2, inputArray.Name._char[i]) == 1) {
+            if (anyBaseNumberToSameArray((uint8_t*)TempChar, 2, inputArray.Name._char[i]) == 1) {
                 swapStr(TempChar, 2);
             }
             ResLen += 2; // 单字节转两字节
@@ -219,7 +219,8 @@ int doubleChStrToShortChStr(strnew inputArray, strnew OutputArray) {
             return 0;
         }
         for (ResLen = 0; ResLen < (inputArray.MaxLen / 2); ResLen++) {
-            OutputArray.Name._char[ResLen] = ((inputArray.Name._char[ResLen * 2] & 0x0F) << 4) | (inputArray.Name._char[ResLen * 2 + 1] & 0x0F);
+            OutputArray.Name._char[ResLen] =
+                ((inputArray.Name._char[ResLen * 2] & 0x0F) << 4) | (inputArray.Name._char[ResLen * 2 + 1] & 0x0F);
         }
         return ResLen;
     }
@@ -249,7 +250,7 @@ int doneAsciiStrToAnyBaseNumberData(char AscArray[], int OutputBase) {
 // 任意进制数 转 字符串
 int doneBaseNumberDataToAsciiStr(char AscArray[], int ArrayMaxLen, int NumberData, int IntputBase) {
     uint64_t TempNum = anyBaseToAnyBase(NumberData, IntputBase, 10);                       // 先转到 10进制
-    int AscArrayLen = anyBaseNumberToSameArray((uint8_t *)AscArray, ArrayMaxLen, TempNum); // 10进制 转对应数组
+    int AscArrayLen  = anyBaseNumberToSameArray((uint8_t*)AscArray, ArrayMaxLen, TempNum); // 10进制 转对应数组
     numberArrayToStrArray(AscArray, AscArray, AscArrayLen);                                // 数组串 转 字符串
     return AscArrayLen;
 }
@@ -286,23 +287,23 @@ uint64_t setDataBit(uint64_t InputNumber, int8_t BitNumber, bool Value) {
 }
 
 // 外用接口（不支持原地转换）
-int HEX2ToASCII(char * hex, int hex_len, char * asc, int asc_len) {
-    if (hex_len * 2 > asc_len) {    // asc_len 太小, 不够
+int HEX2ToASCII(char* hex, int hex_len, char* asc, int asc_len) {
+    if (hex_len * 2 > asc_len) { // asc_len 太小, 不够
         return 0;
     }
     // HEX TO STR-------------------
     newstrobj(IDStr, 1);
     newstrobj(IDHex, 1);
     IDHex.Name._char = hex;
-    IDHex.MaxLen = hex_len;
+    IDHex.MaxLen     = hex_len;
     IDStr.Name._char = asc;
-    IDStr.MaxLen = asc_len;
-    int TempLen = 0;
+    IDStr.MaxLen     = asc_len;
+    int TempLen      = 0;
     // 单字节数组 转 双字节数组 0x23 --> 0x02 0x03
     if ((TempLen = shortChStrToDoubleChStr(IDHex, IDStr)) < asc_len) {
         IDStr.MaxLen = TempLen;
     }
-    // 将数组串转字符串           
+    // 将数组串转字符串
     numberArrayToStrArray(IDStr.Name._char, IDStr.Name._char, IDStr.MaxLen);
     IDStr.Name._char[2 * IDHex.MaxLen] = '\0';
     return IDStr.MaxLen;
@@ -310,19 +311,19 @@ int HEX2ToASCII(char * hex, int hex_len, char * asc, int asc_len) {
 }
 
 // 外用接口（支持原地转换：注, 非原地转换时输入的字符串会被破坏）
-int ASCIIToHEX2(char * asc, int asc_len, char * hex, int hex_len) {
-    if (hex_len < asc_len / 2) {    // hex_len 太小, 不够
+int ASCIIToHEX2(char* asc, int asc_len, char* hex, int hex_len) {
+    if (hex_len < asc_len / 2) { // hex_len 太小, 不够
         return 0;
     }
     // STR TO HEX-------------------
     newstrobj(IDStr, 1);
     newstrobj(IDHex, 1);
     IDStr.Name._char = asc;
-    IDStr.MaxLen = asc_len; // 字符串长度
+    IDStr.MaxLen     = asc_len; // 字符串长度
     IDHex.Name._char = hex;
-    IDHex.MaxLen = hex_len; // 最大空间
+    IDHex.MaxLen     = hex_len;                                              // 最大空间
     strArrayToNumberArray(IDStr.Name._char, IDStr.Name._char, IDStr.MaxLen); // 将字符串转数组串
-    int Len = doubleChStrToShortChStr(IDStr, IDHex);                         // 双字节数组 转 单字节数组 0x02 0x03 --> 0x23
+    int Len = doubleChStrToShortChStr(IDStr, IDHex); // 双字节数组 转 单字节数组 0x02 0x03 --> 0x23
     return Len;
     // STR TO HEX-------------------
 }
@@ -339,5 +340,3 @@ float getPartOfSetPointOnRing(uint32_t SetPoint, uint32_t Min_Ring, uint32_t Max
     }
     return ((SetPoint * 1.0 - Min_Ring * 1.0) / (Max_Ring * 1.0 - Min_Ring * 1.0));
 }
-
-

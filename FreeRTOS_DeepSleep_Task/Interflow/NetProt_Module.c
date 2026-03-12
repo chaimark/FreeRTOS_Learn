@@ -1,20 +1,20 @@
 #include "NetProt_Module.h"
-#include "NumberBaseLib.h"
-#include "StrLib.h"
-#include "SetTime.h"
-#include "RTC_SetTime.h"
 #include "Define.h"
-#include "HY_TXRX.h"
-#include "_Module_ATCmd_FunctionSum.h"
 #include "Display.h"
+#include "HY_TXRX.h"
+#include "NumberBaseLib.h"
+#include "RTC_SetTime.h"
+#include "SetTime.h"
+#include "StrLib.h"
+#include "_Module_ATCmd_FunctionSum.h"
 
 /******************************/
-NetDevATCmd * NetDevice_ATData;
-static strnew UartBuff = {0};    // Uart接收缓冲区
+NetDevATCmd*  NetDevice_ATData;
+static strnew UartBuff = {0}; // Uart接收缓冲区
 
 bool checkUart(int MaxTimeMs) {
-    int MaxTime = (MaxTimeMs == 0 ? 1000 : MaxTimeMs);
-    bool Flag = false;
+    int  MaxTime = (MaxTimeMs == 0 ? 1000 : MaxTimeMs);
+    bool Flag    = false;
     for (int i = 0; i < MaxTime; i++) {
         Flag = (CmdTable.RxLen > 0 ? true : false);
         if (Flag) {
@@ -24,8 +24,8 @@ bool checkUart(int MaxTimeMs) {
     }
     return Flag;
 }
-bool _FindStr_WaitTime(strnew FindStr, int MaxTimeMs, char ** OutNote) {
-    char * TempP = NULL;
+bool _FindStr_WaitTime(strnew FindStr, int MaxTimeMs, char** OutNote) {
+    char* TempP = NULL;
     if (checkUart(MaxTimeMs)) {
         if ((TempP = strstr(CmdTable.RxBuf, FindStr.Name._char)) == NULL) {
             return false;
@@ -63,7 +63,7 @@ void _SpecialDoneFromISR(uint8_t Special_ID) {
 }
 void clearUartBuff(void) {
     memset(UartBuff.Name._char, 0, UartBuff.MaxLen);
-    NowLenOfUartBuff = 0;   // 需要把外部传入的buff标记或长度复位才算清空
+    NowLenOfUartBuff = 0; // 需要把外部传入的buff标记或长度复位才算清空
 }
 void ClearNetDataBuff(void) {
     memset(CmdTable.RxBuf, 0, (LONG_UARTMAX + 1));
@@ -76,12 +76,12 @@ void copyDataFormUART(void) {
             clearUartBuff();
             return;
         }
-        if (CmdTable.RxLen + NowLenOfUartBuff <= (LONG_UARTMAX + 1)) {  // 追加到 CmdTable.
+        if (CmdTable.RxLen + NowLenOfUartBuff <= (LONG_UARTMAX + 1)) {                      // 追加到 CmdTable.
             memcpy(&CmdTable.RxBuf[CmdTable.RxLen], UartBuff.Name._char, NowLenOfUartBuff); // 接收数据
             CmdTable.RxLen += NowLenOfUartBuff;
         } else {
             ClearNetDataBuff();
-            memcpy(CmdTable.RxBuf, UartBuff.Name._char, NowLenOfUartBuff);   // 接收数据
+            memcpy(CmdTable.RxBuf, UartBuff.Name._char, NowLenOfUartBuff); // 接收数据
             CmdTable.RxLen = NowLenOfUartBuff;
         }
         clearUartBuff();
@@ -92,8 +92,8 @@ void getHYCmdFormATStr(strnew MothreBuf, uint16_t DataLen) {
     _getHYCmdFormATStr(MothreBuf, DataLen);
 }
 ////////////////////////////////////////////////////////
-void sendDataByTTLProt(void * dataStr, int SendCmdLen) {
-    char * SendCmd = (char *)dataStr;
+void sendDataByTTLProt(void* dataStr, int SendCmdLen) {
+    char* SendCmd = (char*)dataStr;
     sendDataBy_Module_Prot(SendCmd, SendCmdLen);
 }
 // 设置模组处于AT模式
@@ -104,7 +104,7 @@ bool SetDevATCMDModel_ThroughSendData(void) {
 #ifdef IsShortLinkModeFlag
     ATConfig_Flag = EnterATMode__NB((System_RunData.Now_NetDevParameter.NowNetOnlineFlag ? false : true));
 #else
-//NET 进入 AT 模式
+    // NET 进入 AT 模式
     if (UP_Mode_EC20_ON) {
 #ifdef _4G_ATCMD_FUNCTIONSUM_H
         ATConfig_Flag = EnterATMode_4G((System_RunData.Now_NetDevParameter.NowNetOnlineFlag ? false : true));
@@ -142,8 +142,8 @@ bool sendATCmdData(NetDevATCmd NowATCmd) {
     for (int ResCount_i = 0; ResCount_i <= NowATCmd.CmsResCount; ResCount_i++) {
         newstrobj(TempSucessStr, 1);
         TempSucessStr.Name._char = NowATCmd.SucessStr;
-        TempSucessStr.MaxLen = TempSucessStr.getStrlen(&TempSucessStr);
-        if (FindStr_WaitTime(TempSucessStr, NowATCmd.DelayTime) == false) {   // 模组是否回复
+        TempSucessStr.MaxLen     = TempSucessStr.getStrlen(&TempSucessStr);
+        if (FindStr_WaitTime(TempSucessStr, NowATCmd.DelayTime) == false) { // 模组是否回复
             ClearNetDataBuff();
             // 判断是否可以跳过
             if ((NowATCmd.DoingATReceiveFunName == ResetTrueDoingFun) && ((ResCount_i + 1) == NowATCmd.CmsResCount)) {
@@ -226,7 +226,7 @@ void Net_Task(void) {
                 Display__Module_Steep((unsigned char)NowStep % 100, 0);
                 // 联网遇到问题, 中断联网进程
                 if ((SendCount_i + 1) == NetDevice_ATData[NowStep].CmdSendCount) {
-                    IncludeDelayMs(500);   // 连接流程结束后等待 2 秒	
+                    IncludeDelayMs(500); // 连接流程结束后等待 2 秒
                     Display__Module_Steep(255, 0);
                     IncludeDelayMs(1500);
                     System_RunData.Now_NetDevParameter.NowNetOnlineFlag = false; // 标记不在线, 下次运行这个任务时重启
@@ -253,8 +253,8 @@ void Net_Task(void) {
     }
     ClearNetDataBuff();
     if (System_RunData.Now_NetDevParameter.SendData != NULL) {
-        System_RunData.Now_NetDevParameter.isSendOk = System_RunData.Now_NetDevParameter.SendData();  // 发送数据
-        ClearNetDataBuff(); // 清空数据
+        System_RunData.Now_NetDevParameter.isSendOk = System_RunData.Now_NetDevParameter.SendData(); // 发送数据
+        ClearNetDataBuff();                                                                          // 清空数据
     }
     return;
 }
@@ -269,12 +269,12 @@ void _DataInstallation(strnew OutStr, struct _NetDevATCmdData This) {
 // 处理指令返回的方法
 bool _DoingATCmdResData(struct _NetDevATCmdData This) {
     bool ResFlag = false;
-    ResFlag = DoingATCmdResData__NB(&This);
+    ResFlag      = DoingATCmdResData__NB(&This);
     return ResFlag;
 }
 // 建立对象的函数
 NetDevATCmd New_NetDevAT_Obj(NetDevATCmd DataInit) {
-    DataInit.DataInstallation = _DataInstallation;
+    DataInit.DataInstallation  = _DataInstallation;
     DataInit.DoingATCmdResData = _DoingATCmdResData;
     return DataInit;
 }
@@ -285,11 +285,9 @@ void NetAT_Init(void) {
     for (int i = 0; i < ATCMD_MAXNUMBER; i++) {
         NetDevice_ATData[i] = New_NetDevAT_Obj(NetDevice_ATData[i]);
     }
-    System_RunData.Now_NetDevParameter.GetDownCmd = UserGetDownCmd;  // 获取下行指令
-    System_RunData.Now_NetDevParameter.SendData = UserSendData;      // 长连接不需要发送函数
+    System_RunData.Now_NetDevParameter.GetDownCmd  = UserGetDownCmd; // 获取下行指令
+    System_RunData.Now_NetDevParameter.SendData    = UserSendData;   // 长连接不需要发送函数
     System_RunData.Now_NetDevParameter.UartCmdType = UartCmdType;
-    UartBuff = NEW_NAME(UART_DATABUFF);
+    UartBuff                                       = NEW_NAME(UART_DATABUFF);
     return;
 }
-
-

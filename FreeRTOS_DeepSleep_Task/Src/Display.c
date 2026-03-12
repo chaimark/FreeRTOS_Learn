@@ -1,16 +1,16 @@
-#include <string.h>
-#include "fm33lc0xx_fl.h"
 #include "Display.h"
-#include "Main.h"
-#include "RTC.h"
-#include "../Interflow/PublicLib_No_One.h"
-#include "../Interflow/NumberBaseLib.h"
-#include "../Interflow/StrLib.h"
 #include "../Interflow/AT24CXXDataLoader.h"
+#include "../Interflow/NumberBaseLib.h"
+#include "../Interflow/PublicLib_No_One.h"
+#include "../Interflow/StrLib.h"
+#include "Main.h"
 #include "MotorCtrlDev.h"
-#include "Task_Valve.h"
+#include "RTC.h"
 #include "StrLib.h"
+#include "Task_Valve.h"
 #include "UpData.h"
+#include "fm33lc0xx_fl.h"
+#include <string.h>
 
 /*********************Menu***************************************************************/
 #define MaxMenuNum 20
@@ -32,7 +32,7 @@ void ShowValvePart(void) {
         LCD_ChineseOpen_VALVE;
     }
     unsigned char CountBuf[5] = {0};
-    InputData = anyBaseNumberToAnyBaseArray(InputData, 16, 10, (char *)CountBuf, 5);
+    InputData                 = anyBaseNumberToAnyBaseArray(InputData, 16, 10, (char*)CountBuf, 5);
     LCD_SetDotPx(1, true);
     if ((int16_t)InputData <= 0) {
         LCD_Num_Data(0, 2);
@@ -47,8 +47,8 @@ void ShowValvePart(void) {
 
 void ShowTemper(void) {
     unsigned char CountBuf[4] = {0};
-    int InputData = floatToint6410Rate(System_RunData.Now_Temper_T1);
-    InputData = anyBaseNumberToAnyBaseArray(InputData, 16, 10, (char *)CountBuf, 4);
+    int           InputData   = floatToint6410Rate(System_RunData.Now_Temper_T1);
+    InputData                 = anyBaseNumberToAnyBaseArray(InputData, 16, 10, (char*)CountBuf, 4);
     LCD_SetDotPx(5, true);
     if (InputData <= 0) {
         LCD_Num_Data(0, 6);
@@ -59,7 +59,7 @@ void ShowTemper(void) {
         }
     }
     InputData = floatToint6410Rate(System_RunData.Now_Temper_T2);
-    InputData = anyBaseNumberToAnyBaseArray(InputData, 16, 10, (char *)CountBuf, 4);
+    InputData = anyBaseNumberToAnyBaseArray(InputData, 16, 10, (char*)CountBuf, 4);
     LCD_SetDotPx(1, true);
     if (InputData <= 0) {
         LCD_Num_Data(0, 2);
@@ -76,7 +76,7 @@ void ShowTemper(void) {
 
 void ShowMeterID(void) {
     char InputDataBuff[8] = {0};
-    int Buflen = shortChStrToDoubleChStr(NEW_NAME(AT24CXX_Manager_NET.MeterID), NEW_NAME(InputDataBuff));
+    int  Buflen           = shortChStrToDoubleChStr(NEW_NAME(AT24CXX_Manager_NET.MeterID), NEW_NAME(InputDataBuff));
     for (uint8_t i = 0; i < Buflen; i++) {
         LCD_Num_Data(InputDataBuff[i], (Buflen - i));
     }
@@ -105,9 +105,9 @@ void ShowNowLimitTime(void) {
 
 void ShowRTCDate_Now(void) {
     FL_RTC_InitTypeDef RTC_Date_SET = RTC_Date;
-    RTC_Date_SET.year = anyBaseToAnyBase(RTC_Date_SET.year, 10, 16);
-    RTC_Date_SET.month = anyBaseToAnyBase(RTC_Date_SET.month, 10, 16);
-    RTC_Date_SET.day = anyBaseToAnyBase(RTC_Date_SET.day, 10, 16);
+    RTC_Date_SET.year               = anyBaseToAnyBase(RTC_Date_SET.year, 10, 16);
+    RTC_Date_SET.month              = anyBaseToAnyBase(RTC_Date_SET.month, 10, 16);
+    RTC_Date_SET.day                = anyBaseToAnyBase(RTC_Date_SET.day, 10, 16);
     LCD_Num_Data((20 % 100) / 10, 8);
     LCD_Num_Data((20 % 100) % 10, 7);
     LCD_Num_Data((RTC_Date_SET.year % 100) / 10, 6);
@@ -127,9 +127,9 @@ void ShowRTCDate_Now(void) {
 
 void ShowRTCTime_Now(void) {
     FL_RTC_InitTypeDef RTC_Date_SET = RTC_Date;
-    RTC_Date_SET.hour = anyBaseToAnyBase(RTC_Date_SET.hour, 10, 16);
-    RTC_Date_SET.minute = anyBaseToAnyBase(RTC_Date_SET.minute, 10, 16);
-    RTC_Date_SET.second = anyBaseToAnyBase(RTC_Date_SET.second, 10, 16);
+    RTC_Date_SET.hour               = anyBaseToAnyBase(RTC_Date_SET.hour, 10, 16);
+    RTC_Date_SET.minute             = anyBaseToAnyBase(RTC_Date_SET.minute, 10, 16);
+    RTC_Date_SET.second             = anyBaseToAnyBase(RTC_Date_SET.second, 10, 16);
     LCD_Num_Data((RTC_Date_SET.hour % 100) / 10, 8);
     LCD_Num_Data((RTC_Date_SET.hour % 100) % 10, 7);
     LCD_Num_Data(LINE2, 6);
@@ -146,7 +146,7 @@ void ShowUserEnableFlag(void) {
     unsigned char CountBuf[5] = {0};
     LCD_Num_Data(da_E, 8);
     LCD_Num_Data(da_N, 7);
-    int Buflen = anyBaseNumberToAnyBaseArray(AT24CXX_Manager_NET.ModeCode, 16, 16, (char *)CountBuf, 5);
+    int Buflen = anyBaseNumberToAnyBaseArray(AT24CXX_Manager_NET.ModeCode, 16, 16, (char*)CountBuf, 5);
     if (Buflen <= 0) {
         LCD_Num_Data(0, 4);
         LCD_Num_Data(0, 3);
@@ -161,11 +161,11 @@ void ShowUserEnableFlag(void) {
 
 // 显示
 void ShowNBModeSignal_CSQ(void) {
-    uint16_t InputData = AT24CXX_Manager_NET.Get_Module_Data._Module_DEV_CSQ;
+    uint16_t      InputData   = AT24CXX_Manager_NET.Get_Module_Data._Module_DEV_CSQ;
     unsigned char CountBuf[5] = {0};
     LCD_Num_Data(da_C, 8);
     LCD_Num_Data(da_S, 7);
-    InputData = anyBaseNumberToAnyBaseArray((InputData / 10), 16, 10, (char *)CountBuf, 5);
+    InputData = anyBaseNumberToAnyBaseArray((InputData / 10), 16, 10, (char*)CountBuf, 5);
     if ((int16_t)InputData <= 0) {
         LCD_Num_Data(0, 1);
     } else {
@@ -183,12 +183,12 @@ void ShowNBModeSignal_CSQ(void) {
 }
 
 void ShowBatV(void) {
-    uint16_t InputData = System_RunData.Now_DEV_Volt;
+    uint16_t      InputData   = System_RunData.Now_DEV_Volt;
     unsigned char CountBuf[5] = {0};
     LCD_Num_Data(da_U, 8);
     LCD_Num_Data(xiao_o, 7);
     LCD_Num_Data(da_I, 6);
-    InputData = anyBaseNumberToAnyBaseArray((InputData / 10), 16, 10, (char *)CountBuf, 5);
+    InputData = anyBaseNumberToAnyBaseArray((InputData / 10), 16, 10, (char*)CountBuf, 5);
     if ((int16_t)InputData <= 0) {
         LCD_Num_Data(0, 2);
         LCD_SetDotPx(1, true);
@@ -207,11 +207,11 @@ void ShowBatV(void) {
 }
 
 void ShowVerNum(void) {
-    uint8_t InputData = SOFT_VERSION;
+    uint8_t       InputData   = SOFT_VERSION;
     unsigned char CountBuf[3] = {0};
     LCD_Num_Data(da_U, 8);
     LCD_Num_Data(da_N, 7);
-    InputData = anyBaseNumberToAnyBaseArray(InputData, 16, 10, (char *)CountBuf, 3);
+    InputData = anyBaseNumberToAnyBaseArray(InputData, 16, 10, (char*)CountBuf, 3);
     if ((int16_t)InputData <= 0) {
         LCD_Num_Data(0, 3);
         LCD_Num_Data(0, 2);
@@ -228,7 +228,7 @@ void ShowErrerCode(void) {
     unsigned char CountBuf[5] = {0};
     LCD_Num_Data(da_E, 8);
     LCD_Num_Data(xiao_r, 7);
-    int Buflen = anyBaseNumberToAnyBaseArray(System_RunData.StytemErrorCode, 16, 16, (char *)CountBuf, 5);
+    int Buflen = anyBaseNumberToAnyBaseArray(System_RunData.StytemErrorCode, 16, 16, (char*)CountBuf, 5);
     if (Buflen <= 0) {
         LCD_Num_Data(0, 4);
         LCD_Num_Data(0, 3);
@@ -246,7 +246,7 @@ void ShowFrontValveCtrlUser(void) {
     LCD_Num_Data(da_E, 8);
     LCD_Num_Data(2, 7);
     unsigned char CountBuf[3] = {0};
-    InputData = anyBaseNumberToAnyBaseArray(InputData, 16, 10, (char *)CountBuf, 3);
+    InputData                 = anyBaseNumberToAnyBaseArray(InputData, 16, 10, (char*)CountBuf, 3);
     if ((int16_t)InputData <= 0) {
         LCD_Num_Data(0, 3);
         LCD_Num_Data(0, 2);
@@ -262,7 +262,7 @@ void ShowIMEI(void) {
     ClearDisplayAll();
     newString(TempStr, 1);
     unsigned char a2, a3, a4, a5, a6, a7, a8;
-    strnew Mother = NEW_NAME(AT24CXX_Manager_NET.Get_Module_Data._Module_DEV_IMEI);
+    strnew        Mother = NEW_NAME(AT24CXX_Manager_NET.Get_Module_Data._Module_DEV_IMEI);
     if (MENU_ID == 12) {
         StringSlice(TempStr, Mother, 0, 1);
         a2 = (uint8_t)TempStr.Name._char[0] & 0x0F;
@@ -332,11 +332,11 @@ void ShowPort(void) {
     unsigned char a3, a4, a5, a6, a7;
     ClearDisplayAll();
     unsigned int Port = AT24CXX_Manager_NET.NET_Remote_Port;
-    a3 = Port / 10000;
-    a4 = (Port % 10000) / 1000;
-    a5 = (Port % 1000) / 100;
-    a6 = (Port % 100) / 10;
-    a7 = Port % 10;
+    a3                = Port / 10000;
+    a4                = (Port % 10000) / 1000;
+    a5                = (Port % 1000) / 100;
+    a6                = (Port % 100) / 10;
+    a7                = Port % 10;
 
     LCD_Num_Data(da_P, 8);
     LCD_Num_Data(xiao_o, 7);
@@ -351,9 +351,8 @@ void ShowPort(void) {
     LcdDisplayRefresh();
 }
 void Show_RSRP_RSRQ(void) {
-
-    unsigned int RSP = AT24CXX_Manager_NET.Get_Module_Data._Module_DEV_RSRP;
-    unsigned int RSQ = AT24CXX_Manager_NET.Get_Module_Data._Module_DEV_RSRQ;
+    unsigned int  RSP = AT24CXX_Manager_NET.Get_Module_Data._Module_DEV_RSRP;
+    unsigned int  RSQ = AT24CXX_Manager_NET.Get_Module_Data._Module_DEV_RSRQ;
     unsigned char a1, a2, a3, a5, a6, a7;
     ClearDisplayAll();
     a1 = (RSP % 1000) / 100;
@@ -363,19 +362,23 @@ void Show_RSRP_RSRQ(void) {
     a5 = (RSQ % 1000) / 100;
     a6 = (RSQ % 100) / 10;
     a7 = RSQ % 10;
-    if (a1 != 0x00)LCD_Num_Data(a1, 8);
-    if (a2 != 0x00)LCD_Num_Data(a2, 7);
+    if (a1 != 0x00)
+        LCD_Num_Data(a1, 8);
+    if (a2 != 0x00)
+        LCD_Num_Data(a2, 7);
     LCD_Num_Data(a3, 6);
     LCD_Num_Data(LINE2, 5);
-    if (a5 != 0x00)LCD_Num_Data(a5, 4);
-    if (a6 != 0x00)LCD_Num_Data(a6, 3);
+    if (a5 != 0x00)
+        LCD_Num_Data(a5, 4);
+    if (a6 != 0x00)
+        LCD_Num_Data(a6, 3);
     LCD_Num_Data(a7, 2);
     LCD_SINGAL;
     LcdDisplayRefresh();
 }
 void ShowCCID(void) {
     unsigned char EEprom_CCID[10] = {0};
-    strnew CCIDStr = NEW_NAME(AT24CXX_Manager_NET.Get_Module_Data._Module_SIM_ICCID);
+    strnew        CCIDStr         = NEW_NAME(AT24CXX_Manager_NET.Get_Module_Data._Module_SIM_ICCID);
     unsigned char a1, a2, a3, a4, a5, a6, a7;
     ClearDisplayAll();
     if (MENU_ID == 17) {
@@ -455,8 +458,8 @@ void background(void) {
 #warning "LCD_PleasePay";
     }
     if (((unsigned char)UpdataData.Sign == 0xB2) && (System_RunData.isUpCode == false)) {
-        UpdataData.Sign = 0;
-        UpdataData.NowPageNum = 0;
+        UpdataData.Sign             = 0;
+        UpdataData.NowPageNum       = 0;
         UpdataData.NowLen_Page8Buff = 0;
     }
     if (System_RunData.isUpCode == true) {
@@ -599,49 +602,49 @@ void TesTLCD(void) {
     for (uint8_t i = 0; i < 10; i++) {
         ClearDisplayAll();
         switch (i) {
-            case 0:
-                LCD_ChineseOpen_VALVE;
-                LCD_ChineseClose_VALVE;
-                break;
-            case 1:
-                LCD_TimeDate;
-                LCD_Meter_ID;
-                break;
-            case 2:
-                LCD_CAIJIQI_ID;
-                LCD_ChineseRest;
-                break;
-            case 3:
-                LCD_BATTERYX1;
-                LCD_BATTERYX2;
-                break;
-            case 4:
-                LCD_AlarmSign;
-                LCD_SINGAL;
-                break;
-            case 5:
-                LCD_Temper_Sign;
-                LCD_GJ_Sign;
-                break;
-            case 6:
-                LCD_Kw_Hour_Sign;
-                LCD_Kw_Sign;
-                break;
-            case 7:
-                LCD_BATT_BACK;
-                LCD_BATTERYX4;
-                break;
-            case 8:
-                LCD_BATTERYX3;
-            default:
-                // LCD_ChineseRoomTemper;
-                // LCD_PleasePay;
-                // LCD_ChineseHeat;
-                // LCD_ChineseSet;
-                // LCD_ChineseTemper;
-                // LCD_COL;
-                // LCD_Time;
-                break;
+        case 0:
+            LCD_ChineseOpen_VALVE;
+            LCD_ChineseClose_VALVE;
+            break;
+        case 1:
+            LCD_TimeDate;
+            LCD_Meter_ID;
+            break;
+        case 2:
+            LCD_CAIJIQI_ID;
+            LCD_ChineseRest;
+            break;
+        case 3:
+            LCD_BATTERYX1;
+            LCD_BATTERYX2;
+            break;
+        case 4:
+            LCD_AlarmSign;
+            LCD_SINGAL;
+            break;
+        case 5:
+            LCD_Temper_Sign;
+            LCD_GJ_Sign;
+            break;
+        case 6:
+            LCD_Kw_Hour_Sign;
+            LCD_Kw_Sign;
+            break;
+        case 7:
+            LCD_BATT_BACK;
+            LCD_BATTERYX4;
+            break;
+        case 8:
+            LCD_BATTERYX3;
+        default:
+            // LCD_ChineseRoomTemper;
+            // LCD_PleasePay;
+            // LCD_ChineseHeat;
+            // LCD_ChineseSet;
+            // LCD_ChineseTemper;
+            // LCD_COL;
+            // LCD_Time;
+            break;
         }
         LCD_Num_Data(i, 8);
         LCD_Num_Data(i, 7);
@@ -679,5 +682,3 @@ void Display__Module_Steep(unsigned char steep, unsigned char status) {
     ShowSignal();
     LcdDisplayRefresh();
 }
-
-

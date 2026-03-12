@@ -1,24 +1,24 @@
 #include "StrLib.h"
 #include "stdint.h"
 #include <stdio.h>
-#ifdef _Alignas 
-Type_T _InitType(void * var, const char * type) {
+#ifdef _Alignas
+Type_T _InitType(void* var, const char* type) {
     Type_T Temp;
-    Temp.var = var;
+    Temp.var  = var;
     Temp.type = type;
     return Temp;
 }
 #endif
 /*-----------------------------------函数说明----------------------------------*/
-int catString(char * OutStr, const char * IntStr, int MaxSize, int IntSize);
-bool copyString(char * OutStr, const char * IntStr, int MaxSize, int IntSize);
-char * myStrstr(char * MotherStr, char * SonStr, int MotherMaxSize);
-char * myStrstrCont(char * MotherStr, char * SonStr, int MotherMaxSize, int ContNum);
-void swapChr(char * a, char * b);
-void swapStr(char * IntputStr, int StrLen);
-char swapLowHight_Of_Char(char InputCh);
-bool MoveDataOnBuff(strnew IntptBuff, int ShiftLen, bool IsLeft);
-void StringSlice(strnew OutStr, strnew Mather, int start, int end);
+int      catString(char* OutStr, const char* IntStr, int MaxSize, int IntSize);
+bool     copyString(char* OutStr, const char* IntStr, int MaxSize, int IntSize);
+char*    myStrstr(char* MotherStr, char* SonStr, int MotherMaxSize);
+char*    myStrstrCont(char* MotherStr, char* SonStr, int MotherMaxSize, int ContNum);
+void     swapChr(char* a, char* b);
+void     swapStr(char* IntputStr, int StrLen);
+char     swapLowHight_Of_Char(char InputCh);
+bool     MoveDataOnBuff(strnew IntptBuff, int ShiftLen, bool IsLeft);
+void     StringSlice(strnew OutStr, strnew Mather, int start, int end);
 uint32_t getTimeNumber_UTCByRTCTime(strnew RTCTime_String);
 /*******************************************************************************************************************/
 /*******************************************************************************************************************/
@@ -30,22 +30,22 @@ int _getStrlen(struct New_Arr This) {
     }
     return -1;
 }
-void _strnewInit(strnew * newArray, int TypeSize) {
-    (*newArray).SizeType = TypeSize;
+void _strnewInit(strnew* newArray, int TypeSize) {
+    (*newArray).SizeType  = TypeSize;
     (*newArray).getStrlen = _getStrlen;
 }
 // 新建数组对象 （返回一个结构体数据）
-strnew New_Str_Obj(void * Master, int SizeNum, int SizeType) {
+strnew New_Str_Obj(void* Master, int SizeNum, int SizeType) {
     newstrobj(newArray, 1);
-    newArray.MaxLen = SizeNum;
+    newArray.MaxLen     = SizeNum;
     newArray.Name._void = Master;
-    newArray.SizeType = SizeType;
+    newArray.SizeType   = SizeType;
     return newArray;
 }
 
 /*-----------------------------------函数定义----------------------------------*/
 // 追加字符
-int catString(char * OutStr, const char * IntStr, int MaxSize, int IntSize) {
+int catString(char* OutStr, const char* IntStr, int MaxSize, int IntSize) {
     int AddrNow = 0;
     // 找出"\0"
     while ((OutStr[AddrNow] != '\0') && (AddrNow < MaxSize)) {
@@ -77,7 +77,7 @@ int catString(char * OutStr, const char * IntStr, int MaxSize, int IntSize) {
     }
 }
 // 复制字符串
-bool copyString(char * OutStr, const char * IntStr, int MaxSize, int IntSize) {
+bool copyString(char* OutStr, const char* IntStr, int MaxSize, int IntSize) {
     int run = 0;
     if (MaxSize >= IntSize) {
         for (run = 0; run < IntSize; run++) { // last reserved for'\0'
@@ -99,10 +99,10 @@ bool copyString(char * OutStr, const char * IntStr, int MaxSize, int IntSize) {
     }
 }
 // 查找子字符串
-char * myStrstr(char * MotherStr, char * SonStr, int MotherMaxSize) {
-    char * p_star = NULL;
-    int TempAdd = 0;
-    int TempStart = 0;
+char* myStrstr(char* MotherStr, char* SonStr, int MotherMaxSize) {
+    char* p_star    = NULL;
+    int   TempAdd   = 0;
+    int   TempStart = 0;
     do {
         for (TempAdd = TempStart; TempAdd < MotherMaxSize; TempAdd++) {
             if (MotherStr[TempAdd] != '\0') {
@@ -131,13 +131,13 @@ char * myStrstr(char * MotherStr, char * SonStr, int MotherMaxSize) {
 }
 
 // 查找第N个子字符串
-char * myStrstrCont(char * MotherStr, char * SonStr, int MotherMaxSize, int ContNum) {
-    char * p_star = NULL;
-    char * p_end = (MotherStr + MotherMaxSize);
+char* myStrstrCont(char* MotherStr, char* SonStr, int MotherMaxSize, int ContNum) {
+    char* p_star = NULL;
+    char* p_end  = (MotherStr + MotherMaxSize);
     for (int Task_i = 0; Task_i < ContNum; Task_i++) {
         p_star = NULL;
         if ((p_star = myStrstr(MotherStr, SonStr, MotherMaxSize)) != NULL) {
-            MotherStr = p_star + 1; // 地址偏移, 准备寻找第下一个
+            MotherStr     = p_star + 1; // 地址偏移, 准备寻找第下一个
             MotherMaxSize = p_end - MotherStr;
         } else
             return NULL; // 没有这个字串
@@ -146,16 +146,16 @@ char * myStrstrCont(char * MotherStr, char * SonStr, int MotherMaxSize, int Cont
 }
 
 //  交换两个字符
-void swapChr(char * a, char * b) {
+void swapChr(char* a, char* b) {
     char temp = *a;
-    *a = *b;
-    *b = temp;
+    *a        = *b;
+    *b        = temp;
 }
 
 // 实现字符串逆序的函数
-void swapStr(char * InputStr, int StrLen) {
+void swapStr(char* InputStr, int StrLen) {
     int start = 0;
-    int end = StrLen - 1;
+    int end   = StrLen - 1;
 
     // 循环交换字符串首尾字符, 直到中间
     while (start < end) {
@@ -213,7 +213,7 @@ int isLeapYear(uint32_t year) {
 // 计算从1970年1月1日到指定日期的总天数
 int calculate_days(int year, int month, int day) {
     int days_in_month[] = {31, 28, 31, 30, 31, 30, 31, 31, 30, 31, 30, 31};
-    int total_days = 0;
+    int total_days      = 0;
     int i;
 
     // 计算从1970年到当前年份的总天数
@@ -233,36 +233,24 @@ int calculate_days(int year, int month, int day) {
     return total_days;
 }
 // 计算时间戳（秒数）
-uint32_t get_timestamp(
-    uint32_t NowYear,
-    uint32_t NowMonth,
-    uint32_t NowDay,
-    uint32_t NowHour,
-    uint32_t NowMinute,
-    uint32_t NowSecond) {
+uint32_t get_timestamp(uint32_t NowYear, uint32_t NowMonth, uint32_t NowDay, uint32_t NowHour, uint32_t NowMinute,
+                       uint32_t NowSecond) {
     // 计算从1970年1月1日到指定日期的总天数
     int days = calculate_days(NowYear, NowMonth, NowDay);
     // 转换为秒数
-    long OverTimeSec = days * 86400LL;  // 每天86400秒
-    OverTimeSec += NowHour * 3600LL;            // 小时转秒
-    OverTimeSec += NowMinute * 60LL;            // 分钟转秒
-    OverTimeSec += NowSecond;                   // 加上秒
+    long OverTimeSec = days * 86400LL; // 每天86400秒
+    OverTimeSec += NowHour * 3600LL;   // 小时转秒
+    OverTimeSec += NowMinute * 60LL;   // 分钟转秒
+    OverTimeSec += NowSecond;          // 加上秒
     return OverTimeSec;
 }
 uint32_t getTimeNumber_UTCByRTCTime(strnew RTCTime_String) {
     // RTCTime_String.Name._char 格式为 "YYYY-MM-DD HH:MM:SS"
     int year = 0, month = 0, day = 0, hour = 0, min = 0, sec = 0;
-    sscanf(RTCTime_String.Name._char, "%d-%d-%d %d:%d:%d",
-        &year,
-        &month,
-        &day,
-        &hour,
-        &min,
-        &sec
-    );
+    sscanf(RTCTime_String.Name._char, "%d-%d-%d %d:%d:%d", &year, &month, &day, &hour, &min, &sec);
     // 计算自1970-01-01 00:00:00以来的秒数（UTC时间戳）
-    static const int days_in_month[12] = {31,28,31,30,31,30,31,31,30,31,30,31};
-    uint32_t days = 0;
+    static const int days_in_month[12] = {31, 28, 31, 30, 31, 30, 31, 31, 30, 31, 30, 31};
+    uint32_t         days              = 0;
 
     // 计算从1970到当前年份的天数
     for (int y = 1970; y < year; y++) {
@@ -302,14 +290,15 @@ TimeStuClass TimestampToRTCData(uint32_t timestamp) {
     uint32_t year = 1970;
     while (1) {
         uint32_t days_in_year = isLeapYear(year) ? 366 : 365;
-        if (days < days_in_year) break;
+        if (days < days_in_year)
+            break;
         days -= days_in_year;
         year++;
     }
 
-    TempRTCData.year = year;
-    uint8_t days_in_month[12] = {31,28,31,30,31,30,31,31,30,31,30,31};
-    uint8_t month = 0;
+    TempRTCData.year          = year;
+    uint8_t days_in_month[12] = {31, 28, 31, 30, 31, 30, 31, 31, 30, 31, 30, 31};
+    uint8_t month             = 0;
     if (isLeapYear(year)) {
         days_in_month[1] = 29;
     }
@@ -317,8 +306,8 @@ TimeStuClass TimestampToRTCData(uint32_t timestamp) {
         days -= days_in_month[month];
         month++;
     }
-    days_in_month[1] = 28; // Reset February days
+    days_in_month[1]  = 28; // Reset February days
     TempRTCData.month = month + 1;
-    TempRTCData.day = days + 1;
+    TempRTCData.day   = days + 1;
     return TempRTCData;
 }

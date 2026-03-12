@@ -1,22 +1,22 @@
 #include "CI522_App.h"
-#include <stdlib.h>
-#include <string.h>
 #include "CI522_interface.h"
-#include "stdio.h"
-#include "SetTime.h"
 #include "Define.h"
 #include "NumberBaseLib.h"
+#include "SetTime.h"
+#include "stdio.h"
+#include <stdlib.h>
+#include <string.h>
 
 void I_CI522_ClearBitMask(unsigned char reg, unsigned char mask) {
     char tmp = 0x00;
-    tmp = I_CI522_IO_Read(reg);
-    I_CI522_IO_Write(reg, tmp & ~mask);  // clear bit mask
+    tmp      = I_CI522_IO_Read(reg);
+    I_CI522_IO_Write(reg, tmp & ~mask); // clear bit mask
 }
 
 void I_CI522_SetBitMask(unsigned char reg, unsigned char mask) {
     char tmp = 0x00;
-    tmp = I_CI522_IO_Read(reg);
-    I_CI522_IO_Write(reg, tmp | mask);  // set bit mask
+    tmp      = I_CI522_IO_Read(reg);
+    I_CI522_IO_Write(reg, tmp | mask); // set bit mask
 }
 /***********************************************
  * 函数名：PCDAntennaOn
@@ -41,7 +41,7 @@ void PCDAntennaOn(void) {
  * 调用  ：外部调用
  **********************************************/
 void PCDAntennaOff(void) {
-    I_CI522_ClearBitMask(TxControlReg, 0x03);  // bit1 bit0 清0
+    I_CI522_ClearBitMask(TxControlReg, 0x03); // bit1 bit0 清0
 }
 /*===============================
  函数功能：读A卡初始化配置
@@ -59,13 +59,16 @@ void PCD_CI522_TypeA_Init(void) {
     // When communicating with a PICC we need a timeout if something goes wrong.
     // f_timer = 13.56 MHz / (2*TPreScaler+1) where TPreScaler = [TPrescaler_Hi:TPrescaler_Lo].
     // TPrescaler_Hi are the four low bits in TModeReg. TPrescaler_Lo is TPrescalerReg.
-    I_CI522_IO_Write(TModeReg, 0x80);// TAuto=1; timer starts automatically at the end of the transmission in all communication modes at all speeds
-    I_CI522_IO_Write(TPrescalerReg, 0xa9);// TPreScaler = TModeReg[3..0]:TPrescalerReg
-    I_CI522_IO_Write(TReloadRegH, 0x03); // Reload timer 
-    I_CI522_IO_Write(TReloadRegL, 0xe8); // Reload timer 
-    I_CI522_IO_Write(TxASKReg, 0x40);	// Default 0x00. Force a 100 % ASK modulation independent of the ModGsPReg register setting
-    I_CI522_IO_Write(ModeReg, 0x3D);	// Default 0x3F. Set the preset value for the CRC coprocessor for the CalcCRC command to 0x6363 (ISO 14443-3 part 6.2.4)
-    I_CI522_IO_Write(CommandReg, 0x00);  // Turn on the analog part of receiver   
+    I_CI522_IO_Write(TModeReg, 0x80);      // TAuto=1; timer starts automatically at the end of the transmission in all
+                                           // communication modes at all speeds
+    I_CI522_IO_Write(TPrescalerReg, 0xa9); // TPreScaler = TModeReg[3..0]:TPrescalerReg
+    I_CI522_IO_Write(TReloadRegH, 0x03);   // Reload timer
+    I_CI522_IO_Write(TReloadRegL, 0xe8);   // Reload timer
+    I_CI522_IO_Write(TxASKReg,
+                     0x40); // Default 0x00. Force a 100 % ASK modulation independent of the ModGsPReg register setting
+    I_CI522_IO_Write(ModeReg, 0x3D);    // Default 0x3F. Set the preset value for the CRC coprocessor for the CalcCRC
+                                        // command to 0x6363 (ISO 14443-3 part 6.2.4)
+    I_CI522_IO_Write(CommandReg, 0x00); // Turn on the analog part of receiver
 
     PCDAntennaOn();
 }
@@ -73,7 +76,7 @@ void PCD_CI522_TypeA_Init(void) {
 
 //***********************************//修改新增内容
 extern uint8_t Si522_IRQ_flagA;
-UserCard CardData = {0};
+UserCard       CardData = {0};
 /////////////////////////////////////////////////////////////////////
 //用MF522计算CRC16函数
 /////////////////////////////////////////////////////////////////////
@@ -85,7 +88,7 @@ UserCard CardData = {0};
  * 返回  : 无
  * 调用  ：外部调用
  **********************************************/
-void CalulateCRC(unsigned char * pIndata, unsigned char len, unsigned char * pOutData) {
+void CalulateCRC(unsigned char* pIndata, unsigned char len, unsigned char* pOutData) {
     unsigned char i, n;
     I_CI522_ClearBitMask(DivIrqReg, 0x04);
     I_CI522_IO_Write(CommandReg, PCD_IDLE);
@@ -106,38 +109,37 @@ void CalulateCRC(unsigned char * pIndata, unsigned char len, unsigned char * pOu
 /**************************************************************************************************
  * 函数名：PCDComMF522
  * 描述  ：通过RC522和ISO14443卡通讯
- * 输入  ：Command[IN]:RC522命令字              pInData[IN]:通过RC522发送到卡片的数据    InLenByte[IN]:发送数据的字节长度
+ * 输入  ：Command[IN]:RC522命令字              pInData[IN]:通过RC522发送到卡片的数据 InLenByte[IN]:发送数据的字节长度
  *       ：pOutData[OUT]:接收到的卡片返回数据   pOutLenBit[OUT]:返回数据的位长度
  * 返回  : 无
  * 调用  ：外部调用
  *************************************************************************************************/
 void EndRead(void) {
-    I_CI522_SetBitMask(ControlReg, 0x80);           // stop timer now
+    I_CI522_SetBitMask(ControlReg, 0x80); // stop timer now
     I_CI522_IO_Write(CommandReg, PCD_IDLE);
 }
-char PCDComMF522(unsigned char Command,
-    unsigned char * pInData, unsigned char InLenByte,
-    unsigned char * pOutData, unsigned int * pOutLenBit) {
+char PCDComMF522(unsigned char Command, unsigned char* pInData, unsigned char InLenByte, unsigned char* pOutData,
+                 unsigned int* pOutLenBit) {
     if (InLenByte == 0) {
         return MI_ERR;
     }
-    char status = MI_ERR;
-    unsigned char irqEn = 0x00;
+    char          status  = MI_ERR;
+    unsigned char irqEn   = 0x00;
     unsigned char waitFor = 0x00;
     unsigned char lastBits;
     switch (Command) {
-        case PCD_AUTHENT:
-            irqEn = 0x12;
-            waitFor = 0x10;
-            break;
-        case PCD_TRANSCEIVE:
-            irqEn = 0x77;
-            waitFor = 0x30;
-            break;
-        default:
-            break;
+    case PCD_AUTHENT:
+        irqEn   = 0x12;
+        waitFor = 0x10;
+        break;
+    case PCD_TRANSCEIVE:
+        irqEn   = 0x77;
+        waitFor = 0x30;
+        break;
+    default:
+        break;
     }
-    //I_CI522_IO_Write(ComIEnReg,irqEn|0x80);
+    // I_CI522_IO_Write(ComIEnReg,irqEn|0x80);
     I_CI522_ClearBitMask(ComIrqReg, 0x80);
     I_CI522_IO_Write(CommandReg, PCD_IDLE);
     I_CI522_SetBitMask(FIFOLevelReg, 0x80);
@@ -173,7 +175,7 @@ char PCDComMF522(unsigned char Command,
     }
 
     if (Command == PCD_TRANSCEIVE) {
-        TempChr = I_CI522_IO_Read(FIFOLevelReg);
+        TempChr  = I_CI522_IO_Read(FIFOLevelReg);
         lastBits = I_CI522_IO_Read(ControlReg) & 0x07;
         if (pOutLenBit != NULL) {
             if (lastBits) {
@@ -209,17 +211,17 @@ char PCDComMF522(unsigned char Command,
  *                0x4403 = Mifare_DESFire
  * 返回值 : 成功返回MI_OK
  ********************************************************************/
-char PCDRequest(unsigned char req_code, unsigned char * pTagType) {
+char PCDRequest(unsigned char req_code, unsigned char* pTagType) {
     I_CI522_ClearBitMask(Status2Reg, 0x08);
     I_CI522_IO_Write(BitFramingReg, 0x07);
     I_CI522_SetBitMask(TxControlReg, 0x03);
 
     unsigned char ucComMF522Buf[MAXRLEN];
-    unsigned int unLen = 0;
-    ucComMF522Buf[0] = req_code;
-    char status = PCDComMF522(PCD_TRANSCEIVE, ucComMF522Buf, 1, ucComMF522Buf, &unLen);
+    unsigned int  unLen = 0;
+    ucComMF522Buf[0]    = req_code;
+    char status         = PCDComMF522(PCD_TRANSCEIVE, ucComMF522Buf, 1, ucComMF522Buf, &unLen);
     if ((status == MI_OK) && (unLen == 0x10)) {
-        *pTagType = ucComMF522Buf[0];
+        *pTagType       = ucComMF522Buf[0];
         *(pTagType + 1) = ucComMF522Buf[1];
     } else {
         status = MI_ERR;
@@ -231,8 +233,8 @@ char PCDRequest(unsigned char req_code, unsigned char * pTagType) {
 //功    能：防冲撞
 //参数说明: pSnr[OUT]:卡片序列号，4字节
 //返    回: 成功返回MI_OK
-/////////////////////////////////////////////////////////////////////  
-char PCDAnticoll(unsigned char * pSnr, unsigned char anticollision_level) {
+/////////////////////////////////////////////////////////////////////
+char PCDAnticoll(unsigned char* pSnr, unsigned char anticollision_level) {
     I_CI522_ClearBitMask(Status2Reg, 0x08);
     I_CI522_IO_Write(BitFramingReg, 0x00);
     I_CI522_ClearBitMask(CollReg, 0x80);
@@ -246,7 +248,7 @@ char PCDAnticoll(unsigned char * pSnr, unsigned char anticollision_level) {
         return MI_ERR;
     }
 
-    unsigned char status = MI_OK;
+    unsigned char status    = MI_OK;
     unsigned char snr_check = 0;
     for (uint8_t i = 0; i < 5; i++) {
         if (i < 4) {
@@ -267,7 +269,7 @@ char PCDAnticoll(unsigned char * pSnr, unsigned char anticollision_level) {
 //参数说明: pSnr[IN]:卡片序列号，4字节
 //返    回: 成功返回MI_OK
 ////////////////////////////////////////////////////////////////////
-char PCDSelect(unsigned char * pSnr, unsigned char * sak, uint8_t ANTICO_Num) {
+char PCDSelect(unsigned char* pSnr, unsigned char* sak, uint8_t ANTICO_Num) {
     unsigned char ucComMF522Buf[MAXRLEN];
     ucComMF522Buf[0] = ANTICO_Num;
     ucComMF522Buf[1] = 0x70;
@@ -279,9 +281,9 @@ char PCDSelect(unsigned char * pSnr, unsigned char * sak, uint8_t ANTICO_Num) {
     CalulateCRC(ucComMF522Buf, 7, &ucComMF522Buf[7]);
     I_CI522_ClearBitMask(Status2Reg, 0x08);
     unsigned int unLen;
-    char status = PCDComMF522(PCD_TRANSCEIVE, ucComMF522Buf, 9, ucComMF522Buf, &unLen);
+    char         status = PCDComMF522(PCD_TRANSCEIVE, ucComMF522Buf, 9, ucComMF522Buf, &unLen);
     if ((status == MI_OK) && (unLen == 0x18)) {
-        *sak = ucComMF522Buf[0];
+        *sak   = ucComMF522Buf[0];
         status = MI_OK;
     } else {
         status = MI_ERR;
@@ -305,13 +307,13 @@ char PCDHalt(void) {
 //功    能：验证卡片密码
 //参数说明: auth_mode[IN]: 密码验证模式
 //                 0x60 = 验证A密钥
-//                 0x61 = 验证B密钥 
+//                 0x61 = 验证B密钥
 //          addr[IN]：块地址
 //          pKey[IN]：密码
 //          pSnr[IN]：卡片序列号，4字节
 //返    回: 成功返回MI_OK
-/////////////////////////////////////////////////////////////////////               
-char PCDAuthState(unsigned char auth_mode, unsigned char addr, unsigned char * pKey, unsigned char * pSnr) {
+/////////////////////////////////////////////////////////////////////
+char PCDAuthState(unsigned char auth_mode, unsigned char addr, unsigned char* pKey, unsigned char* pSnr) {
     unsigned char ucComMF522Buf[MAXRLEN];
     ucComMF522Buf[0] = auth_mode;
     ucComMF522Buf[1] = addr;
@@ -329,14 +331,14 @@ char PCDAuthState(unsigned char auth_mode, unsigned char addr, unsigned char * p
 //参数说明: addr[IN]：块地址
 //          pData[OUT]：读出的数据，16字节
 //返    回: 成功返回MI_OK
-///////////////////////////////////////////////////////////////////// 
-char PCDRead(unsigned char addr, unsigned char * pData) {
+/////////////////////////////////////////////////////////////////////
+char PCDRead(unsigned char addr, unsigned char* pData) {
     unsigned char ucComMF522Buf[MAXRLEN];
     ucComMF522Buf[0] = PICC_READ;
     ucComMF522Buf[1] = addr;
     CalulateCRC(ucComMF522Buf, 2, &ucComMF522Buf[2]);
-    unsigned int unLen = 0;
-    char status = PCDComMF522(PCD_TRANSCEIVE, ucComMF522Buf, 4, ucComMF522Buf, &unLen);
+    unsigned int unLen  = 0;
+    char         status = PCDComMF522(PCD_TRANSCEIVE, ucComMF522Buf, 4, ucComMF522Buf, &unLen);
     if ((status == MI_OK) && (unLen == 0x90)) {
         memcpy(pData, ucComMF522Buf, 16);
     } else {
@@ -350,14 +352,14 @@ char PCDRead(unsigned char addr, unsigned char * pData) {
 //参数说明: addr[IN]：块地址
 //          pData[IN]：写入的数据，16字节
 //返    回: 成功返回MI_OK
-/////////////////////////////////////////////////////////////////////                  
-char PCDWrite(unsigned char addr, unsigned char * pData) {
+/////////////////////////////////////////////////////////////////////
+char PCDWrite(unsigned char addr, unsigned char* pData) {
     unsigned char ucComMF522Buf[MAXRLEN];
     ucComMF522Buf[0] = PICC_WRITE;
     ucComMF522Buf[1] = addr;
     CalulateCRC(ucComMF522Buf, 2, &ucComMF522Buf[2]);
-    unsigned int unLen = 0;
-    char status = PCDComMF522(PCD_TRANSCEIVE, ucComMF522Buf, 4, ucComMF522Buf, &unLen);
+    unsigned int unLen  = 0;
+    char         status = PCDComMF522(PCD_TRANSCEIVE, ucComMF522Buf, 4, ucComMF522Buf, &unLen);
     if ((status != MI_OK) || (unLen != 4) || ((ucComMF522Buf[0] & 0x0F) != 0x0A)) {
         status = MI_ERR;
     }
@@ -373,31 +375,31 @@ char PCDWrite(unsigned char addr, unsigned char * pData) {
     return status;
 }
 // read UserCard
-bool ReadCardData(UserCard * UserCardData) {
+bool ReadCardData(UserCard* UserCardData) {
     newString(TempBuf, 16);
-    if (PCDRead(4, (unsigned char *)TempBuf.Name._char) != MI_OK) {
+    if (PCDRead(4, (unsigned char*)TempBuf.Name._char) != MI_OK) {
         return false;
     }
     (*UserCardData).ValidNum = U8_Connect_U8(TempBuf.Name._char[0], TempBuf.Name._char[1]);
     (*UserCardData).CardType = TempBuf.Name._char[2];
     memcpy((*UserCardData).MeterID, &TempBuf.Name._char[3], 4);
-    if (PCDRead(5, (unsigned char *)TempBuf.Name._char) != MI_OK) {
+    if (PCDRead(5, (unsigned char*)TempBuf.Name._char) != MI_OK) {
         return false;
     }
     memcpy((*UserCardData).RTC_Time_Set, &TempBuf.Name._char[0], 6);
     memcpy((*UserCardData).LimitTime, &TempBuf.Name._char[6], 3);
     (*UserCardData).LimitTimeDegree = U8_Connect_U8(TempBuf.Name._char[0x09], TempBuf.Name._char[0x0A]);
-    (*UserCardData).ModeCode = U8_Connect_U8(TempBuf.Name._char[0x0B], TempBuf.Name._char[0x0C]);
+    (*UserCardData).ModeCode        = U8_Connect_U8(TempBuf.Name._char[0x0B], TempBuf.Name._char[0x0C]);
     return true;
 }
 // write UserCard
-bool WriteCardData(UserCard * UserCardData) {
+bool WriteCardData(UserCard* UserCardData) {
     newString(TempBuf, 16);
     TempBuf.Name._char[0] = (((*UserCardData).ValidNum >> 8) & 0x00FF);
     TempBuf.Name._char[1] = (((*UserCardData).ValidNum >> 0) & 0x00FF);
     TempBuf.Name._char[2] = (*UserCardData).CardType;
     memcpy(&TempBuf.Name._char[3], (*UserCardData).MeterID, 4);
-    if (PCDWrite(4, (unsigned char *)TempBuf.Name._char) != MI_OK) {
+    if (PCDWrite(4, (unsigned char*)TempBuf.Name._char) != MI_OK) {
         return false;
     }
     memcpy(&TempBuf.Name._char[0], (*UserCardData).RTC_Time_Set, 6);
@@ -406,15 +408,15 @@ bool WriteCardData(UserCard * UserCardData) {
     TempBuf.Name._char[0x0A] = (((*UserCardData).LimitTimeDegree >> 0) & 0x00FF);
     TempBuf.Name._char[0x0B] = (((*UserCardData).ModeCode >> 8) & 0x00FF);
     TempBuf.Name._char[0x0C] = (((*UserCardData).ModeCode >> 0) & 0x00FF);
-    if (PCDWrite(5, (unsigned char *)TempBuf.Name._char) != MI_OK) {
+    if (PCDWrite(5, (unsigned char*)TempBuf.Name._char) != MI_OK) {
         return false;
     }
     return true;
 }
 
-bool PCD_CI522_TypeA_rw_block(bool (*DoneFun)(UserCard * UserCardData)) {
+bool PCD_CI522_TypeA_rw_block(bool (*DoneFun)(UserCard* UserCardData)) {
     unsigned char ATQA[2];
-    //request 寻卡 //寻天线区内未进入休眠状态的卡，返回卡片类型 2字节	
+    // request 寻卡 //寻天线区内未进入休眠状态的卡，返回卡片类型 2字节
     I_CI522_IO_Write(RFCfgReg, RFCfgReg_Val); //复位接收增益
     if (PCDRequest(PICC_REQIDL, ATQA) != MI_OK) {
         I_CI522_IO_Write(RFCfgReg, 0x48);
@@ -426,32 +428,33 @@ bool PCD_CI522_TypeA_rw_block(bool (*DoneFun)(UserCard * UserCardData)) {
         }
     }
     unsigned char UID[12];
-    //Anticoll 冲突检测
+    // Anticoll 冲突检测
     if (PCDAnticoll(UID, PICC_ANTICOLL1) != MI_OK) {
         SetErrerCode(CODE_ERR_CARD_FAULT, true);
         return false;
     }
     unsigned char SAK = 0;
-    //Select 选卡
+    // Select 选卡
     if (PCDSelect(UID, &SAK, PICC_ANTICOLL1) != MI_OK) {
         SetErrerCode(CODE_ERR_CARD_FAULT, true);
         return false;
     }
     // Authenticate 验证 A 密码
-    unsigned char DefaultKeyABuf[10] = {0xAB, 0x12, 0xAB, 0x34, 0xAB, 0x56, 0x7F, 0x07, 0x88, 0x69}; // 注意：7F 07 88 69
+    unsigned char DefaultKeyABuf[10] = {0xAB, 0x12, 0xAB, 0x34, 0xAB,
+                                        0x56, 0x7F, 0x07, 0x88, 0x69}; // 注意：7F 07 88 69
     // unsigned char DefaultKeyABuf[10] = {0xFF, 0xFF, 0xFF, 0xFF, 0xFF, 0xFF, 0xFF, 0xFF, 0xFF, 0xFF};
     if (PCDAuthState(PICC_AUTHENT1A, 4, DefaultKeyABuf, UID) != MI_OK) {
         SetErrerCode(CODE_ERR_CARD_FAULT, true);
         return false;
     }
     UserCard M1_Card_Data = {
-        .ValidNum = 0,
-        .CardType = 0,
-        .MeterID = {0},
-        .RTC_Time_Set = {0},
-        .LimitTime = {0},
+        .ValidNum        = 0,
+        .CardType        = 0,
+        .MeterID         = {0},
+        .RTC_Time_Set    = {0},
+        .LimitTime       = {0},
         .LimitTimeDegree = 0,
-        .ModeCode = 0,
+        .ModeCode        = 0,
     };
     // 读BLOCK原始数据
     if (ReadCardData(&M1_Card_Data) == false) {
@@ -463,15 +466,16 @@ bool PCD_CI522_TypeA_rw_block(bool (*DoneFun)(UserCard * UserCardData)) {
         return false;
     }
     SetErrerCode(CODE_ERR_CARD_FAULT, false);
-    if (!(M1_Card_Data.MeterID[0] == 0xFF) && (M1_Card_Data.MeterID[1] == 0xFF) && (M1_Card_Data.MeterID[2] == 0xFF) && (M1_Card_Data.MeterID[3] == 0xFF)) {
+    if (!(M1_Card_Data.MeterID[0] == 0xFF) && (M1_Card_Data.MeterID[1] == 0xFF) && (M1_Card_Data.MeterID[2] == 0xFF) &&
+        (M1_Card_Data.MeterID[3] == 0xFF)) {
         // 修改 UserCardData
         M1_Card_Data.ValidNum = (M1_Card_Data.ValidNum > 0 ? M1_Card_Data.ValidNum - 1 : 0);
     }
     if (M1_Card_Data.ValidNum == 0) {
         memset(M1_Card_Data.LimitTime, 0, 3);
-        M1_Card_Data.LimitTime[0] = 0x00;
-        M1_Card_Data.LimitTime[1] = 0x01;
-        M1_Card_Data.LimitTime[2] = 0x01;
+        M1_Card_Data.LimitTime[0]    = 0x00;
+        M1_Card_Data.LimitTime[1]    = 0x01;
+        M1_Card_Data.LimitTime[2]    = 0x01;
         M1_Card_Data.LimitTimeDegree = 0;
     }
     // 写BLOCK 写入新的数据
@@ -498,13 +502,14 @@ bool PCD_CI522_TypeA_rw_block(bool (*DoneFun)(UserCard * UserCardData)) {
  * 调用  ：外部调用
  **********************************************/
 void PCDReset(void) {
-//	hard reset
-//	HAL_GPIO_WritePin(S52_NRSTPD_GPIO_Port,S52_NRSTPD_Pin,GPIO_PIN_RESET);
-//	FL_DelayUs(100);
-//	HAL_GPIO_WritePin(S52_NRSTPD_GPIO_Port,S52_NRSTPD_Pin,GPIO_PIN_RESET);
-//	FL_DelayUs(100);	
-    I_CI522_IO_Write(CommandReg, 0x0f);			      //向CommandReg 写入 0x0f	作用是使RC522复位
-    while (I_CI522_IO_Read(CommandReg) & 0x10);	  //Powerdown位为0时，表示RC522已准备好
+    //	hard reset
+    //	HAL_GPIO_WritePin(S52_NRSTPD_GPIO_Port,S52_NRSTPD_Pin,GPIO_PIN_RESET);
+    //	FL_DelayUs(100);
+    //	HAL_GPIO_WritePin(S52_NRSTPD_GPIO_Port,S52_NRSTPD_Pin,GPIO_PIN_RESET);
+    //	FL_DelayUs(100);
+    I_CI522_IO_Write(CommandReg, 0x0f); //向CommandReg 写入 0x0f	作用是使RC522复位
+    while (I_CI522_IO_Read(CommandReg) & 0x10)
+        ; // Powerdown位为0时，表示RC522已准备好
     FL_DelayUs(100);
 }
 
@@ -514,7 +519,7 @@ void PCDReset(void) {
 //     GPIO_SetBits(GPIOA, GPIO_Pin_2);
 //     FL_DelayMs(5);
 // }
-//ci522_interfaces
+// ci522_interfaces
 // void I_CI522_SiModifyReg(unsigned char RegAddr, unsigned char ModifyVal, unsigned char MaskByte) {
 //     unsigned char RegVal;
 //     RegVal = I_CI522_IO_Read(RegAddr);

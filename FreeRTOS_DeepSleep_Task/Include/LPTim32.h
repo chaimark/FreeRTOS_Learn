@@ -8,5 +8,4 @@
 
 extern void LPTIM_Setup(void);
 extern void LPTIM_Stop(void);
-#endif 
-
+#endif
